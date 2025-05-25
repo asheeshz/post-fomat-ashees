@@ -1,0 +1,383 @@
+/* --- ग्लोबल और कंटेनर --- */
+.am-maha-sangram-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.am-maha-sangram-container {
+    font-family: 'Teko', sans-serif;
+    /* Removed fiery background, will use theme's background */
+    /* background: linear-gradient(135deg, #000000 0%, #4A0404 30%, #800000 60%, #FF4500 100%); */
+    /* background-size: 445.578% 445.578%; */
+    /* animation: am-fireGradient 20s ease infinite; */
+    color: #ffffff; /* Default text color, theme might override */
+    line-height: 1.8;
+    padding: 20px 0;
+    margin:0;
+    overflow-x: auto; /* Changed from hidden to auto for safety in all themes */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+/* @keyframes am-fireGradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} } */
+
+/* Particles.js Background */
+.am-particles-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+.am-content-wrapper {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 1280px;
+    width: 90%;
+    min-width: 360px;
+}
+
+/* --- हेडर --- */
+.am-maha-sangram-container .am-page-header {
+    margin-bottom: 40px;
+    animation: am-fadeInHeader 2s ease-out;
+    text-align: center;
+    padding: 40px 15px 25px 15px;
+    border-bottom: 7px solid #FF0000;
+    position: relative;
+}
+@keyframes am-fadeInHeader { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Styles for the new div replacing H1 */
+.am-maha-sangram-container .am-page-header .am-main-title-display {
+    font-family: 'Martel Sans', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.7104em, 7.805952vw, 5.4208em);
+    color: transparent;
+    background: linear-gradient(45deg, #FFD700, #FF8C00, #FF0000, #8B0000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(255,0,0,0.7), 0 0 20px rgba(255,0,0,0.5);
+    letter-spacing: 2px;
+    animation: am-titleGlow 3s infinite alternate;
+    margin-bottom: 5px;
+    display: block; /* To ensure it behaves like a block element */
+}
+@keyframes am-titleGlow { from { text-shadow: 0 0 5px rgba(255,0,0,0.5), 0 0 10px rgba(255,0,0,0.3); } to { text-shadow: 0 0 20px rgba(255,0,0,0.9), 0 0 30px rgba(255,100,0,0.7); } }
+
+.am-maha-sangram-container .am-page-header .am-subtitle { font-family: 'Lohit Devanagari', sans-serif; font-size: clamp(0.910694em, 2.276736vw, 1.252205em); color: #FFD700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+.am-maha-sangram-container .am-page-header .am-poet-name { font-family: 'Rakkas', cursive; font-size: clamp(1.138368em, 2.732083vw, 1.650634em); color: #FFA500; margin-top:10px; display:block;}
+
+
+/* --- एक्शन बटन --- */
+.am-maha-sangram-container .am-action-buttons { margin-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; animation: am-buttonsAppear 1s 1s ease-out forwards; opacity:0; }
+@keyframes am-buttonsAppear { from { opacity:0; transform: scale(0.5); } to { opacity:1; transform: scale(1); } }
+.am-maha-sangram-container .am-action-button {
+    background: linear-gradient(145deg, #8B0000, #FF0000);
+    color: #ffffff;
+    border: 4px solid #FFD700;
+    padding: 12px 20px;
+    font-family: 'Teko', sans-serif;
+    font-size: clamp(1.024531em, 2.276736vw, 1.252205em);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-shadow: 0 0 5px #000;
+    box-shadow: 0 0 15px rgba(255,215,0,0.5), inset 0 0 5px rgba(255,0,0,0.7);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.am-maha-sangram-container .am-action-button .fa {
+    margin-right: 8px;
+    font-size: 1.252205em;
+    line-height: 1;
+}
+.am-maha-sangram-container .am-action-button:hover { background: linear-gradient(145deg, #FF0000, #FF4500); transform: scale(1.1) rotate(-2deg); box-shadow: 0 0 25px rgba(255,215,0,0.8), inset 0 0 10px rgba(255,100,0,0.7); }
+.am-maha-sangram-container .am-action-button:disabled { background: #555; color: #999; border-color: #777; box-shadow: none; transform: none; cursor: not-allowed; }
+
+/* --- कविता क्षेत्र --- */
+.am-maha-sangram-container .am-poem-content-area {
+    background: rgba(0,0,0,0.4);
+    padding: clamp(18px, 3.6vw, 36px);
+    border-radius: 10px;
+    border: 3px solid rgba(255,215,0,0.35);
+    box-shadow: 0 0 0 10px rgba(20,0,0,0.6),
+                0 0 30px rgba(0,0,0,0.5);
+    margin-bottom: 50px;
+}
+.am-maha-sangram-container .am-stanza { margin-bottom: 27px; }
+.am-maha-sangram-container .am-poem-line { font-family: 'Rakkas', cursive; font-size: clamp(1.366042em, 3.642778vw, 2.162899em); margin-bottom: 11px; color: #f0f0f0; text-shadow: 0 0 3px #000, 0 0 5px #FF0000; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease var(--stagger-delay), transform 0.5s ease var(--stagger-delay); }
+.am-maha-sangram-container .am-poem-line.visible { opacity: 1; transform: translateY(0); }
+.am-maha-sangram-container .am-poem-line .am-fiery-word { color: transparent; background: linear-gradient(45deg, #FFD700, #FF8C00, #FF4500); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; animation: am-fieryWordPulse 1.5s infinite alternate; }
+@keyframes am-fieryWordPulse { from { transform: scale(1); text-shadow: 0 0 8px #FF4500; } to { transform: scale(1.1); text-shadow: 0 0 15px #FF8C00; } }
+.am-maha-sangram-container .am-hunkar-line { font-size: clamp(1.593715em, 4.325798vw, 2.390573em) !important; font-weight: bold; color: #FF0000 !important; text-transform: uppercase; letter-spacing: 1px; border: 2.5px dashed #FFD700; padding: 9px; margin: 13px 0 !important; animation: am-hunkarShake 0.3s 2s 3 ease-in-out; }
+@keyframes am-hunkarShake { 0%, 100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+
+/* --- इमेज और वीडियो प्लेसहोल्डर --- */
+.am-media-section {
+    margin: 50px 0;
+    padding: 18px;
+    background: rgba(30,30,30,0.2);
+    border: 3px dashed #FFD700;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 0 10px rgba(20,0,0,0.6),
+                0 0 20px rgba(0,0,0,0.4);
+}
+.am-media-section h3 { font-family: 'Martel Sans', sans-serif; color: #FFD700; font-size: clamp(1.536797em, 3.073594vw, 2.049062em); margin-bottom: 13px; text-transform: uppercase; }
+.am-image-placeholder img {
+    max-width: 100%;
+    height: auto;
+    border: 3.5px solid #FF4500;
+    border-radius: 5px;
+    margin-bottom:13px;
+}
+.am-image-placeholder p { font-size:clamp(0.8em, 2vw, 0.910694em); color:#ccc; }
+.am-video-player-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    border: 3.5px solid #FF0000;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.am-video-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.am-video-player-container p { font-size:clamp(0.8em, 2vw, 0.910694em); color:#ccc; text-align:center; margin-top:5px; }
+
+/* --- मार्गदर्शन अनुभाग सेपरेटर --- */
+.am-guidance-section-separator {
+    text-align: center;
+    margin: 50px 0 30px 0;
+    font-family: 'Martel Sans', sans-serif;
+    font-size: clamp(1.536797em, 3.585859vw, 2.049062em);
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+.am-guidance-section-separator span {
+    padding: 5px 15px;
+    border-top: 2.5px solid #FF4500;
+    border-bottom: 2.5px solid #FF4500;
+    text-shadow: 0 0 5px #FF0000;
+}
+.am-guidance-section-separator .fa {
+    font-size: 1.024531em;
+    color: #FF8C00;
+    text-shadow: 0 0 8px #FF4500;
+    animation: am-flickerSeparatorIcon 1.5s infinite alternate;
+}
+@keyframes am-flickerSeparatorIcon {
+    0% { opacity: 0.6; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.6; transform: scale(0.95); }
+}
+
+
+/* --- कोड बॉक्स और ट्यूटोरियल --- */
+.am-guidance-box {
+    margin: 50px 0;
+    padding: 22px;
+    background: rgba(10,10,10,0.7);
+    border: 3px solid #FF4500;
+    border-radius: 8px;
+    box-shadow: 0 0 0 10px rgba(10,5,5,0.65),
+                0 0 20px rgba(255,69,0,0.3);
+    text-align: left;
+}
+.am-guidance-box h2 { font-family: 'Martel Sans', sans-serif; color: #FFD700; font-size: clamp(1.821389em, 4.098125vw, 2.561328em); text-align: center; margin-bottom: 18px; border-bottom: 1px solid #FF4500; padding-bottom: 9px; }
+.am-guidance-box h3 { font-family: 'Teko', sans-serif; color: #FFA500; font-size: clamp(1.42296em, 3.073594vw, 1.821389em); margin-top: 18px; margin-bottom: 9px; }
+.am-guidance-box p, .am-guidance-box ul { font-family: 'Lohit Devanagari', sans-serif; font-size: clamp(1.081450em, 2.162899vw, 1.252205em); color: #e0e0e0; line-height: 1.7; margin-bottom: 9px; }
+.am-guidance-box ul { list-style-position: inside; padding-left: 18px; } .am-guidance-box ul li { margin-bottom: 4px; } .am-guidance-box strong { color: #FFD700; }
+.am-code-block-wrapper { background: #000; border: 1px solid #333; border-radius: 5px; padding: 13px; margin-top: 9px; position: relative; }
+.am-code-block-wrapper pre { font-family: 'Roboto Mono', monospace; font-size: clamp(0.996072em, 2.276736vw, 1.280664em); color: #a9b7c6; white-space: pre-wrap; word-wrap: break-word; max-height: 360px; overflow: auto; }
+.am-copy-code-button { position: absolute; top: 9px; right: 9px; background: #FF4500; color: white; border: none; padding: 4px 9px; font-size: 0.796858em; cursor: pointer; border-radius: 3px; display: inline-flex; align-items: center;}
+.am-copy-code-button .fa { margin-right: 4px;}
+.am-copy-code-button:hover { background: #FF0000; }
+
+/* --- कॉपीराइट और अधिकार पत्र --- */
+.am-rights-section {
+    margin-top: 50px;
+    padding: 13px;
+    background: rgba(30,20,0,0.25);
+    border-top: 3px dashed #FFD700;
+    text-align: center;
+    box-shadow: 0 -10px 0 0 rgba(20,0,0,0.6),
+                0 0 15px rgba(255,215,0,0.1);
+    font-family: 'Lohit Devanagari', sans-serif;
+    font-size: clamp(0.796858em, 1.821389vw, 1.024531em);
+    color: #FFD700;
+}
+.am-rights-section p { margin-bottom: 7px; line-height: 1.5;}
+
+/* --- फुटर --- */
+.am-maha-sangram-container .am-page-footer {
+    margin-top: 50px;
+    padding: 22px;
+    color: #FFD700;
+    font-size: clamp(0.910694em, 2.049062vw, 1.138368em);
+    text-transform: uppercase;
+    border-top: 2.5px solid rgba(255,215,0,0.3);
+}
+.am-maha-sangram-container .am-page-footer::before {
+    content: "\f256 \f06d \f256";
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    display: block;
+    font-size: 2.049062em;
+    margin-bottom: 9px;
+    animation: am-footerPulse 2s infinite;
+}
+@keyframes am-footerPulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+/* @keyframes am-backgroundShift { 0% { background-position: 0 0; } 100% { background-position: 1000px 500px; } } */ /* No longer needed as main bg is removed */
+
+/* Print styles - These are applied by @media print */
+@media print {
+    .am-maha-sangram-container { background: #fff !important; color: #000 !important; padding:10px !important; overflow-x: visible !important; min-height: unset !important; display: block !important; text-align: left !important; }
+    .am-content-wrapper { min-width: unset !important; width: auto !important; padding: 0 !important; }
+    .am-maha-sangram-container .am-page-header { border-bottom: 1px solid #ccc !important; padding: 20px 0 !important; margin-bottom: 20px !important; }
+    /* .am-maha-sangram-container .am-page-header h1 (old selector) */
+    .am-maha-sangram-container .am-page-header .am-main-title-display { color: #000 !important; background: none !important; -webkit-text-fill-color: #000 !important; text-shadow: none !important; animation: none !important; }
+    .am-maha-sangram-container .am-page-header .am-subtitle { color: #333 !important; opacity: 1 !important; }
+    .am-maha-sangram-container .am-page-header .am-poet-name { color: #666 !important; opacity: 1 !important; }
+    .am-maha-sangram-container .am-action-buttons, .am-particles-bg, .am-maha-sangram-container::before, .am-media-section, .am-guidance-section-separator, .am-guidance-box .am-copy-code-button, .am-rights-section .fa { display: none !important; }
+    .am-maha-sangram-container .am-poem-content-area, .am-maha-sangram-container .am-guidance-box, .am-maha-sangram-container .am-rights-section, .am-maha-sangram-container .am-page-footer {
+        box-shadow: none !important; border-width: 1px !important; border-style: solid !important; border-color: #ccc !important;
+        background: #f9f9f9 !important; margin: 10px 0 !important; padding: 15px !important; border-radius: 0 !important;
+    }
+    .am-maha-sangram-container .am-poem-line, .am-maha-sangram-container .am-poem-line .am-fiery-word { color: #000 !important; background: none !important; -webkit-text-fill-color: #000 !important; text-shadow: none !important; animation: none !important; opacity: 1 !important; transform: none !important; transition: none !important; }
+    .am-maha-sangram-container .am-hunkar-line { color: #333 !important; border: 1px dashed #ccc !important; animation: none !important; }
+    .am-guidance-box h2, .am-guidance-box h3, .am-guidance-box p, .am-guidance-box ul li, .am-guidance-box pre, .am-rights-section p {color: #333 !important;}
+    .am-guidance-box code { background: #ddd !important; color: #333 !important;}
+    .am-rights-section { border-top: 1px solid #ccc !important; }
+    .am-maha-sangram-container .am-page-footer { color: #333 !important; border-top: 1px solid #ccc !important; padding: 15px !important; margin-top: 20px !important; }
+    .am-maha-sangram-container .am-page-footer::before { content: none !important; display: none !important; }
+}
+
+/* PDF Mode Styles - Applied when body has 'pdf-mode' class from JavaScript */
+body.pdf-mode .am-maha-sangram-container {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 10px !important;
+    overflow-x: visible !important;
+    min-height: unset !important;
+    display: block !important;
+    align-items: initial !important;
+    justify-content: initial !important;
+    text-align: left !important;
+    animation: none !important;
+}
+
+body.pdf-mode .am-content-wrapper {
+    min-width: unset !important;
+    width: auto !important;
+    padding: 0 !important;
+}
+
+body.pdf-mode .am-page-header {
+    border-bottom: 1px solid #cccccc !important;
+    padding: 20px 0 !important;
+    margin-bottom: 20px !important;
+    animation: none !important;
+}
+
+/* body.pdf-mode .am-page-header h1 (old selector) */
+body.pdf-mode .am-page-header .am-main-title-display {
+    color: #000000 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: initial !important;
+    text-shadow: none !important;
+    animation: none !important;
+}
+body.pdf-mode .am-page-header .am-subtitle { color: #333333 !important; opacity: 1 !important; }
+body.pdf-mode .am-page-header .am-poet-name { color: #666666 !important; opacity: 1 !important; }
+
+
+body.pdf-mode .am-action-buttons,
+body.pdf-mode .am-particles-bg,
+body.pdf-mode .am-guidance-box .am-copy-code-button,
+body.pdf-mode .am-media-section,
+body.pdf-mode .am-guidance-section-separator,
+body.pdf-mode .am-rights-section .fa {
+    display: none !important;
+}
+
+body.pdf-mode .am-page-footer::before {
+    content: none !important;
+    display: none !important;
+}
+
+body.pdf-mode .am-poem-content-area,
+body.pdf-mode .am-guidance-box,
+body.pdf-mode .am-rights-section,
+body.pdf-mode .am-page-footer {
+    box-shadow: none !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #cccccc !important;
+    background: #f9f9f9 !important;
+    margin: 10px 0 !important;
+    padding: 15px !important;
+    border-radius: 0 !important;
+}
+
+body.pdf-mode .am-poem-line,
+body.pdf-mode .am-poem-line .am-fiery-word {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: initial !important;
+    animation: none !important;
+}
+
+body.pdf-mode .am-hunkar-line {
+    color: #333333 !important;
+    border: 1px dashed #cccccc !important;
+    animation: none !important;
+    text-transform: none !important;
+}
+
+body.pdf-mode .am-guidance-box h2,
+body.pdf-mode .am-guidance-box h3,
+body.pdf-mode .am-guidance-box p,
+body.pdf-mode .am-guidance-box ul li,
+body.pdf-mode .am-guidance-box pre,
+body.pdf-mode .am-rights-section p {
+    color: #333333 !important;
+}
+
+body.pdf-mode .am-guidance-box code {
+    background: #dddddd !important;
+    color: #333333 !important;
+}
+
+body.pdf-mode .am-rights-section { border-top: 1px solid #cccccc !important; }
+body.pdf-mode .am-page-footer { 
+    margin-top: 20px !important; 
+    color: #333 !important; /* Ensure footer text is also plain */
+    border-top: 1px solid #ccc !important;
+}
