@@ -1,14 +1,230 @@
-try{AOS.init({duration:900,once:!0,offset:100,easing:'ease-in-out-quad'})}catch(e){console.error("AOS init failed:",e)}
-"undefined"!=typeof particlesJS&&document.getElementById("am-particles-js")?particlesJS("am-particles-js",{particles:{number:{value:50,density:{enable:!0,value_area:900}},color:{value:["#FFD700","#FFA500","#DAA520","#B8860B","#CFB53B"]},shape:{type:"circle"},opacity:{value:.6,random:!0,anim:{enable:!0,speed:.7,opacity_min:.15,sync:!1}},size:{value:3.5,random:!0,anim:{enable:!0,speed:2.5,size_min:.4,sync:!1}},line_linked:{enable:!1},move:{enable:!0,speed:1.2,direction:"top-right",random:!0,straight:!1,out_mode:"out",bounce:!1,attract:{enable:!1}}},interactivity:{detect_on:"canvas",events:{onhover:{enable:!1},onclick:{enable:!1},resize:!0}},retina_detect:!0}):document.getElementById("am-particles-js")&&console.warn("particles.js script might not be loaded or particlesJS is not defined, but #am-particles-js element exists.");
-try{const t=new Date().getFullYear(),e=document.getElementById("am-mahaTaandavCurrentYearFooter");e&&(e.innerHTML=`कविता: "अतिथि का अग्नि-पथ" © ${t} यह अग्नि-पथ विजय तक प्रशस्त रहेगा। - आचार्य आशीष मिश्र`);const o=document.getElementById("am-copyrightYearPoem");o&&(o.textContent=t);const n=document.getElementById("am-articleCopyrightYearFooter");n&&(n.textContent=t)}catch(t){console.error("Year update failed:",t)}
-const am_poemLines=document.querySelectorAll(".am-poem-content-area .chhand-line"),am_observerOptions={root:null,rootMargin:"0px",threshold:.1},am_poemLineObserver=new IntersectionObserver(((t,e)=>{t.forEach((t=>{t.isIntersecting&&t.target.classList.add("visible")}))}),am_observerOptions);
-function am_getVoicesRobust(){return am_voicesLoadedPromise||(am_voicesLoadedPromise=new Promise((t=>{let e=speechSynthesis.getVoices();e.length?t(e):(speechSynthesis.onvoiceschanged=()=>{e=speechSynthesis.getVoices(),t(e)},setTimeout((()=>{e=speechSynthesis.getVoices(),t(e)}),1200))})),),am_voicesLoadedPromise}async function am_populateVoiceListTTSInternal(){try{const t=await am_getVoicesRobust();if(am_voicesTTS=t.filter((t=>t.lang.startsWith("hi"))),0===am_voicesTTS.length&&(am_voicesTTS=t.filter((t=>t.lang.toLowerCase().includes("hi")||t.name.toLowerCase().includes("hindi")))),0===am_voicesTTS.length&&t.length>0){let e=t.find((t=>t.lang.startsWith("en")&&t.default));e?am_voicesTTS=[e]:am_voicesTTS=t}0===am_voicesTTS.length&&am_ttsPlayBtnGlobal?(am_ttsPlayBtnGlobal.innerHTML.includes("पथ सुनें")||am_ttsPlayBtnGlobal.innerHTML.includes("वाणी त्रुटि"))&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-times-circle" aria-hidden="true"></i> वाणी अक्षम',am_ttsPlayBtnGlobal.disabled=!0,am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!0)):am_ttsPlayBtnGlobal&&am_ttsPlayBtnGlobal.disabled&&am_ttsPlayBtnGlobal.innerHTML.includes("वाणी अक्षम")&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-volume-up" aria-hidden="true"></i> पथ सुनें',am_ttsPlayBtnGlobal.disabled=!1)}catch(t){console.error("Error populating voice list:",t),am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> वाणी त्रुटि',am_ttsPlayBtnGlobal.disabled=!0)}}
-function am_speakNextTTSInternal(){if(!am_isPlayingPoemTTS||am_currentUtteranceIndexTTS>=am_utteranceQueueTTS.length)return am_isPlayingPoemTTS=!1,am_currentUtteranceIndexTTS=0,am_utteranceQueueTTS=[],am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-volume-up" aria-hidden="true"></i> पथ सुनें',am_ttsPlayBtnGlobal.disabled=!1),void(am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!0));const t=am_utteranceQueueTTS[am_currentUtteranceIndexTTS],e=new SpeechSynthesisUtterance(t);if(e.onstart=()=>{am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> पथ गूंज रहा...'),am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!1)},e.onend=()=>{am_currentUtteranceIndexTTS++,am_speakNextTTSInternal()},e.onerror=(t)=>{console.error("TTS Error:",t.error),am_isPlayingPoemTTS=!1,am_currentUtteranceIndexTTS=0,am_utteranceQueueTTS=[],am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-volume-up" aria-hidden="true"></i> पथ सुनें',am_ttsPlayBtnGlobal.disabled=!1),am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!0),alert("Speech synthesis error: "+t.error+". Please ensure that Hindi voices are enabled in your system/browser.")},am_voicesTTS.length>0){let o;o=am_voicesTTS.find((t=>t.lang.startsWith("hi")&&(t.name.includes("Google")||t.name.includes("Kalpana")||t.name.includes("Lekha")||t.name.includes("Microsoft Madhuri")))),o||(o=am_voicesTTS.find((t=>"hi-IN"===t.lang))),o||(o=am_voicesTTS.find((t=>t.lang.startsWith("hi")))),e.voice=o||am_voicesTTS[0],e.voice.lang.startsWith("hi")||console.warn(`TTS: Speaking Hindi text with a non-Hindi voice: ${e.voice.name} (${e.voice.lang})`)}else return console.warn("TTS: No voices available to speak. Playback aborted."),alert("No suitable voice found for speech synthesis."),am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-times-circle" aria-hidden="true"></i> वाणी अक्षम',am_ttsPlayBtnGlobal.disabled=!0),am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!0),void(am_isPlayingPoemTTS=!1);e.rate=.85,e.pitch=1,e.volume=1,am_synth.speak(e)}
-function am_copyPoemGuidance(){const t=document.getElementById("am-poemGuidanceText");t?(navigator.clipboard.writeText(t.innerText||t.textContent).then((()=>{alert("कविता और गायन निर्देश आपके क्लिपबोर्ड पर कॉपी हो गए हैं!")})).catch((t=>{console.error("कॉपी करने में विफल: ",t);try{const e=document.createElement("textarea");e.value=textToCopy,e.style.position="fixed",e.style.left="-9999px",e.style.top="-9999px",document.body.appendChild(e),e.focus(),e.select(),document.execCommand("copy"),document.body.removeChild(e),alert("कविता और गायन निर्देश आपके क्लिपबोर्ड पर कॉपी हो गए हैं!")}catch(t){console.error("फालबैक कॉपी विफल: ",t),alert("क्षमा करें, कॉपी करने में विफल। आप पाठ को मैन्युअल रूप से चुनकर कॉपी कर सकते हैं।")}}))):alert("कॉपी करने के लिए सामग्री नहीं मिली (am-poemGuidanceText)।")}
-am_poemLines.length>0&&am_poemLines.forEach(((t,e)=>{t.closest(".chorus")?t.classList.add("visible"):t.style.setProperty("--stagger-delay",70*e+"ms"),am_poemLineObserver.observe(t)}));
-const am_synth=window.speechSynthesis;let am_voicesTTS=[],am_utteranceQueueTTS=[],am_isPlayingPoemTTS=!1,am_currentUtteranceIndexTTS=0;const am_ttsPlayBtnGlobal=document.getElementById("am-ttsPlayPoem"),am_ttsStopBtnGlobal=document.getElementById("am-ttsStopPoem");let am_voicesLoadedPromise=null;
-am_populateVoiceListTTSInternal(),am_ttsPlayBtnGlobal&&am_ttsPlayBtnGlobal.addEventListener("click",(async()=>{if(am_synth.speaking)return void(am_synth.paused?(am_synth.resume(),am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> पथ गूंज रहा...'):(am_synth.pause(),am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-pause-circle" aria-hidden="true"></i> रुका (RESUME)'));if(0!==am_voicesTTS.length&&am_voicesLoadedPromise&&(!am_voicesLoadedPromise||0!==am_voicesTTS.length)||(await am_populateVoiceListTTSInternal(),0===am_voicesTTS.length))return void alert("No voice available for speech synthesis on your browser or system. Please try reloading the page or check your system settings.");am_utteranceQueueTTS=[],document.querySelectorAll('.am-hero-section:not(.am-article-block .am-page-header) .am-main-title-display, .am-hero-section:not(.am-article-block .am-page-header) .am-subtitle, .am-poem-content-area .khanda h2, .am-poem-content-area .chhand-line').forEach((t=>{if(t.closest(".am-article-block"))return;let e=t.textContent.replace(/[\u200B-\u200D\uFEFF]/g,"").trim();t.tagName==="H2"&&t.closest(".khanda")?e=`खंड शीर्षक: ${t.textContent.trim()}`:t.classList.contains("am-main-title-display")?e=`शीर्षक: ${t.textContent.trim()}`:t.classList.contains("am-subtitle")&&(e=`उपशीर्षक: ${t.textContent.trim()}`),e&&am_utteranceQueueTTS.push(e)})),am_utteranceQueueTTS.length>0?(am_isPlayingPoemTTS=!0,am_currentUtteranceIndexTTS=0,am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.disabled=!0),am_speakNextTTSInternal()):(alert("No content found in the poem to read."),am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.disabled=!1))})),am_ttsStopBtnGlobal&&am_ttsStopBtnGlobal.addEventListener("click",(()=>{am_synth.cancel(),am_isPlayingPoemTTS=!1,am_currentUtteranceIndexTTS=0,am_utteranceQueueTTS=[],am_ttsPlayBtnGlobal&&(am_ttsPlayBtnGlobal.innerHTML='<i class="fa fa-volume-up" aria-hidden="true"></i> पथ सुनें',am_ttsPlayBtnGlobal.disabled=!1),am_ttsStopBtnGlobal&&(am_ttsStopBtnGlobal.disabled=!0)}));
-const am_downloadBtnGlobal=document.getElementById("am-downloadPoemPdf"),am_pdfPopup=document.getElementById("am-pdf-popup");
-am_downloadBtnGlobal&&am_pdfPopup&&am_downloadBtnGlobal.addEventListener("click",(()=>{const t=am_downloadBtnGlobal.innerHTML;am_downloadBtnGlobal.innerHTML='<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> PDF बन रहा है...',am_downloadBtnGlobal.disabled=!0,am_pdfPopup.style.display="flex";const e=document.querySelector(".am-content-wrapper");if(e&&window.html2canvas&&window.jspdf){const{jsPDF:o}=window.jspdf;document.body.classList.add("pdf-mode");const n=window.scrollY;window.scrollTo(0,0),setTimeout((()=>{html2canvas(e,{scale:1.5,useCORS:!0,backgroundColor:"#ffffff",scrollX:0,scrollY:-window.scrollY,windowWidth:e.scrollWidth,windowHeight:e.scrollHeight,logging:!1,onclone:t=>{Array.from(t.querySelectorAll(".am-poem-content-area .chhand-line")).forEach((t=>t.classList.add("visible")))}}).then((e=>{window.scrollTo(0,n),document.body.classList.remove("pdf-mode"),am_pdfPopup.style.display="none",am_downloadBtnGlobal.innerHTML=t,am_downloadBtnGlobal.disabled=!1;const s=e.toDataURL("image/png"),a=new o({orientation:"p",unit:"mm",format:"a4"}),i=a.getImageProperties(s),l=10,r=a.internal.pageSize.getWidth()-2*l,d=i.height*r/i.width,c=a.internal.pageSize.getHeight()-2*l;let m=0,p=0;for(;p<i.height;){if(m>0&&a.addPage(),sourceHeightInCanvas=c/d*i.height,sourceHeightInCanvas=Math.min(sourceHeightInCanvas,i.height-p),sourceHeightInCanvas<=0)break;a.addImage(s,"PNG",l,l,r,sourceHeightInCanvas*r/i.width,"","FAST",0,p/i.height*e.height,sourceHeightInCanvas),p+=sourceHeightInCanvas,m+=c}a.save("अतिथि-का-अग्नि-पथ_और_विश्लेषण.pdf")})).catch((e=>{console.error("PDF Error:",e),window.scrollTo(0,n),document.body.classList.remove("pdf-mode"),am_pdfPopup.style.display="none",am_downloadBtnGlobal.innerHTML=t,am_downloadBtnGlobal.disabled=!1,alert("Error creating PDF: "+e.message)}))}),400)}else am_pdfPopup.style.display="none",alert("Error creating PDF! Required libraries (html2canvas or jspdf) are not loaded or content wrapper not found."),am_downloadBtnGlobal.innerHTML=t,am_downloadBtnGlobal.disabled=!1}));
-const am_shareBtnGlobal=document.getElementById("am-sharePoem");
-am_shareBtnGlobal&&am_shareBtnGlobal.addEventListener("click",(t=>{t.preventDefault();const e=window.location.href,o=document.title;if(navigator.share)navigator.share({title:o,text:`🔥 "${o}" 🔥 आचार्य आशीष मिश्र द्वारा - अतिथि शिक्षकों के संघर्ष की ज्वाला और भाषाई विश्लेषण! जरूर पढ़ें और साझा करें!`,url:e}).catch((t=>console.log("Share Error:",t)));else{const n=`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🔥 "${o}" 🔥 आचार्य आशीष मिश्र द्वारा - अतिथि शिक्षकों के संघर्ष की ज्वाला और भाषाई विश्लेषण! जरूर पढ़ें और साझा करें!`)}&url=${encodeURIComponent(e)}`,s=`https://api.whatsapp.com/send?text=${encodeURIComponent(`🔥 "${o}" 🔥 आचार्य आशीष मिश्र द्वारा - अतिथि शिक्षकों के संघर्ष की ज्वाला और भाषाई विश्लेषण! जरूर पढ़ें और साझा करें!`+" "+e)}`;let a="इस अग्नि-पथ को साझा करें!\n\n";a+=`Twitter: ${n}\n\n`,a+=`WhatsApp: ${s}\n\n`,a+=`या लिंक कॉपी करें: ${e}`,alert(a)}})),window.addEventListener("beforeunload",(()=>{am_synth&&am_synth.speaking&&am_synth.cancel()}));
+// --- AOS Initialization ---
+try {
+    AOS.init({ 
+        duration: 1000, 
+        once: false, 
+        offset: 100,    
+        easing: 'ease-out-quad'
+    });
+} catch(e) { console.error("AOS initialization failed:", e); }
+
+// --- Year Update ---
+try {
+    const footerYearEl = document.getElementById('currentYearFooter'); 
+    if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
+    const copyrightYearEl = document.getElementById('copyrightYear'); 
+    if (copyrightYearEl) { copyrightYearEl.textContent = new Date().getFullYear() + " आचार्य आशीष मिश्र"; }
+} catch(e) { console.error("Year update failed:", e); }
+
+// --- TTS Functionality ---
+const atithi_synth = window.speechSynthesis; 
+let atithi_voices = [];  
+let atithi_utteranceQueue = []; 
+let atithi_isPlayingTTS = false; 
+let atithi_currentUtteranceIndex = 0; 
+const atithi_ttsPlayButton = document.getElementById('playTTSButton'); 
+const atithi_ttsStopButton = document.getElementById('stopTTSButton'); 
+
+function atithi_populateVoiceList() { 
+    if (!atithi_synth) { return; }
+    atithi_voices = atithi_synth.getVoices().filter(voice => voice.lang.startsWith('hi'));
+    if (atithi_voices.length === 0) { atithi_voices = atithi_synth.getVoices(); }
+}
+
+if (atithi_synth) {
+    if (atithi_synth.getVoices().length) { atithi_populateVoiceList(); }
+    else if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = atithi_populateVoiceList; }
+    else { setTimeout(atithi_populateVoiceList, 250); } 
+} else {
+    if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
+    if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
+    console.warn("Speech Synthesis not supported.");
+}
+
+function atithi_speakNextUtterance() { 
+    if (!atithi_isPlayingTTS || atithi_currentUtteranceIndex >= atithi_utteranceQueue.length) {
+        atithi_isPlayingTTS = false; atithi_currentUtteranceIndex = 0; atithi_utteranceQueue = [];
+        if(atithi_ttsPlayButton) { atithi_ttsPlayButton.innerHTML = '<i class="fa fa-volume-up" aria-hidden="true"></i> पूरा पोस्ट सुनें'; atithi_ttsPlayButton.disabled = false; }
+        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
+        return;
+    }
+    const textToSpeak = atithi_utteranceQueue[atithi_currentUtteranceIndex];
+    if (!textToSpeak || textToSpeak.trim() === "") { 
+        atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); return;
+    }
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.onstart = () => {
+        if(atithi_ttsPlayButton) atithi_ttsPlayButton.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> बोल रहा...';
+        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = false;
+    };
+    utterance.onend = () => { atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); };
+    utterance.onerror = (event) => { 
+        console.error('TTS Error:', event);
+        atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); 
+    };
+    if (atithi_voices.length > 0) {
+        let hindiVoice = atithi_voices.find(voice => voice.lang === 'hi-IN' && (voice.name.includes('Google') || voice.name.toLowerCase().includes('hindi')));
+        utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices[0];
+    }
+    utterance.rate = 0.85; utterance.pitch = 1; utterance.volume = 1; 
+    try { atithi_synth.speak(utterance); } catch (e) { console.error("Error speaking:", e); atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); }
+}
+
+if (atithi_ttsPlayButton && atithi_synth) {
+    atithi_ttsPlayButton.addEventListener('click', () => {
+        if (atithi_synth.speaking) {
+            if (atithi_synth.paused) { atithi_synth.resume(); atithi_ttsPlayButton.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> बोल रहा...'; }
+            else { atithi_synth.pause(); atithi_ttsPlayButton.innerHTML = '<i class="fa fa-pause-circle" aria-hidden="true"></i> रुका है'; }
+            return;
+        }
+        atithi_populateVoiceList(); 
+        atithi_utteranceQueue = [];
+        const selectorsForTTS = [
+            '#introContent p',
+            '#articleContent h2, #articleContent h3, #articleContent h4, #articleContent h5, #articleContent h6, #articleContent p, #articleContent li, #articleContent .atithi-article-quote',
+            '#poemContent .atithi-poem-line',
+            '#mediaContent h3, #mediaContent .atithi-media-placeholder p', 
+            '#guidanceContent h2, #guidanceContent h3, #guidanceContent p, #guidanceContent li',
+            '#conclusionContent h3, #conclusionContent p',
+            '#rightsContent h3, #rightsContent p'
+        ];
+        
+        document.querySelectorAll(selectorsForTTS.join(', ')).forEach(el => {
+            const textContent = el.textContent ? el.textContent.replace( /[\u200B-\u200D\uFEFF]/g, '' ).trim() : "";
+            if (textContent && textContent.toLowerCase() !== 'कोड कॉपी') { 
+                 atithi_utteranceQueue.push(textContent);
+            }
+        });
+
+        if (atithi_utteranceQueue.length > 0) {
+            atithi_isPlayingTTS = true; atithi_currentUtteranceIndex = 0;
+            if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
+            atithi_speakNextUtterance();
+        } else { alert("पढ़ने के लिए कोई सामग्री नहीं मिली।"); }
+    });
+}
+if (atithi_ttsStopButton && atithi_synth) {
+    atithi_ttsStopButton.addEventListener('click', () => {
+        atithi_synth.cancel(); atithi_isPlayingTTS = false; atithi_currentUtteranceIndex = 0; atithi_utteranceQueue = [];
+        if(atithi_ttsPlayButton) { atithi_ttsPlayButton.innerHTML = '<i class="fa fa-volume-up" aria-hidden="true"></i> पूरा पोस्ट सुनें'; atithi_ttsPlayButton.disabled = false; }
+        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
+    });
+}
+
+// --- PDF Download ---
+const atithi_downloadPdfButton = document.getElementById('downloadPdfButton'); 
+if (atithi_downloadPdfButton) {
+    atithi_downloadPdfButton.addEventListener('click', () => {
+        const originalButtonHtml = atithi_downloadPdfButton.innerHTML;
+        atithi_downloadPdfButton.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> बन रहा है...';
+        atithi_downloadPdfButton.disabled = true;
+        const elementToCapture = document.querySelector('.atithi-page-container'); 
+        if (elementToCapture && typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') {
+            const { jsPDF } = jspdf; 
+            document.body.classList.add('pdf-mode');
+            const currentScrollY = window.scrollY; window.scrollTo(0,0); 
+            setTimeout(() => { 
+                html2canvas(elementToCapture, { 
+                    scale: 1.2, useCORS: true, backgroundColor: '#ffffff', 
+                    scrollX: 0, scrollY: 0, 
+                    windowWidth: elementToCapture.scrollWidth, 
+                    windowHeight: elementToCapture.scrollHeight, logging: false,
+                    onclone: (clonedDoc) => { 
+                        clonedDoc.body.classList.add('pdf-mode');
+                        clonedDoc.querySelectorAll('.atithi-action-buttons, .atithi-copy-button, .atithi-media-content .atithi-video-player, .atithi-external-links .atithi-button:not([href*="portal"])').forEach(el => el.style.display = 'none');
+                        clonedDoc.querySelectorAll('[data-aos]').forEach(el => {
+                            el.classList.remove('aos-init', 'aos-animate');
+                        });
+                    }
+                })
+                .then(canvas => {
+                    window.scrollTo(0, currentScrollY); document.body.classList.remove('pdf-mode');
+                    const imgData = canvas.toDataURL('image/png', 0.9);
+                    const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfMargin = 8; 
+                    const pdfWidth = pdf.internal.pageSize.getWidth() - 2 * pdfMargin;
+                    const pdfHeightCalculated = (imgProps.height * pdfWidth) / imgProps.width;
+                    const pageHeightA4 = pdf.internal.pageSize.getHeight() - 2 * pdfMargin;
+                    let currentYCanvas = 0; let numPages = Math.ceil(pdfHeightCalculated / pageHeightA4);
+                    for (let i = 0; i < numPages; i++) {
+                        if (i > 0) pdf.addPage();
+                        let sourceHeightCanvas = (pageHeightA4 / pdfHeightCalculated) * canvas.height;
+                        sourceHeightCanvas = Math.min(sourceHeightCanvas, canvas.height - currentYCanvas);
+                        if (sourceHeightCanvas <=0) break;
+                        let pageCanvas = document.createElement('canvas');
+                        pageCanvas.width = canvas.width; pageCanvas.height = sourceHeightCanvas;
+                        let pageCtx = pageCanvas.getContext('2d');
+                        pageCtx.drawImage(canvas, 0, currentYCanvas, canvas.width, sourceHeightCanvas, 0, 0, canvas.width, sourceHeightCanvas);
+                        let destHeightPdf = (sourceHeightCanvas * pdfWidth) / canvas.width;
+                        pdf.addImage(pageCanvas.toDataURL('image/png', 0.9), 'PNG', pdfMargin, pdfMargin, pdfWidth, destHeightPdf);
+                        currentYCanvas += sourceHeightCanvas;
+                    }
+                    pdf.save('अतिथि-शिक्षकों-का-संघर्ष-और-आह्वान.pdf');
+                    atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false;
+                }).catch(err => {
+                    window.scrollTo(0, currentScrollY); console.error("PDF Error:", err);
+                    document.body.classList.remove('pdf-mode');
+                    atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false;
+                    alert("PDF बनाने में त्रुटि हुई: " + err.message);
+                });
+            }, 400); 
+        } else {
+            alert("PDF बनाने में त्रुटि! लाइब्रेरी लोड नहीं हुई हैं या कंटेंट रैपर नहीं मिला।");
+            atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false;
+        }
+    });
+}
+
+// --- Share Functionality ---
+const atithi_sharePostButton = document.getElementById('sharePostButton'); 
+if (atithi_sharePostButton) {
+    atithi_sharePostButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pageUrl = window.location.href;
+        const pageTitleElement = document.querySelector('.atithi-page-header .atithi-main-title');
+        const pageTitle = pageTitleElement ? pageTitleElement.textContent.trim() : "अतिथि शिक्षकों का संघर्ष और आह्वान";
+        const authorName = "आचार्य आशीष मिश्र";
+        const shareText = `🔥 "${pageTitle}" 🔥 ${authorName} द्वारा संकलित - अतिथि शिक्षकों का महा-संग्राम! जरूर पढ़ें और शेयर करें!`;
+        if (navigator.share) {
+            navigator.share({ title: pageTitle, text: shareText, url: pageUrl })
+            .catch((error) => console.log('Share Error:', error));
+        } else {
+            const twitter = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
+            const whatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + pageUrl)}`;
+            let fallbackMessage = `इस क्रांति को साझा करें!\n\nTwitter:\n${twitter}\n\nWhatsApp:\n${whatsapp}\n\nया लिंक कॉपी करें:\n${pageUrl}`;
+            alert(fallbackMessage); 
+        }
+    });
+}
+
+// --- Copy Poem Guidance Text ---
+function atithi_copyPoemGuidance() { 
+    const textToCopyEl = document.getElementById('poemGuidanceText'); 
+    if (textToCopyEl) { 
+        let textToCopy = textToCopyEl.innerText || textToCopyEl.textContent;
+        textToCopy = textToCopy.replace(/IGNORE_WHEN_COPYING_START[\s\S]*?IGNORE_WHEN_COPYING_END\s*/gm, "").trim();
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('कविता और गायन निर्देशन आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं!');
+        }).catch(err => {
+            console.error('कॉपी करने में विफल: ', err);
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "fixed"; textArea.style.top = "-9999px"; textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus(); textArea.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if(success) { alert('कविता और गायन निर्देशन आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं!'); }
+                else { throw new Error('Fallback copy failed'); }
+            } catch (fallbackErr) {
+                 console.error('Fallback कॉपी करने में विफल: ', fallbackErr);
+                 alert('क्षमा करें, कॉपी करने में त्रुटि हुई।');
+            }
+        });
+     }
+}
+
+window.addEventListener('beforeunload', () => { if (atithi_synth && atithi_synth.speaking) { atithi_synth.cancel(); } });
+</script>
