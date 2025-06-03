@@ -1,17 +1,20 @@
+// <script type="text/javascript">
+// <!--
 document.addEventListener('DOMContentLoaded', function() {
 
 // --- AOS Initialization ---
 try {
     if (typeof AOS !== 'undefined') {
         AOS.init({
-            duration: 1000,
-            once: false, 
-            offset: 120, 
-            easing: 'ease-out-quad'
+            duration: 800,
+            once: false,
+            offset: 100,
+            easing: 'ease-out-cubic',
+            // disable: 'mobile' // Consider enabling if performance is an issue on mobile
         });
         console.log("AOS initialized successfully.");
     } else {
-        console.warn("AOS library is not defined. Skipping initialization. Make sure AOS.js and AOS.css are linked in your HTML.");
+        console.warn("AOS library is not defined. Skipping initialization.");
     }
 } catch (e) {
     console.error("AOS initialization failed:", e);
@@ -39,24 +42,17 @@ const atithi_ttsPlayButton = document.getElementById('playTTSButton');
 const atithi_ttsStopButton = document.getElementById('stopTTSButton');
 
 function atithi_populateVoiceList() {
-    if (!atithi_synth) {
-        console.warn("Speech Synthesis API not available.");
-        return;
-    }
+    if (!atithi_synth) { return; }
     try {
         let allVoices = atithi_synth.getVoices();
         atithi_voices = allVoices.filter(voice => voice.lang.startsWith('hi'));
         if (atithi_voices.length === 0 && allVoices.length > 0) {
-            atithi_voices = allVoices; // Fallback to any available voice
+            atithi_voices = allVoices;
         }
-         console.log("Voices populated. Hindi voices found:", atithi_voices.filter(v => v.lang.startsWith('hi')).length, "Total voices:", atithi_voices.length);
-         if (atithi_voices.length > 0) {
-            if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = false;
-         } else {
-            // If still no voices, keep play button disabled or provide feedback
-            if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
-            console.warn("No voices available for TTS after attempting to populate.");
-         }
+        console.log("Voices populated. Hindi voices:", atithi_voices.filter(v => v.lang.startsWith('hi')).length, "Total:", atithi_voices.length);
+        if (atithi_ttsPlayButton) {
+            atithi_ttsPlayButton.disabled = (atithi_voices.length === 0);
+        }
     } catch (e) {
         console.error("Error populating voice list:", e);
         if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
@@ -68,30 +64,23 @@ if (atithi_synth) {
     if (speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = atithi_populateVoiceList;
     }
-    
-    // Attempt to populate voices. Some browsers populate them on load.
     if (atithi_synth.getVoices().length > 0) {
          atithi_populateVoiceList();
     } else {
-        // For browsers that load voices asynchronously after onvoiceschanged
-        // or need a slight delay.
-        setTimeout(function(){
+        setTimeout(() => {
             if (atithi_synth.getVoices().length > 0) {
                 atithi_populateVoiceList();
-            } else {
-                console.warn("Voices still not available after timeout. TTS might not work as expected.");
-                 if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
+            } else if (atithi_ttsPlayButton) {
+                atithi_ttsPlayButton.disabled = true;
+                console.warn("TTS voices still not available after timeout.");
             }
-        }, 500); // Increased timeout slightly
+        }, 1000); // Increased timeout for voice loading
     }
-    
-    if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = (atithi_voices.length === 0); // Disable if no voices initially
     if (atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-
 } else {
     if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
     if (atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-    console.warn("Speech Synthesis not supported by this browser.");
+    console.warn("Speech Synthesis not supported.");
 }
 
 function atithi_speakNextUtterance() {
@@ -124,19 +113,16 @@ function atithi_speakNextUtterance() {
     utterance.onerror = (event) => {
         console.error('TTS Error:', event.error, "for text:", textToSpeak);
         atithi_currentUtteranceIndex++;
-        atithi_speakNextUtterance(); 
+        atithi_speakNextUtterance();
     };
 
     if (atithi_voices.length > 0) {
         let hindiVoice = atithi_voices.find(voice => voice.lang === 'hi-IN' && (voice.name.includes('Google') || voice.name.toLowerCase().includes('hindi')));
-        utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices[0]; 
-         if (utterance.voice) {
-            console.log("Using voice:", utterance.voice.name, utterance.voice.lang);
-        } else {
-            console.warn("No suitable voice found for TTS, attempting to use browser default.");
-        }
+        utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices[0];
+        if (utterance.voice) console.log("Using voice:", utterance.voice.name, utterance.voice.lang);
+        else console.warn("No suitable voice found, using browser default.");
     } else {
-         console.warn("Voice list is empty. TTS will use a default system voice if available.");
+         console.warn("Voice list empty. TTS will use default system voice.");
     }
     utterance.rate = 0.85;
     utterance.pitch = 1;
@@ -164,9 +150,8 @@ if (atithi_ttsPlayButton && atithi_synth) {
         }
 
         if (atithi_voices.length === 0) {
-            atithi_populateVoiceList(); 
+            atithi_populateVoiceList();
             if (atithi_voices.length === 0) {
-                console.warn("TTS voices not available yet. Please try again in a moment.");
                 alert("आवाज़ लोड हो रही है, कृपया कुछ क्षण बाद पुनः प्रयास करें।");
                 return;
             }
@@ -174,18 +159,30 @@ if (atithi_ttsPlayButton && atithi_synth) {
 
         atithi_utteranceQueue = [];
         const selectorsForTTS = [
+            '.atithi-page-header .atithi-main-title', '.atithi-page-header .atithi-subtitle', // Header text
             '#introContent p',
             '#articleContent h2, #articleContent h3, #articleContent h4, #articleContent h5, #articleContent h6, #articleContent p, #articleContent li, #articleContent .atithi-article-quote',
-            '#poemContent .atithi-poem-line',
+            '#poemContent .atithi-poem-title', '#poemContent .atithi-poem-line',
             '#mediaContent h3, #mediaContent .atithi-media-placeholder p',
-            '#guidanceContent h2, #guidanceContent h3, #guidanceContent p, #guidanceContent li',
+            '#guidanceContent h2, #guidanceContent h3, #guidanceContent p, #guidanceContent ul li', // Target li directly for lists
             '#conclusionContent h3, #conclusionContent p',
             '#rightsContent h3, #rightsContent p'
         ];
 
         document.querySelectorAll(selectorsForTTS.join(', ')).forEach(el => {
-            const textContent = el.textContent ? el.textContent.replace(/[\u200B-\u200D\uFEFF]/g, '').trim() : "";
-            if (textContent && textContent.toLowerCase() !== 'कोड कॉपी') { 
+            let textContent = "";
+            if (el.matches('.atithi-main-title')) { // Special handling for main title to exclude deco spans
+                 el.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        textContent += node.textContent.trim() + " ";
+                    }
+                });
+                textContent = textContent.trim();
+            } else {
+               textContent = el.textContent ? el.textContent.replace(/[\u200B-\u200D\uFEFF]/g, '').trim() : "";
+            }
+
+            if (textContent && textContent.toLowerCase() !== 'कोड कॉपी' && !el.closest('.atithi-code-block')) { // Exclude code block content
                 atithi_utteranceQueue.push(textContent);
             }
         });
@@ -197,7 +194,7 @@ if (atithi_ttsPlayButton && atithi_synth) {
             atithi_speakNextUtterance();
         } else {
             alert("पढ़ने के लिए कोई सामग्री नहीं मिली।");
-            if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = (atithi_voices.length === 0); // Re-enable if content was just empty
+            if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = (atithi_voices.length === 0);
         }
     });
 }
@@ -226,47 +223,92 @@ if (atithi_downloadPdfButton) {
 
         const elementToCapture = document.querySelector('.atithi-page-container');
 
-        if (elementToCapture && typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') {
-            const { jsPDF } = window.jspdf; 
-            
-            document.body.classList.add('pdf-mode');
-            const currentScrollY = window.scrollY; 
-            window.scrollTo(0, 0); 
+        if (!elementToCapture) {
+            alert("PDF त्रुटि: मुख्य कंटेंट क्षेत्र (.atithi-page-container) नहीं मिला।");
+            atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false; return;
+        }
+        if (typeof html2canvas === 'undefined') {
+            alert("PDF त्रुटि: html2canvas लाइब्रेरी लोड नहीं हुई।");
+            atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false; return;
+        }
+        if (typeof jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+            alert("PDF त्रुटि: jsPDF लाइब्रेरी लोड नहीं हुई।");
+            atithi_downloadPdfButton.innerHTML = originalButtonHtml; atithi_downloadPdfButton.disabled = false; return;
+        }
 
-            setTimeout(() => { 
+        const { jsPDF } = window.jspdf;
+        const currentScrollY = window.scrollY;
+        
+        // Temporarily apply PDF mode styles and scroll to top
+        document.body.classList.add('pdf-mode');
+        window.scrollTo(0, 0);
+
+        // Allow a brief moment for styles to apply and page to re-render if necessary
+        setTimeout(() => {
+            try {
                 html2canvas(elementToCapture, {
-                    scale: 1.2, 
+                    scale: 1.5, // Increased for better quality, can be 1.2 or 1
                     useCORS: true,
-                    backgroundColor: '#ffffff', 
+                    backgroundColor: '#ffffff',
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: elementToCapture.scrollWidth,
-                    windowHeight: elementToCapture.scrollHeight,
-                    logging: false, 
+                    windowWidth: elementToCapture.scrollWidth, // Use scrollWidth of the element
+                    windowHeight: elementToCapture.scrollHeight, // Use scrollHeight for full content
+                    logging: true, // Enable for debugging
+                    removeContainer: true, // Helps with memory cleanup
                     onclone: (clonedDoc) => {
-                        clonedDoc.body.classList.add('pdf-mode'); 
-                        clonedDoc.querySelectorAll('.atithi-action-buttons, .atithi-copy-button, .atithi-media-content .atithi-video-player, .atithi-external-links .atithi-button:not([href*="portal"]), .atithi-email-display, .atithi-related-link-box, .atithi-cta-scroll-block').forEach(el => el.style.display = 'none');
-                        clonedDoc.querySelectorAll('[data-aos]').forEach(el => {
-                            el.classList.remove('aos-init', 'aos-animate');
-                            el.style.opacity = '1';
-                            el.style.transform = 'none';
-                        });
+                        try {
+                            clonedDoc.body.classList.add('pdf-mode');
+                            const selectorsToHideInPDF = [
+                                '.atithi-action-buttons', '.atithi-copy-button',
+                                '.atithi-media-content .atithi-video-player',
+                                '.atithi-external-links .atithi-button:not([href*="portal"])',
+                                '.atithi-email-display', '.atithi-related-link-box',
+                                '.atithi-cta-scroll-block', '.atithi-external-links', /* Hide entire external links section */
+                                'script', 'iframe:not([src*="youtube.com/embed/Qc7oU4P4c0A"])' // Example: keep specific iframe
+                            ];
+                            clonedDoc.querySelectorAll(selectorsToHideInPDF.join(',')).forEach(el => {
+                                if(el && el.style) el.style.display = 'none';
+                            });
+                            clonedDoc.querySelectorAll('[data-aos]').forEach(el => {
+                                if (el) {
+                                    el.removeAttribute('data-aos'); // Remove AOS attribute to prevent interference
+                                    el.style.opacity = '1';
+                                    el.style.transform = 'none';
+                                    el.style.transition = 'none';
+                                }
+                            });
+                            // Ensure all elements are visible for capture
+                            clonedDoc.querySelectorAll('*').forEach(el => {
+                                if (el.style) {
+                                     // Override any styles that might make elements invisible due to JS
+                                    if (el.style.opacity === '0') el.style.opacity = '1';
+                                    if (el.style.visibility === 'hidden') el.style.visibility = 'visible';
+                                    // Remove transforms that might misplace elements
+                                    if (el.style.transform && el.style.transform !== 'none') el.style.transform = 'none';
+                                }
+                            });
+                        } catch (cloneErr) {
+                            console.error("Error during onclone:", cloneErr);
+                        }
                     }
                 })
                 .then(canvas => {
-                    const imgData = canvas.toDataURL('image/png', 0.92);
+                    const imgData = canvas.toDataURL('image/png', 0.9); // Quality vs size
                     const pdf = new jsPDF({
                         orientation: 'p',
                         unit: 'mm',
-                        format: 'a4'
+                        format: 'a4',
+                        // putOnlyUsedFonts: true, // Experimental, may reduce size
+                        // compress: true // May reduce size but increase processing
                     });
                     const imgProps = pdf.getImageProperties(imgData);
-                    const pdfMargin = 8; 
+                    const pdfMargin = 7;
                     const pdfWidth = pdf.internal.pageSize.getWidth() - 2 * pdfMargin;
-                    const pdfHeightFromImage = (imgProps.height * pdfWidth) / imgProps.width; 
-                    const a4PageHeight = pdf.internal.pageSize.getHeight() - 2 * pdfMargin; 
+                    const pdfHeightFromImage = (imgProps.height * pdfWidth) / imgProps.width;
+                    const a4PageHeight = pdf.internal.pageSize.getHeight() - 2 * pdfMargin;
 
-                    let canvasYOffset = 0; 
+                    let canvasYOffset = 0;
                     const totalPdfPages = Math.ceil(pdfHeightFromImage / a4PageHeight);
 
                     for (let i = 0; i < totalPdfPages; i++) {
@@ -274,42 +316,43 @@ if (atithi_downloadPdfButton) {
                         
                         let sliceHeightOnCanvas = (a4PageHeight / pdfHeightFromImage) * canvas.height;
                         sliceHeightOnCanvas = Math.min(sliceHeightOnCanvas, canvas.height - canvasYOffset);
-                        
-                        if (sliceHeightOnCanvas <= 0) break; 
+
+                        if (sliceHeightOnCanvas <= 0) break;
 
                         const tempCanvas = document.createElement('canvas');
                         tempCanvas.width = canvas.width;
                         tempCanvas.height = sliceHeightOnCanvas;
                         const tempCtx = tempCanvas.getContext('2d');
-                        
                         tempCtx.drawImage(canvas, 0, canvasYOffset, canvas.width, sliceHeightOnCanvas, 0, 0, canvas.width, sliceHeightOnCanvas);
                         
                         const slicePdfHeight = (sliceHeightOnCanvas * pdfWidth) / canvas.width;
-                        
-                        pdf.addImage(tempCanvas.toDataURL('image/png', 0.92), 'PNG', pdfMargin, pdfMargin, pdfWidth, slicePdfHeight);
+                        pdf.addImage(tempCanvas.toDataURL('image/png', 0.9), 'PNG', pdfMargin, pdfMargin, pdfWidth, slicePdfHeight);
                         canvasYOffset += sliceHeightOnCanvas;
                     }
                     pdf.save('रीवा-की-प्राचीन-धरोहर.pdf');
-                }).catch(err => {
-                    console.error("PDF Generation Error:", err);
-                    alert("PDF बनाने में त्रुटि हुई: " + err.message);
-                }).finally(() => {
-                    window.scrollTo(0, currentScrollY); 
+                })
+                .catch(err => {
+                    console.error("PDF Generation Error (html2canvas promise):", err);
+                    alert("PDF बनाने में त्रुटि हुई: " + err.message + "\nअधिक जानकारी के लिए कंसोल देखें।");
+                })
+                .finally(() => {
+                    window.scrollTo(0, currentScrollY);
                     document.body.classList.remove('pdf-mode');
                     atithi_downloadPdfButton.innerHTML = originalButtonHtml;
                     atithi_downloadPdfButton.disabled = false;
                 });
-            }, 400); 
-        } else {
-            alert("PDF बनाने में त्रुटि! आवश्यक लाइब्रेरी (html2canvas, jsPDF) लोड नहीं हुई हैं या कंटेंट रैपर नहीं मिला।");
-            atithi_downloadPdfButton.innerHTML = originalButtonHtml;
-            atithi_downloadPdfButton.disabled = false;
-            if (typeof html2canvas === 'undefined') console.error('html2canvas is not loaded');
-            if (typeof jspdf === 'undefined') console.error('jspdf is not loaded');
-            if (!elementToCapture) console.error('.atithi-page-container not found');
-        }
+            } catch (outerErr) {
+                 console.error("Outer error in PDF generation setup:", outerErr);
+                 alert("PDF बनाने में सेटअप त्रुटि: " + outerErr.message);
+                 window.scrollTo(0, currentScrollY);
+                 document.body.classList.remove('pdf-mode');
+                 atithi_downloadPdfButton.innerHTML = originalButtonHtml;
+                 atithi_downloadPdfButton.disabled = false;
+            }
+        }, 700); // Increased timeout for complex pages
     });
 }
+
 
 // --- Share Functionality ---
 const atithi_sharePostButton = document.getElementById('sharePostButton');
@@ -326,24 +369,19 @@ if (atithi_sharePostButton) {
                     tempTitle += node.textContent.trim();
                 }
             });
-            if (tempTitle) pageTitle = tempTitle;
+            if (tempTitle) pageTitle = tempTitle.replace(/\s+/g, ' ').trim(); // Consolidate multiple spaces
         }
         const authorName = "आचार्य आशीष मिश्र";
         const shareText = `📜 "${pageTitle}" 📜 ${authorName} द्वारा शोधित - विंध्य की प्राचीन धरोहर! अवश्य पढ़ें और साझा करें!`;
 
         if (navigator.share) {
-            navigator.share({
-                    title: pageTitle,
-                    text: shareText,
-                    url: pageUrl
-                })
+            navigator.share({ title: pageTitle, text: shareText, url: pageUrl })
                 .then(() => console.log('Successful share'))
                 .catch((error) => console.log('Error sharing:', error));
         } else {
             const twitter = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
             const whatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + pageUrl)}`;
-            let fallbackMessage = `इस ऐतिहासिक लेख को साझा करें!\n\nTwitter:\n${twitter}\n\nWhatsApp:\n${whatsapp}\n\nया लिंक कॉपी करें:\n${pageUrl}`;
-            prompt("साझा करने के लिए लिंक कॉपी करें या नीचे दिए गए विकल्पों का उपयोग करें:", `${pageUrl}\n\nTwitter: ${twitter}\nWhatsApp: ${whatsapp}`);
+            prompt("साझा करें:", `${shareText}\n\nLink: ${pageUrl}\nTwitter: ${twitter}\nWhatsApp: ${whatsapp}`);
         }
     });
 }
@@ -360,14 +398,14 @@ function atithi_copyPoemGuidance() {
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert('संदर्भ ग्रंथ आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं!');
             }).catch(err => {
-                console.error('Async: Could not copy text: ', err);
+                console.error('Async copy failed: ', err);
                 atithi_fallbackCopyTextToClipboard(textToCopy);
             });
         } else {
             atithi_fallbackCopyTextToClipboard(textToCopy);
         }
     } else {
-        console.error("Element with ID 'poemGuidanceText' not found for copying.");
+        console.error("Element 'poemGuidanceText' not found for copying.");
     }
 }
 const copyPoemButton = document.querySelector('.atithi-code-block .atithi-copy-button');
@@ -375,31 +413,22 @@ if (copyPoemButton) {
     if (document.getElementById('poemGuidanceText')) {
         copyPoemButton.addEventListener('click', atithi_copyPoemGuidance);
     } else {
-        console.warn("Copy button found, but target 'poemGuidanceText' not found.");
-        copyPoemButton.disabled = true;
+        copyPoemButton.style.display = 'none'; // Hide button if target is missing
     }
 }
 
 function atithi_fallbackCopyTextToClipboard(text) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.top = "-9999px";
-    textArea.style.left = "-9999px";
+    textArea.style.position = "fixed"; textArea.style.top = "-9999px"; textArea.style.left = "-9999px";
     document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+    textArea.focus(); textArea.select();
     try {
         const successful = document.execCommand('copy');
-        if (successful) {
-            alert('संदर्भ ग्रंथ आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं! (fallback)');
-        } else {
-            alert('क्षमा करें, कॉपी करने में त्रुटि हुई। (fallback execCommand failed)');
-            console.error('Fallback: execCommand was not successful');
-        }
+        alert(successful ? 'संदर्भ ग्रंथ क्लिपबोर्ड पर कॉपी (fallback)!' : 'कॉपी करने में त्रुटि (fallback)!');
     } catch (err) {
-        console.error('Fallback: Oops, unable to copy', err);
-        alert('क्षमा करें, कॉपी करने में त्रुटि हुई। (fallback exception)');
+        console.error('Fallback copy error', err);
+        alert('कॉपी करने में त्रुटि (fallback exception)!');
     }
     document.body.removeChild(textArea);
 }
@@ -411,5 +440,19 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
+// --- Scrollable Links Container (Optional JS for enhancements) ---
+const scrollableLinksContainer = document.getElementById('scrollableLinksContainer');
+if (scrollableLinksContainer) {
+    // Example: Add a class when scrolled to indicate more content
+    scrollableLinksContainer.addEventListener('scroll', function() {
+        if (this.scrollTop > 10) {
+            this.classList.add('scrolled');
+        } else {
+            this.classList.remove('scrolled');
+        }
+    });
+}
+
 }); // End of DOMContentLoaded
 // -->
+// </script>
