@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof AOS !== 'undefined') {
             AOS.init({
                 duration: 1000,
-                once: false,
-                offset: 100,
+                once: false, // Animation will trigger every time element scrolls into view
+                offset: 120, // Default offset for elements unless overridden by data-aos-offset
                 easing: 'ease-out-quad'
             });
             console.log("AOS initialized successfully.");
@@ -58,17 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (atithi_synth) {
-        // speechSynthesis.getVoices() might return an empty list initially.
-        // The 'voiceschanged' event is fired when the list of voices has been populated.
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = atithi_populateVoiceList;
         }
-        // Some browsers might not fire onvoiceschanged if voices are already available
-        // or might take time, so populate if already available or after a small delay.
         if (atithi_synth.getVoices().length > 0) {
              atithi_populateVoiceList();
         } else {
-            setTimeout(atithi_populateVoiceList, 300); // Give a bit more time for voices to load
+            setTimeout(atithi_populateVoiceList, 300); 
         }
 
     } else {
@@ -107,12 +103,12 @@ document.addEventListener('DOMContentLoaded', function() {
         utterance.onerror = (event) => {
             console.error('TTS Error:', event);
             atithi_currentUtteranceIndex++;
-            atithi_speakNextUtterance(); // Try next utterance even on error
+            atithi_speakNextUtterance(); 
         };
 
         if (atithi_voices.length > 0) {
             let hindiVoice = atithi_voices.find(voice => voice.lang === 'hi-IN' && (voice.name.includes('Google') || voice.name.toLowerCase().includes('hindi')));
-            utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices[0]; // Fallback
+            utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices[0]; 
              if (utterance.voice) {
                 console.log("Using voice:", utterance.voice.name, utterance.voice.lang);
             } else {
@@ -146,11 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Ensure voices are populated before trying to speak
             if (atithi_voices.length === 0) {
-                atithi_populateVoiceList(); // Try to populate again
+                atithi_populateVoiceList(); 
                 if (atithi_voices.length === 0) {
-                     // If still no voices after trying again, alert user or log
                     console.warn("TTS voices not available yet. Please try again in a moment.");
                     alert("आवाज़ लोड हो रही है, कृपया कुछ क्षण बाद पुनः प्रयास करें।");
                     return;
@@ -161,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectorsForTTS = [
                 '#introContent p',
                 '#articleContent h2, #articleContent h3, #articleContent h4, #articleContent h5, #articleContent h6, #articleContent p, #articleContent li, #articleContent .atithi-article-quote',
-                '#poemContent .atithi-poem-line',
+                '#poemContent .atithi-poem-line', // This will pick up the modified font size text
                 '#mediaContent h3, #mediaContent .atithi-media-placeholder p',
                 '#guidanceContent h2, #guidanceContent h3, #guidanceContent p, #guidanceContent li',
                 '#conclusionContent h3, #conclusionContent p',
@@ -170,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.querySelectorAll(selectorsForTTS.join(', ')).forEach(el => {
                 const textContent = el.textContent ? el.textContent.replace(/[\u200B-\u200D\uFEFF]/g, '').trim() : "";
-                if (textContent && textContent.toLowerCase() !== 'कोड कॉपी') { // Exclude "कोड कॉपी"
+                if (textContent && textContent.toLowerCase() !== 'कोड कॉपी') { 
                     atithi_utteranceQueue.push(textContent);
                 }
             });
@@ -178,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (atithi_utteranceQueue.length > 0) {
                 atithi_isPlayingTTS = true;
                 atithi_currentUtteranceIndex = 0;
-                if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true; // Disable play button while preparing
+                if (atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true; 
                 atithi_speakNextUtterance();
             } else {
                 alert("पढ़ने के लिए कोई सामग्री नहीं मिली।");
@@ -188,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (atithi_ttsStopButton && atithi_synth) {
         atithi_ttsStopButton.addEventListener('click', () => {
-            atithi_synth.cancel(); // This will trigger onend for the current utterance if one is speaking
+            atithi_synth.cancel(); 
             atithi_isPlayingTTS = false;
             atithi_currentUtteranceIndex = 0;
             atithi_utteranceQueue = [];
@@ -216,82 +210,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 const currentScrollY = window.scrollY;
                 window.scrollTo(0, 0);
 
-                setTimeout(() => { // Allow time for pdf-mode styles to apply
+                setTimeout(() => { 
                     html2canvas(elementToCapture, {
-                        scale: 1.2, // Adjust scale as needed
+                        scale: 1.2, 
                         useCORS: true,
                         backgroundColor: '#ffffff',
-                        scrollX: -window.scrollX, // Ensure these are 0 if page is scrolled to top
+                        scrollX: -window.scrollX, 
                         scrollY: -window.scrollY,
                         windowWidth: elementToCapture.scrollWidth,
                         windowHeight: elementToCapture.scrollHeight,
-                        logging: false, // Set to true for debugging html2canvas
+                        logging: false, 
                         onclone: (clonedDoc) => {
-                            clonedDoc.body.classList.add('pdf-mode'); // Ensure class is on cloned doc
-                            // Hide elements not needed in PDF
-                            clonedDoc.querySelectorAll('.atithi-action-buttons, .atithi-copy-button, .atithi-media-content .atithi-video-player, .atithi-external-links .atithi-button:not([href*="portal"])').forEach(el => el.style.display = 'none');
-                            // Remove AOS classes to prevent animations in cloned doc
+                            clonedDoc.body.classList.add('pdf-mode'); 
+                            clonedDoc.querySelectorAll('.atithi-action-buttons, .atithi-copy-button, .atithi-media-content .atithi-video-player, .atithi-external-links .atithi-button:not([href*="portal"]), .atithi-email-display, .atithi-related-link-box').forEach(el => el.style.display = 'none');
                             clonedDoc.querySelectorAll('[data-aos]').forEach(el => {
                                 el.classList.remove('aos-init', 'aos-animate');
                             });
                         }
                     })
                     .then(canvas => {
-                        window.scrollTo(0, currentScrollY); // Restore scroll position
+                        window.scrollTo(0, currentScrollY); 
                         document.body.classList.remove('pdf-mode');
 
-                        const imgData = canvas.toDataURL('image/png', 0.9); // Quality 0.9
+                        const imgData = canvas.toDataURL('image/png', 0.9); 
                         const pdf = new jsPDF({
                             orientation: 'p',
                             unit: 'mm',
                             format: 'a4'
                         });
                         const imgProps = pdf.getImageProperties(imgData);
-                        const pdfMargin = 8; // Margin in mm
+                        const pdfMargin = 8; 
                         const pdfWidth = pdf.internal.pageSize.getWidth() - 2 * pdfMargin;
-                        const pdfHeightCalculated = (imgProps.height * pdfWidth) / imgProps.width; // Calculated total height of the image in PDF units
-                        const pageHeightA4 = pdf.internal.pageSize.getHeight() - 2 * pdfMargin; // Usable height of A4 page
+                        const pdfHeightCalculated = (imgProps.height * pdfWidth) / imgProps.width; 
+                        const pageHeightA4 = pdf.internal.pageSize.getHeight() - 2 * pdfMargin; 
 
-                        let currentYCanvas = 0; // Current Y position on the source canvas
+                        let currentYCanvas = 0; 
                         const numPages = Math.ceil(pdfHeightCalculated / pageHeightA4);
 
                         for (let i = 0; i < numPages; i++) {
                             if (i > 0) pdf.addPage();
-
-                            // Calculate the height of the slice to take from the original canvas
                             let sourceHeightCanvas = (pageHeightA4 / pdfHeightCalculated) * canvas.height;
                             sourceHeightCanvas = Math.min(sourceHeightCanvas, canvas.height - currentYCanvas);
-
-                            if (sourceHeightCanvas <= 0) break; // No more content to draw
-
-                            // Create a temporary canvas for the current page's slice
+                            if (sourceHeightCanvas <= 0) break; 
                             let pageCanvas = document.createElement('canvas');
                             pageCanvas.width = canvas.width;
                             pageCanvas.height = sourceHeightCanvas;
                             let pageCtx = pageCanvas.getContext('2d');
-
-                            // Draw the slice from the main canvas to the temporary page canvas
                             pageCtx.drawImage(canvas, 0, currentYCanvas, canvas.width, sourceHeightCanvas, 0, 0, canvas.width, sourceHeightCanvas);
-
-                            // Calculate the height of this slice in the PDF
                             let destHeightPdf = (sourceHeightCanvas * pdfWidth) / canvas.width;
-
                             pdf.addImage(pageCanvas.toDataURL('image/png', 0.9), 'PNG', pdfMargin, pdfMargin, pdfWidth, destHeightPdf);
                             currentYCanvas += sourceHeightCanvas;
                         }
 
-                        pdf.save('अतिथि-शिक्षकों-का-संघर्ष-और-आह्वान.pdf');
+                        pdf.save('रीवा-की-प्राचीन-धरोहर.pdf');
                         atithi_downloadPdfButton.innerHTML = originalButtonHtml;
                         atithi_downloadPdfButton.disabled = false;
                     }).catch(err => {
-                        window.scrollTo(0, currentScrollY); // Restore scroll on error
+                        window.scrollTo(0, currentScrollY); 
                         document.body.classList.remove('pdf-mode');
                         console.error("PDF Generation Error:", err);
                         atithi_downloadPdfButton.innerHTML = originalButtonHtml;
                         atithi_downloadPdfButton.disabled = false;
                         alert("PDF बनाने में त्रुटि हुई: " + err.message);
                     });
-                }, 400); // Timeout duration
+                }, 400); 
             } else {
                 alert("PDF बनाने में त्रुटि! आवश्यक लाइब्रेरी (html2canvas, jsPDF) लोड नहीं हुई हैं या कंटेंट रैपर नहीं मिला।");
                 atithi_downloadPdfButton.innerHTML = originalButtonHtml;
@@ -310,9 +292,18 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const pageUrl = window.location.href;
             const pageTitleElement = document.querySelector('.atithi-page-header .atithi-main-title');
-            const pageTitle = pageTitleElement ? pageTitleElement.textContent.trim() : "अतिथि शिक्षकों का संघर्ष और आह्वान";
+            let pageTitle = "विंध्य की प्राचीन धरोहर: रीवा"; 
+            if (pageTitleElement) {
+                let tempTitle = "";
+                pageTitleElement.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        tempTitle += node.textContent.trim();
+                    }
+                });
+                if (tempTitle) pageTitle = tempTitle;
+            }
             const authorName = "आचार्य आशीष मिश्र";
-            const shareText = `🔥 "${pageTitle}" 🔥 ${authorName} द्वारा संकलित - अतिथि शिक्षकों का महा-संग्राम! जरूर पढ़ें और शेयर करें!`;
+            const shareText = `📜 "${pageTitle}" 📜 ${authorName} द्वारा शोधित - विंध्य की प्राचीन धरोहर! अवश्य पढ़ें और साझा करें!`;
 
             if (navigator.share) {
                 navigator.share({
@@ -323,10 +314,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(() => console.log('Successful share'))
                     .catch((error) => console.log('Error sharing:', error));
             } else {
-                // Fallback for browsers that do not support navigator.share
                 const twitter = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
                 const whatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + pageUrl)}`;
-                let fallbackMessage = `इस क्रांति को साझा करें!\n\nTwitter:\n${twitter}\n\nWhatsApp:\n${whatsapp}\n\nया लिंक कॉपी करें:\n${pageUrl}`;
+                let fallbackMessage = `इस ऐतिहासिक लेख को साझा करें!\n\nTwitter:\n${twitter}\n\nWhatsApp:\n${whatsapp}\n\nया लिंक कॉपी करें:\n${pageUrl}`;
                 alert(fallbackMessage);
             }
         });
@@ -337,27 +327,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const textToCopyEl = document.getElementById('poemGuidanceText');
         if (textToCopyEl) {
             let textToCopy = textToCopyEl.innerText || textToCopyEl.textContent;
-            // Remove the IGNORE_WHEN_COPYING block
             textToCopy = textToCopy.replace(/IGNORE_WHEN_COPYING_START[\s\S]*?IGNORE_WHEN_COPYING_END\s*/gm, "").trim();
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                    alert('कविता और गायन निर्देशन आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं!');
+                    alert('संदर्भ ग्रंथ आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं!');
                 }).catch(err => {
                     console.error('Async: कुड नॉट कॉपी टेक्स्ट: ', err);
-                    atithi_fallbackCopyTextToClipboard(textToCopy); // Fallback for async failure
+                    atithi_fallbackCopyTextToClipboard(textToCopy); 
                 });
             } else {
-                atithi_fallbackCopyTextToClipboard(textToCopy); // Fallback for no clipboard API
+                atithi_fallbackCopyTextToClipboard(textToCopy); 
             }
         }
     }
-    // Make copy function globally accessible if button is outside this script scope,
-    // or ensure event listener is attached here.
-    // If the button onclick="atithi_copyPoemGuidance()" is used, the function must be global.
-    // For robust C CSP, it's better to attach event listener here.
-    const copyPoemButton = document.querySelector('.atithi-copy-button[onclick="copyPoemGuidance()"]');
-    if (copyPoemButton) {
+    const copyPoemButton = document.querySelector('.atithi-copy-button'); 
+    if (copyPoemButton && document.getElementById('poemGuidanceText')) { 
         copyPoemButton.addEventListener('click', atithi_copyPoemGuidance);
     }
 
@@ -365,7 +350,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function atithi_fallbackCopyTextToClipboard(text) {
         const textArea = document.createElement("textarea");
         textArea.value = text;
-        // Avoid scrolling to bottom
         textArea.style.position = "fixed";
         textArea.style.top = "-9999px";
         textArea.style.left = "-9999px";
@@ -375,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const successful = document.execCommand('copy');
             if (successful) {
-                alert('कविता और गायन निर्देशन आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं! (fallback)');
+                alert('संदर्भ ग्रंथ आपके क्लिपबोर्ड पर कॉपी कर दिए गए हैं! (fallback)');
             } else {
                 alert('क्षमा करें, कॉपी करने में त्रुटि हुई। (fallback execCommand failed)');
             }
@@ -395,3 +379,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 }); // End of DOMContentLoaded
+</script>
