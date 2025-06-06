@@ -966,3 +966,225 @@ html {
     .atithi-action-buttons { gap: 8px; }
     .atithi-button { padding: 8px 12px; font-size: clamp(0.85em, 1.9vw, 1em); }
 }
+
+
+/* ------------ NEW CSS FOR FLEXIBLE TABLE (तालिका 5 के लिए) ------------ */
+
+.atithi-flexible-table-container {
+    width: 100%;
+    margin-top: 20px; /* पिछले कंटेंट से थोड़ी दूरी */
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 215, 0, 0.4); /* हल्का सुनहरा बॉर्डर कंटेनर के लिए */
+    border-radius: 8px;
+    padding: 15px; /* पैडिंग थोड़ी बढ़ाई */
+    background-color: rgba(15, 5, 40, 0.3); /* कंटेनर के लिए गहरा बैंगनी पारदर्शी बैकग्राउंड */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+.atithi-flexible-table-container h2 {
+    font-family: 'Rozha One', 'Lohit Devanagari', serif;
+    color: #FFD700;
+    font-size: clamp(1.7em, 3.5vw, 2.2em); /* थोड़ा बड़ा शीर्षक */
+    text-align: center;
+    margin-bottom: 25px; /* शीर्षक और तालिका के बीच अधिक स्थान */
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid rgba(255, 215, 0, 0.6); /* थोड़ी मोटी अंडरलाइन */
+    text-shadow: 1px 1px 3px #000;
+}
+.atithi-flexible-table-container h2 .fa {
+    margin-right: 12px; /* आइकन और टेक्स्ट के बीच थोड़ा और स्थान */
+    font-size: 0.9em; /* आइकन को शीर्षक के सापेक्ष थोड़ा छोटा करें */
+}
+
+/* पंक्तियों को लपेटने के लिए, यदि आवश्यक हो */
+.atithi-table-rows-wrapper {
+    width: 100%;
+    overflow-x: auto; /* यदि सामग्री बहुत चौड़ी हो तो क्षैतिज स्क्रॉलिंग की अनुमति दें */
+}
+
+.atithi-table-row {
+    display: flex;
+    /* flex-wrap: nowrap; हटा दिया गया ताकि सेल रैप हो सकें अगर वे फिट न हों, लेकिन हम min-width से इसे नियंत्रित करेंगे */
+    margin-bottom: 6px; /* पंक्तियों के बीच थोड़ा अधिक गैप */
+    border-radius: 5px;
+    overflow: hidden; /* यह सुनिश्चित करने के लिए कि गोल कोने काम करें */
+    border: 1px solid transparent; /* होवर पर बॉर्डर के लिए जगह */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.atithi-table-row:nth-child(odd) {
+    background-color: rgba(40, 20, 70, 0.35); /* थोड़ा गहरा और जीवंत विषम रंग */
+}
+.atithi-table-row:nth-child(even) {
+    background-color: rgba(60, 30, 90, 0.35); /* थोड़ा गहरा और जीवंत सम रंग */
+}
+.atithi-table-row:not(.atithi-table-header):hover {
+    background-color: rgba(80, 50, 120, 0.5); /* होवर पर थोड़ा और स्पष्ट रंग */
+    border-color: rgba(255, 215, 0, 0.5); /* होवर पर सुनहरा बॉर्डर */
+}
+
+
+.atithi-table-cell {
+    padding: 12px 15px; /* पैडिंग समायोजित */
+    border-right: 1px dashed rgba(255, 215, 0, 0.25); /* डैश्ड विभाजक */
+    color: #F0E68C; /* हल्का पीला टेक्स्ट */
+    font-size: clamp(0.95em, 1.9vw, 1.1em);
+    line-height: 1.7; /* मानक लाइन-हाइट */
+    /*
+    min-height: calc(1.7em * 4 + 24px);  लगभग 4 लाइन टेक्स्ट की ऊंचाई + पैडिंग
+    max-height: calc(1.7em * 4 + 24px);  ऊंचाई सीमित
+    यह नियम था "लाइन का गैप इतना रहे कि उसमें चार लाइन का कंटेंट ही आए लेकिन कंटेंट की मात्रा बढ़ने रा के बीच गैप चार लाइन का रहेगा लेकिन उस बाक्स के कालम की चौड़ाई बढ़ जाएगी"
+    इसके लिए, हम max-height को हटा देंगे और overflow-y: auto को रखेंगे ताकि यदि आवश्यक हो तो सेल वर्टिकली भी स्क्रॉल कर सके
+    मुख्य रूप से चौड़ाई विस्तार पर ध्यान केंद्रित करेंगे।
+    */
+    min-height: calc(1.7em * 4 + 24px); /* न्यूनतम ऊंचाई 4 लाइनों के लिए */
+    max-height: calc(1.7em * 4 + 24px); /* अधिकतम ऊंचाई 4 लाइनों के लिए, इससे ज्यादा पर स्क्रॉल */
+    overflow: auto; /* यदि सामग्री ऊंचाई या चौड़ाई से अधिक हो तो स्क्रॉल करें */
+
+    display: flex;
+    align-items: flex-start; /* सामग्री को ऊपर से शुरू करें */
+
+    flex-grow: 1; /* डिफ़ॉल्ट रूप से सभी सेल उपलब्ध स्थान साझा करें */
+    flex-shrink: 0; /* सामग्री के आधार पर सेल को सिकुड़ने से रोकें (ताकि वे चौड़े हो सकें) */
+    flex-basis: 200px; /* प्रत्येक सेल के लिए एक आधारभूत चौड़ाई, यह 'min-width' की तरह काम करेगा */
+                       /* आप इसे सामग्री के प्रकार के आधार पर प्रति कॉलम समायोजित कर सकते हैं */
+    min-width: 150px;  /* एक न्यूनतम चौड़ाई ताकि सेल बहुत संकरे न हों */
+    word-wrap: break-word; /* लंबे शब्दों को तोड़ें */
+    transition: flex-basis 0.3s ease, min-width 0.3s ease; /* चौड़ाई परिवर्तन के लिए स्मूथ ट्रांजीशन */
+}
+
+.atithi-table-cell:last-child {
+    border-right: none;
+}
+
+/* हेडर सेल के लिए विशेष स्टाइल */
+.atithi-table-header .atithi-table-cell {
+    background-color: rgba(255, 215, 0, 0.2); /* सुनहरा गहरा बैकग्राउंड */
+    color: #FFD700;
+    font-family: 'Teko', 'Martel Sans', sans-serif;
+    font-weight: 700; /* बोल्डर हेडर */
+    text-transform: uppercase;
+    letter-spacing: 1px; /* अधिक स्पष्टता */
+    font-size: clamp(1.05em, 2.1vw, 1.2em);
+    min-height: auto; /* हेडर की ऊंचाई सामग्री पर आधारित */
+    max-height: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.7);
+    padding-top: 15px; /* हेडर के लिए अधिक पैडिंग */
+    padding-bottom: 15px;
+    flex-shrink: 1; /* हेडर को सिकुड़ने की अनुमति दें यदि आवश्यक हो */
+}
+
+/* सामग्री वाले ब्लॉक के लिए */
+.atithi-table-cell-content {
+    width: 100%;
+    /* word-break: break-word; -- यह अब atithi-table-cell पर है */
+}
+
+/* कॉलम-विशिष्ट चौड़ाई (आवश्यकतानुसार समायोजित करें) */
+/* पहला कॉलम (सांस्कृतिक पहलू) */
+.atithi-table-row .atithi-table-cell:nth-child(1) {
+    flex-basis: 30%; /* प्रतिशत आधारित चौड़ाई */
+    min-width: 180px; /* सांस्कृतिक पहलू के लिए थोड़ी अधिक न्यूनतम चौड़ाई */
+    font-weight: bold; /* पहलू को बोल्ड करें */
+    color: #FFDEAD; /* थोड़ा अलग रंग */
+}
+/* दूसरा कॉलम (विवरण) */
+.atithi-table-row .atithi-table-cell:nth-child(2) {
+    flex-basis: 70%; /* विवरण के लिए अधिक स्थान */
+    min-width: 300px; /* विवरण के लिए अधिक न्यूनतम चौड़ाई */
+}
+
+/* हेडर के लिए भी यही चौड़ाई लागू करें */
+.atithi-table-header .atithi-table-cell:nth-child(1) {
+    flex-basis: 30%;
+    min-width: 180px;
+}
+.atithi-table-header .atithi-table-cell:nth-child(2) {
+    flex-basis: 70%;
+    min-width: 300px;
+}
+
+
+/* छोटे स्क्रीन के लिए समायोजन */
+@media (max-width: 768px) {
+    .atithi-table-row {
+        /* छोटी स्क्रीन पर, पंक्तियाँ कॉलम में स्टैक हो सकती हैं */
+        /* या क्षैतिज स्क्रॉलिंग पर निर्भर रहना बेहतर होगा जैसा कि atithi-table-rows-wrapper में है */
+        /* यदि स्टैकिंग चाहते हैं:
+        flex-direction: column;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        */
+    }
+    .atithi-table-cell {
+        /* यदि स्टैकिंग चाहते हैं:
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        min-height: auto;
+        max-height: none;
+        width: 100% !important;
+        flex-basis: auto !important;
+        min-width: 0 !important;
+        text-align: left;
+        */
+
+        /* वर्तमान डिज़ाइन के लिए, हम क्षैतिज स्क्रॉलिंग का उपयोग करेंगे */
+        /* लेकिन फॉन्ट साइज़ थोड़ा छोटा कर सकते हैं */
+        font-size: clamp(0.85em, 1.7vw, 1em);
+        min-height: calc(1.7em * 3.5 + 20px); /* 3.5 लाइनों के लिए न्यूनतम ऊंचाई */
+        max-height: calc(1.7em * 3.5 + 20px); /* और अधिकतम */
+
+    }
+    /* .atithi-table-cell:last-child { border-bottom: none; } यदि स्टैकिंग */
+
+    /* यदि आप हेडर को छोटी स्क्रीन पर छिपाना चाहते हैं */
+    /* .atithi-table-header { display: none; } */
+    /* और डेटा-लेबल का उपयोग करें (इसके लिए HTML में data-label जोड़ना होगा) */
+    /*
+    .atithi-table-cell::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        width: 30%;
+        margin-right: 10px;
+        color: #FFC107;
+    }
+    .atithi-table-cell > .atithi-table-cell-content {
+        display: block;
+        overflow: hidden;
+    }
+    */
+}
+
+@media (max-width: 480px) {
+    .atithi-flexible-table-container {
+        padding: 10px;
+    }
+    .atithi-flexible-table-container h2 {
+        font-size: clamp(1.5em, 4.5vw, 1.9em);
+        margin-bottom: 15px;
+    }
+    .atithi-table-cell {
+        font-size: clamp(0.8em, 1.8vw, 0.95em);
+        padding: 8px 10px;
+        min-height: calc(1.6em * 4 + 16px); /* 4 लाइनें + पैडिंग */
+        max-height: calc(1.6em * 4 + 16px);
+        min-width: 120px; /* छोटी स्क्रीन पर न्यूनतम चौड़ाई */
+        flex-basis: 150px; /* छोटी स्क्रीन पर बेसिस */
+    }
+    .atithi-table-row .atithi-table-cell:nth-child(1) {
+        min-width: 120px;
+        flex-basis: 40%;
+    }
+    .atithi-table-row .atithi-table-cell:nth-child(2) {
+        min-width: 180px;
+        flex-basis: 60%;
+    }
+     .atithi-table-header .atithi-table-cell {
+        font-size: clamp(0.9em, 2vw, 1.1em);
+        padding: 10px 8px;
+    }
+}
