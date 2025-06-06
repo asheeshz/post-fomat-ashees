@@ -1188,3 +1188,42 @@ html {
         padding: 10px 8px;
     }
 }
+/* ------------ विशिष्ट तालिकाओं (1, 2, 3) के लिए कॉलम चौड़ाई समायोजन ------------ */
+/* तालिका 1 के लिए कॉलम चौड़ाई (3 कॉलम) */
+#table1Container .atithi-table-row .atithi-table-cell:nth-child(1),
+#table1Container .atithi-table-header .atithi-table-cell:nth-child(1) { flex-basis: 25%; min-width: 150px; }
+#table1Container .atithi-table-row .atithi-table-cell:nth-child(2),
+#table1Container .atithi-table-header .atithi-table-cell:nth-child(2) { flex-basis: 25%; min-width: 120px; }
+#table1Container .atithi-table-row .atithi-table-cell:nth-child(3),
+#table1Container .atithi-table-header .atithi-table-cell:nth-child(3) { flex-basis: 50%; min-width: 250px; }
+
+/* तालिका 2 के लिए कॉलम चौड़ाई (4 कॉलम) */
+#table2Container .atithi-table-row .atithi-table-cell:nth-child(1),
+#table2Container .atithi-table-header .atithi-table-cell:nth-child(1) { flex-basis: 20%; min-width: 150px; }
+/* ... तालिका 2 के बाकी कॉलम ... */
+#table2Container .atithi-table-row .atithi-table-cell:nth-child(4),
+#table2Container .atithi-table-header .atithi-table-cell:nth-child(4) { flex-basis: 40%; min-width: 250px; }
+
+
+/* तालिका 3 के लिए कॉलम चौड़ाई (4 कॉलम) */
+#table3Container .atithi-table-row .atithi-table-cell:nth-child(1),
+#table3Container .atithi-table-header .atithi-table-cell:nth-child(1) { flex-basis: 25%; min-width: 180px; }
+/* ... तालिका 3 के बाकी कॉलम ... */
+#table3Container .atithi-table-row .atithi-table-cell:nth-child(4),
+#table3Container .atithi-table-header .atithi-table-cell:nth-child(4) { flex-basis: 30%; min-width: 220px; }
+
+/* छोटे स्क्रीन के लिए समायोजन (यदि इन तालिकाओं के लिए विशिष्ट नियम आवश्यक हैं) */
+@media (max-width: 768px) {
+    #table1Container .atithi-table-cell,
+    #table2Container .atithi-table-cell,
+    #table3Container .atithi-table-cell {
+        /* यदि तालिका 1, 2, 3 के लिए अलग छोटे स्क्रीन नियम चाहिए */
+    }
+}
+@media (max-width: 480px) {
+    #table1Container .atithi-table-cell,
+    #table2Container .atithi-table-cell,
+    #table3Container .atithi-table-cell {
+        /* यदि तालिका 1, 2, 3 के लिए अलग बहुत छोटी स्क्रीन नियम चाहिए */
+    }
+}
