@@ -968,120 +968,82 @@ html {
 }
 /* --- Player and Modal Specific Styles (to be used WITH your existing atithi- styles.css) --- */
 
-/* Ensure these :root variables are defined in your main CSS or set necessary values here */
-/* These are defaults if not found in your main CSS for player context */
+/* --- इमेज एल्बम और मोडल के लिए संशोधित CSS --- */
+
+/* ... (अन्य :root और पेज स्टाइल अपरिवर्तित) ... */
+
+/* सुनिश्चित करें कि ये वेरिएबल्स आपके मुख्य CSS में परिभाषित हैं या यहाँ आवश्यक मान सेट करें */
 :root {
-    --atithi-modal-overlay-bg: rgba(10, 5, 20, 0.97);
-    --atithi-modal-content-bg: #0a0514; 
+    /* ... (आपके मौजूदा वेरिएबल्स) ... */
+    --atithi-modal-overlay-bg: rgba(10, 5, 20, 0.97); 
+    --atithi-modal-content-bg: #0a0514; /* मोडल का मुख्य बैकग्राउंड */
     --atithi-modal-border-color: rgba(255, 215, 0, 0.25);
     --atithi-modal-button-color: #FFF8DC;
-    --atithi-modal-button-bg: rgba(60, 60, 60, 0.75);
-    --atithi-modal-button-hover-bg: rgba(85, 85, 85, 0.9);
-    --atithi-modal-button-padding: 8px 12px;
-    --atithi-modal-button-radius: 5px;
-    --atithi-safe-area-inset: 20px; 
-    --atithi-border-radius-std: var(--atithiBorderRadius, 8px); /* Use existing or default */
-    --atithi-media-frame-bg: #000;
-    --atithi-media-frame-border: 2px solid rgba(255, 215, 0, 0.15);
+    --atithi-modal-button-bg: rgba(50, 50, 50, 0.8);
+    --atithi-modal-button-hover-bg: rgba(80, 80, 80, 0.95);
+    --atithi-modal-button-padding: 9px 14px;
+    --atithi-modal-button-radius: 6px;
+    --atithi-safe-area-inset: 100px; /* <<< आपकी महत्वपूर्ण आवश्यकता */
+    --atithi-border-radius-std: var(--atithiBorderRadius, 8px); 
+    --atithi-image-frame-bg: #080808; /* इमेज के पीछे का फ्रेम बैकग्राउंड */
+    --atithi-image-frame-padding: 10px; /* फ्रेम की मोटाई */
+    --atithi-image-border-color: rgba(200, 200, 200, 0.2); /* इमेज का हल्का बॉर्डर */
 }
 
-/* Player Trigger Area */
-.atithi-media-player-trigger-area {
-    /* Uses your .atithi-content-block styles */
-    /* You might want to add specific margins if needed */
-     margin-bottom: 25px !important; /* Ensure space after this block */
-}
-
-.atithi-video-thumbnail-display {
-    width: 100%;
-    max-width: 420px; /* Slightly smaller default */
-    aspect-ratio: 16 / 9;
-    margin: 15px auto;
-    position: relative;
-    cursor: pointer;
-    background-color: #111;
-    border-radius: var(--atithi-border-radius-std);
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    border: 1px solid var(--atithi-modal-border-color);
-}
-.atithi-video-thumbnail-display img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-.atithi-video-thumbnail-display:hover img { transform: scale(1.07); }
-
-.atithi-play-icon-overlay {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    display: flex; align-items: center; justify-content: center;
-    background-color: rgba(0,0,0,0.35);
-    transition: background-color 0.3s ease;
-}
-.atithi-video-thumbnail-display:hover .atithi-play-icon-overlay {
-    background-color: rgba(0,0,0,0.15);
-}
-.atithi-play-icon-overlay .fa-play {
-    font-size: 45px; /* Slightly smaller */
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 0 12px rgba(0,0,0,0.6);
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-.atithi-video-thumbnail-display:hover .atithi-play-icon-overlay .fa-play {
-    transform: scale(1.15); color: #fff;
-}
-
-.atithi-media-count-text {
-    font-size: 0.9em;
-    color: var(--atithiTextColor, #ccc); /* Use theme color or fallback */
-    margin-top: 8px;
-}
-/* Styling for Image Album button if it needs to differ from general .atithi-button */
-.atithi-button.atithi-image-album-btn {
-    /* Your existing .atithi-button styles will apply. */
-    /* If specific overrides are needed for this button, add them here. */
-    /* e.g., background: linear-gradient(145deg, #C70039, #900C3F) !important; */
-}
-
-
-/* Modal Base */
-.atithi-custom-modal {
-    display: none; 
-    position: fixed;
-    z-index: 100000; /* Very high z-index */
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
-    overflow: hidden; 
-    background-color: var(--atithi-modal-overlay-bg);
-    justify-content: center; 
-    align-items: center; 
-}
-.atithi-custom-modal.active { display: flex; }
-
+/* मोडल का मुख्य कंटेंट एरिया */
 .atithi-modal-content-area { 
     background-color: var(--atithi-modal-content-bg); 
-    color: var(--atithi-modal-text-color); 
+    color: var(--atithi-modal-text-color, #c0d6e4); 
     padding: 10px; 
     border: 1px solid var(--atithi-modal-border-color);
     width: calc(100vw - (2 * var(--atithi-safe-area-inset, 20px))); 
     height: calc(100vh - (2 * var(--atithi-safe-area-inset, 20px)));
-    max-width: 1200px; /* Slightly reduced default max-width */
-    max-height: calc(0.9 * 100vh); /* Max 90% of viewport height */
-    position: relative; border-radius: var(--atithi-border-radius-std, 8px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    display: flex; flex-direction: column;
+    max-width: 1152px; 
+    max-height: 648px; 
+    position: relative; 
+    border-radius: var(--atithi-border-radius-std, 8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex; 
+    flex-direction: column;
     overflow: hidden; 
 }
 
+/* मीडिया (वीडियो/इमेज) रखने वाला कंटेनर */
 .atithi-modal-media-viewer { 
-    flex-grow: 1; display: flex;
-    align-items: center; justify-content: center;
+    flex-grow: 1; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
     position: relative;
     overflow: hidden;
-    background-color: var(--atithi-media-frame-bg); 
-    border-radius: calc(var(--atithi-border-radius-std, 8px) - 4px); 
+    background-color: #000; /* वीडियो के पीछे का रंग */
+    border-radius: calc(var(--atithi-border-radius-std, 8px) - 2px); 
 }
 
-/* Modal Controls (Close, Nav) */
+/* इमेज एल्बम स्पेसिफिक */
+#atithiImageFrameWrapper { /* यह .atithi-modal-media-viewer क्लास के साथ इमेज एल्बम का मुख्य व्यूअर है */
+    background-color: var(--atithi-image-frame-bg); /* फ्रेम का बैकग्राउंड */
+    padding: var(--atithi-image-frame-padding); /* फ्रेम बनाने के लिए पैडिंग */
+    box-sizing: border-box;
+    display: flex; /* इमेज को केंद्र में रखने के लिए */
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* मीडिया व्यूअर की पूरी चौड़ाई ले */
+    height: 100%; /* मीडिया व्यूअर की पूरी ऊंचाई ले */
+}
+
+#atithiAlbumImage { 
+    display: block;
+    max-width: 100%; /* फ्रेम रैपर के अंदर 100% */
+    max-height: 100%; /* फ्रेम रैपर के अंदर 100% */
+    object-fit: contain; 
+    border: 1px solid var(--atithi-image-border-color); /* इमेज पर हल्का बॉर्डर */
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); /* इमेज पर हल्की बाहरी शैडो */
+    border-radius: calc(var(--atithi-border-radius-std, 8px) - 6px); /* इमेज के कोने गोल */
+    /* background-color: #000; /* यदि इमेज ट्रांसपेरेंट हो या फिट न हो तो पीछे काला दिखेगा */
+}
+
+/* मोडल नियंत्रण बटन (पहले जैसे ही) */
 .atithi-modal-close-btn {
     position: absolute;
     top: var(--atithi-safe-area-inset, 20px);
@@ -1093,7 +1055,7 @@ html {
     width: 36px; height: 36px;
     font-size: 1.3em; line-height: 34px; 
     text-align: center; cursor: pointer;
-    box-shadow: var(--atithi-modal-button-shadow, 0 2px 5px rgba(0,0,0,0.4));
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
     transition: background-color 0.2s, transform 0.2s;
     z-index: 1002;
 }
@@ -1107,10 +1069,11 @@ html {
     bottom: var(--atithi-safe-area-inset, 20px);
     left: var(--atithi-safe-area-inset, 20px);
     display: flex; flex-direction: column; 
-    gap: 10px; z-index: 1001;
+    gap: 8px; z-index: 1001;
 }
-/* Use existing .atithi-button for nav buttons, but allow some overrides for modal context */
 .atithi-modal-nav-controls .atithi-button { 
+    /* यह आपके मुख्य .atithi-button स्टाइल का उपयोग करेगा, */
+    /* लेकिन मोडल के संदर्भ में कुछ गुणों को ओवरराइड कर सकता है */
     margin: 0 !important; 
     padding: var(--atithi-modal-button-padding) !important;
     font-size: 0.9em !important;
@@ -1118,57 +1081,40 @@ html {
     background: var(--atithi-modal-button-bg) !important;
     color: var(--atithi-modal-button-color) !important;
     border: 1px solid rgba(255,255,255,0.1) !important;
-    box-shadow: var(--atithi-modal-button-shadow, 0 2px 5px rgba(0,0,0,0.4)) !important;
-    min-width: 100px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4) !important;
+    min-width: 110px; 
 }
 .atithi-modal-nav-controls .atithi-button:hover:not(:disabled) {
     background: var(--atithi-modal-button-hover-bg) !important;
 }
 .atithi-modal-nav-controls .atithi-button:disabled {
-    background: rgba(80,80,80,0.3) !important; /* Darker disabled */
-    color: #777 !important; /* Darker text for disabled */
+    background: rgba(80,80,80,0.3) !important; 
+    color: #777 !important; 
     cursor: not-allowed !important;
     opacity: 0.6;
 }
 .atithi-modal-nav-controls .atithi-button .fa { font-size: 1em; }
+
+#atithiImageCounterDisplayModal { 
+    position: absolute;
+    top: var(--atithi-safe-area-inset, 20px); 
+    right: var(--atithi-safe-area-inset, 20px);
+    background-color: rgba(0,0,0,0.75);
+    color: #fff; padding: 6px 12px;
+    border-radius: 4px; font-size: 0.85em; z-index: 1001;
+    font-family: 'Roboto', sans-serif;
+}
     
-/* YouTube Player */
+/* यूट्यूब प्लेयर */
 #atithiYouTubePlayerContainer { width: 100%; height: 100%; }
 #atithiYouTubePlayerContainer iframe {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
     border-radius: calc(var(--atithi-border-radius-std, 8px) - 6px); 
 }
 
-/* Image Album */
-#atithiImageFrameWrapper { 
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    padding: 6px; /* Thinner frame padding */
-    box-sizing: border-box;
-    background: linear-gradient(160deg, #111, #080808); /* Even darker frame */
-}
-#atithiAlbumImage { 
-    display: block; max-width: 100%; max-height: 100%;
-    object-fit: contain; 
-    border: 2px solid rgba(200, 200, 200, 0.15); /* More subtle border */
-    box-shadow: 0 0 20px rgba(0,0,0,0.7), 
-                0 0 10px rgba(255, 215, 0, 0.15), /* Softer glow */
-                inset 0 0 8px rgba(0,0,0,0.3); 
-    border-radius: calc(var(--atithi-border-radius-std, 8px) - 8px); 
-    background-color: #030303; /* Very dark background */
-}
-#atithiImageCounterDisplayModal { 
-    position: absolute;
-    top: var(--atithi-safe-area-inset, 20px); /* Top-right, near close button */
-    right: var(--atithi-safe-area-inset, 20px);
-    background-color: rgba(0,0,0,0.8);
-    color: #fff; padding: 5px 10px;
-    border-radius: 4px; font-size: 0.8em; z-index: 1001;
-    font-family: 'Roboto', sans-serif;
-}
-    
+
 @media (max-width: 768px) { 
-    :root { --atithi-safe-area-inset: 10px; }
+    :root { --atithi-safe-area-inset: 15px; }
     .atithi-modal-content-area { 
          width: calc(100vw - 20px); 
          height: calc(100vh - 20px); 
@@ -1182,7 +1128,7 @@ html {
     #atithiImageCounterDisplayModal { font-size: 0.8em; padding: 3px 6px; }
 }
 @media (max-width: 480px) {
-    :root { --atithi-safe-area-inset: 5px; }
+    :root { --atithi-safe-area-inset: 10px; }
      .atithi-modal-content-area {
         width: 100vw; height: 100vh; border-radius:0; margin:0;
     }
@@ -1191,3 +1137,12 @@ html {
     .atithi-modal-nav-controls .atithi-button { padding: 6px 8px !important; font-size: 0.8em !important; min-width: 80px;}
     #atithiImageCounterDisplayModal { bottom: 10px; right: 10px; padding: 4px 8px; font-size: 0.75em;}
 }
+
+/* यह सुनिश्चित करें कि आपके मुख्य CSS में :root परिभाषाएँ हैं, या आवश्यक वेरिएबल्स यहाँ परिभाषित करें */
+/* उदाहरण के लिए, यदि --atithiBorderRadius परिभाषित नहीं है, तो आप इसे इस तरह सेट कर सकते हैं: */
+/*
+:root {
+    --atithiBorderRadius: 8px; 
+    --atithiTextColor: #FFF8DC; 
+}
+*/                
