@@ -20,16 +20,16 @@ html {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #29084B 0%, #4A148C 30%, #7B1FA2 70%, #AB47BC 100%); /* गुलाबी-बैंगनी-नीला ग्रेडिएंट */
+    background: linear-gradient(135deg, #29084B 0%, #4A148C 30%, #7B1FA2 70%, #AB47BC 100%);
     position: relative;
-    padding-top: 6px; /* टॉप ग्रेडिएंट बार के लिए */
-    overflow-x: hidden; /* हॉरिजॉन्टल स्क्रॉल रोकें */
-    color: #FFF8DC; /* Cornsilk - मुख्य टेक्स्ट रंग */
+    padding-top: 6px;
+    overflow-x: hidden;
+    color: #FFF8DC; /* Default text color for the entire container */
 }
 
-.qu-rewariyasat-body-wrapper::before { /* टॉप पर शानदार ग्रेडिएंट बॉर्डर */
+.qu-rewariyasat-body-wrapper::before { /* Top gradient border */
     content: '';
-    position: fixed; /* Fixed ताकि स्क्रॉल करने पर भी दिखे */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -41,7 +41,7 @@ html {
     );
     background-size: 500% 100%;
     animation: qu-top-border-shine 12s linear infinite;
-    z-index: 1050; /* Pop-up से भी ऊपर */
+    z-index: 1050;
 }
 
 @keyframes qu-top-border-shine {
@@ -56,10 +56,10 @@ html {
     z-index: 1;
     background-color: rgba(13, 2, 26, 0.85);
     border-radius: 10px;
-    border: 2px solid #FFD700; /* मुख्य सुनहरा बॉर्डर */
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2), /* हल्का आंतरिक ग्लो */
-                0 0 35px rgba(255, 215, 0, 0.45); /* बाहरी सुनहरा ग्लो */
-    margin: 26px auto 20px auto; /* टॉप/बॉटम मार्जिन और ऑटो फॉर सेंटरिंग */
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2),
+                0 0 35px rgba(255, 215, 0, 0.45);
+    margin: 26px auto 20px auto;
     position: relative;
 }
 
@@ -75,7 +75,7 @@ header.qu-page-main-header {
 header.qu-page-main-header h1 {
     font-family: 'Rozha One', 'Martel Sans', serif;
     font-size: clamp(2em, 4.5vw, 3em);
-    color: #FFD700; /* चमकदार सुनहरा */
+    color: #FFD700 !important; /* FIXED: Made color important */
     text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
     margin-bottom: 8px;
 }
@@ -88,18 +88,17 @@ header.qu-page-main-header h1 .fa {
 header.qu-page-main-header p.subtitle {
     font-family: 'Teko', 'Sahitya', sans-serif;
     font-size: clamp(1em, 2.2vw, 1.3em);
-    color: #F0E68C; /* हल्का पीला */
+    color: #F0E68C !important; /* FIXED: Made color important */
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
-/* जावास्क्रिप्ट द्वारा उपयोग किए जाने वाले तत्वों के लिए */
 .qu-page-header .qu-main-title {
     font-family: 'Rozha One', 'Martel Sans', serif;
-    color: #FFD700;
+    color: #FFD700 !important; /* FIXED: Made color important */
 }
 .qu-page-header .qu-author-name {
     font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive;
-    color: #FFDEAD;
+    color: #FFDEAD !important; /* FIXED: Made color important */
 }
 
 
@@ -117,7 +116,7 @@ header.qu-page-main-header p.subtitle {
 
 .qu-flexible-table-container h2 {
     font-family: 'Rozha One', 'Sanskrit Text', serif;
-    color: #FFD700; /* चमकदार सुनहरा */
+    color: #FFD700 !important; /* FIXED: Added !important to override theme styles */
     font-size: clamp(1.7em, 3.5vw, 2.3em);
     text-align: center;
     margin-bottom: 20px;
@@ -132,7 +131,7 @@ header.qu-page-main-header p.subtitle {
 }
  .qu-flexible-table-container .table-intro-text {
     text-align: justify;
-    color: #FFEFD5; /* हल्का पीला */
+    color: #FFEFD5 !important; /* FIXED: Made color important */
     margin-bottom: 25px;
     font-size: clamp(0.95em, 1.9vw, 1.1em);
     line-height: 1.8;
@@ -167,7 +166,7 @@ header.qu-page-main-header p.subtitle {
 .qu-table-cell {
     padding: 12px 15px;
     border-right: 1px dotted rgba(255, 215, 0, 0.5);
-    color: #F5F5F5; /* हल्का सफ़ेद */
+    color: #F5F5F5 !important; /* FIXED: Made default cell color important */
     font-family: 'Sanskrit Text', 'Tiro Devanagari Hindi', 'Martel Sans', serif;
     font-size: clamp(1em, 2vw, 1.1em);
     line-height: 1.6;
@@ -196,7 +195,7 @@ header.qu-page-main-header p.subtitle {
 }
 
 .qu-table-cell.qu-fixed-content-cell strong {
-    color: #FFDEAD; /* हल्का पीला */
+    color: #FFDEAD !important; /* FIXED: Added !important to override theme styles */
     font-family: 'Martel Sans', 'Rozha One', serif;
     font-weight: 700;
     display: block;
@@ -205,7 +204,7 @@ header.qu-page-main-header p.subtitle {
 }
 .qu-table-cell.qu-fixed-content-cell p.subtitle-text {
     font-size: 0.9em;
-    color: #CFD8DC; /* हल्का नीला-ग्रे */
+    color: #CFD8DC !important; /* FIXED: Made color important */
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -217,7 +216,7 @@ header.qu-page-main-header p.subtitle {
 .qu-table-cell.qu-details-button-cell {
     cursor: pointer;
     background: linear-gradient(145deg, #C2185B, #880E4F);
-    color: white; /* सफ़ेद */
+    color: white !important; /* FIXED: Made button color important */
     border: 1px solid #6A0032;
     border-radius: 6px;
     text-align: center;
@@ -267,7 +266,7 @@ header.qu-page-main-header p.subtitle {
     min-height: 60px;
 }
 .qu-table-header-row .qu-table-cell {
-    color: #FFEB3B; /* चमकदार पीला */
+    color: #FFEB3B !important; /* FIXED: Made header color important */
     font-family: 'Rozha One', 'Martel Sans', serif;
     font-weight: 900;
     text-transform: uppercase;
@@ -283,9 +282,9 @@ header.qu-page-main-header p.subtitle {
     text-shadow: 1px 1px 0px #8C5A00, 2px 2px 5px rgba(0,0,0,0.7);
     max-height: none;
 }
-.qu-table-header-row .qu-table-cell h4 { /* अब यह h4 टैग पर लागू होगा */
+.qu-table-header-row .qu-table-cell h4 {
     margin: 0; padding: 0; font-size: inherit; font-weight: inherit;
-    color: inherit; /* अपने पैरेंट सेल से रंग लेगा */
+    color: inherit; /* Inherits the yellow color from its parent cell */
 }
 
 /* --- Layouts for Columns --- */
@@ -329,7 +328,7 @@ header.qu-page-main-header p.subtitle {
 }
 .qu-modal-content {
     background: radial-gradient(circle, #2a0a4a 0%, #1a052e 100%);
-    color: #FFF8DC; /* Cornsilk - पठनीय टेक्स्ट */
+    color: #FFF8DC; /* Cornsilk - readable text */
     padding: 35px 40px;
     border-radius: 15px;
     border: 3px solid #FFC107;
@@ -343,7 +342,7 @@ header.qu-page-main-header p.subtitle {
 }
 .qu-modal-content h3 {
     font-family: 'Rozha One', 'Martel Sans', serif;
-    color: #FFD700; /* चमकदार सुनहरा */
+    color: #FFD700 !important; /* FIXED: Made modal title color important */
     font-size: clamp(1.7em, 3.5vw, 2.4em);
     margin-top: 0;
     margin-bottom: 25px;
@@ -359,10 +358,10 @@ header.qu-page-main-header p.subtitle {
 .qu-modal-content p {
     margin-bottom: 18px;
     font-size: clamp(1.05em, 2.1vw, 1.25em);
-    color: #F0F0F0; /* हल्का सफ़ेद */
+    color: #F0F0F0 !important; /* FIXED: Made modal text color important */
 }
 .qu-modal-content strong {
-    color: #FFEB3B; /* चमकदार पीला */
+    color: #FFEB3B !important; /* FIXED: Made modal strong text color important */
     font-family: 'Martel Sans', 'Rozha One', serif;
     font-weight: 700;
 }
@@ -376,7 +375,7 @@ header.qu-page-main-header p.subtitle {
     position: relative;
     margin-bottom: 12px;
     font-size: clamp(1em, 2vw, 1.2em);
-    color: #F0F0F0; /* हल्का सफ़ेद */
+    color: #F0F0F0 !important; /* FIXED: Made list item color important */
 }
 .qu-modal-content ul li::before {
     content: "\f138";
@@ -437,7 +436,7 @@ header.qu-page-main-header p.subtitle {
     border-radius: 0 0 10px 10px;
 }
 .qu-button {
-    color: #ffffff; /* सफ़ेद टेक्स्ट */
+    color: #ffffff !important; /* FIXED: Made button text color important */
     padding: 10px 20px;
     font-family: 'Teko', 'Martel Sans', sans-serif;
     font-size: clamp(1em, 2vw, 1.15em);
@@ -462,10 +461,10 @@ header.qu-page-main-header p.subtitle {
 }
 .qu-button:hover {
     transform: translateY(-2px) scale(1.03);
-    color: #ffffff; /* होवर पर भी टेक्स्ट सफ़ेद रहेगा */
+    color: #ffffff !important; /* Hover state text color */
 }
 
-/* सामान्य बटन स्टाइल */
+/* Specific button colors */
 .qu-button.qu-button-general {
      background: linear-gradient(145deg, #004D40, #00695C);
      border: 1px solid #00796B;
@@ -477,32 +476,30 @@ header.qu-page-main-header p.subtitle {
     border-color: #4DB6AC;
 }
 
-/* विशिष्ट बटन रंग */
 .qu-button.share-btn { background: linear-gradient(145deg, #4A148C, #6A1B9A); border: 1px solid #7B1FA2; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 -2px 2px rgba(255,255,255,0.1);}
 .qu-button.share-btn:hover { background: linear-gradient(145deg, #6A1B9A, #8E24AA); border-color: #AB47BC; box-shadow: 0 6px 10px rgba(0,0,0,0.4), 0 0 12px rgba(171,71,188,0.5); }
         
 .qu-button.study-btn { background: linear-gradient(145deg, #C62828, #B71C1C); border: 1px solid #D32F2F; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 -2px 2px rgba(255,255,255,0.1);}
 .qu-button.study-btn:hover { background: linear-gradient(145deg, #D32F2F, #E53935); border-color: #F44336; box-shadow: 0 6px 10px rgba(0,0,0,0.4), 0 0 12px rgba(244,67,54,0.5); }
         
-/* डाउनलोड बटन के लिए मूल स्टाइल */
 .qu-button.qu-button-download {
-    background: linear-gradient(145deg, #800000, #B22222); /* गहरा लाल रंग */
-    border: 2px solid #FFC107; /* सुनहरा पीला बॉर्डर */
-    padding: 12px 25px; /* मूल बटन का पैडिंग */
+    background: linear-gradient(145deg, #800000, #B22222);
+    border: 2px solid #FFC107;
+    padding: 12px 25px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.35), inset 0 -2px 2px rgba(255,255,255,0.1), inset 0 2px 2px rgba(0,0,0,0.2);
 }
 .qu-button.qu-button-download:hover {
-    background: linear-gradient(145deg, #B22222, #CD5C5C); /* होवर पर थोड़ा हल्का लाल */
+    background: linear-gradient(145deg, #B22222, #CD5C5C);
     box-shadow: 0 6px 12px rgba(0,0,0,0.45), 0 0 15px rgba(255,193,7,0.6), inset 0 -2px 3px rgba(255,255,255,0.15), inset 0 2px 3px rgba(0,0,0,0.25);
-    border-color: #FFD700; /* सुनहरा बॉर्डर */
+    border-color: #FFD700;
 }
 
 /* --- Footer Styles --- */
 footer p {
-    color: #FFD700; /* सुनिश्चित करें कि फुटर टेक्स्ट भी पठनीय है */
+    color: #FFD700 !important; /* FIXED: Made footer text color important */
 }
 footer p:last-child {
-    color: #FFDEAD;
+    color: #FFDEAD !important; /* FIXED: Made footer text color important */
 }
 
 
