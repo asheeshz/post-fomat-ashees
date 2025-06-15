@@ -16,7 +16,8 @@ html {
     padding: 0;
 }
 
-body {
+/* ब्लॉगर थीम के साथ टकराव से बचने के लिए बॉडी टैग को एक रैपर क्लास से बदल दिया गया है */
+.qu-rewariyasat-body-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,7 +28,7 @@ body {
     overflow-x: hidden; /* बॉडी पर हॉरिजॉन्टल स्क्रॉल रोकें */
 }
 
-body::before { /* टॉप पर शानदार ग्रेडिएंट बॉर्डर */
+.qu-rewariyasat-body-wrapper::before { /* टॉप पर शानदार ग्रेडिएंट बॉर्डर */
     content: '';
     position: fixed; /* Fixed ताकि स्क्रॉल करने पर भी दिखे */
     top: 0;
