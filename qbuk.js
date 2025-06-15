@@ -52,8 +52,6 @@ window.addEventListener('load', function() {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(textToCopy).then(() => {
                 console.log('Content copied to clipboard successfully.');
-                // Pop-up alert is removed as per instruction.
-                // You can add a subtle temporary message on the button itself if needed.
                 const originalText = qu_sharePostButton.innerHTML;
                 qu_sharePostButton.innerHTML = '<i class="fa fa-check"></i> कॉपीड!';
                 setTimeout(() => { qu_sharePostButton.innerHTML = originalText; }, 2000);
@@ -78,6 +76,7 @@ window.addEventListener('load', function() {
         qu_modalTitle.innerHTML = title;
         qu_modalBody.innerHTML = content;
         qu_modalOverlay.style.display = 'flex';
+        // यह ब्लॉगर के वास्तविक बॉडी टैग को नियंत्रित करेगा
         document.body.style.position = 'fixed';
         document.body.style.top = `-${qu_originalScrollPosition}px`;
         document.body.style.width = '100%';
@@ -95,6 +94,7 @@ window.addEventListener('load', function() {
 
     function qu_hideModalInternal() {
         qu_modalOverlay.style.display = 'none';
+        // ब्लॉगर के बॉडी टैग की स्टाइल को रीसेट करें
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.width = '';
