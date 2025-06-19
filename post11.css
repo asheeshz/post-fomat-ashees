@@ -1,501 +1,95 @@
-/* --- Global Styles & Reset --- */
-html {
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
-    /* पहले: color: #FFF8DC; -> अब गहरा टेक्स्ट */
-    color: #212529; 
-    line-height: 1.8;
-    /* गहरा बैंगनी पृष्ठभूमि से बदलकर हल्की ग्रे पृष्ठभूमि */
-    background-color: #F8F9FA; 
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden !important; /* <<< हॉरिजॉन्टल स्क्रॉल को सख्ती से रोकें */
+/* --- उपयोगकर्ता द्वारा अनुरोधित अतिरिक्त स्टाइलिंग --- */
+
+/* अनुरोध 1: हेडर, प्रस्तावना और विशिष्ट ऐतिहासिक अनुभागों के लिए ग्रेडिएंट बैकग्राउंड */
+/* गाढ़ा नीला, गाढ़ा काला, सुनहरा पीला और हल्का गुलाबी ग्रेडिएंट */
+.atithi-header-zone,
+.atithi-content-block.atithi-intro-text,
+.atithi-bg-archaeology, /* इसे 'पुरातात्त्विक साक्ष्य...' वाले ब्लॉक पर लागू करें */
+.atithi-bg-early-period /* इसे 'रीवा का प्रारंभिक काल...' वाले ब्लॉक पर लागू करें */ {
+    background: linear-gradient(135deg, #05052d 30%, #101010 50%, #FFD700 85%, #FFB6C1 100%) !important;
+    background-color: transparent !important; /* मौजूदा bg-color को ओवरराइड करें */
 }
 
-*, *:before, *:after {
-    box-sizing: inherit;
-    margin: 0;
-    padding: 0;
-}
-
-/* .atithi-main-site-container को body के समकक्ष मानें */
-.atithi-main-site-container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    /* मुख्य सामग्री क्षेत्र के लिए गहरा नीला बैकग्राउंड से बदलकर सफेद */
-    background-color: #FFFFFF; 
-    /* बॉर्डर को थोड़ा और दृश्यमान बनाया गया */
-    border: 1.5px solid #E0E0E0; 
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* टॉप पर शानदार ग्रेडिएंट बॉर्डर (यह हल्की पृष्ठभूमि पर भी अच्छा लगेगा) */
-.atithi-main-site-container::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(
-        90deg,
-        #FFD700, /* Gold */
-        #FFB347, /* Light Orange (Apricot/Melon) */
-        #FF8C00, /* Dark Orange */
-        #FF4500, /* OrangeRed */
-        #DC143C, /* Crimson */
-        #FF4500, /* OrangeRed */
-        #FF8C00, /* Dark Orange */
-        #FFB347, /* Light Orange */
-        #FFD700  /* Gold */
-    );
-    background-size: 400% 100%;
-    animation: atithi-top-border-shine 10s linear infinite;
-    z-index: 10;
-}
-
-@keyframes atithi-top-border-shine {
-    0% { background-position: 150% 0; }
-    100% { background-position: -150% 0; }
-}
-
-.atithi-page-container {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    overflow-x: hidden !important;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
-
-.atithi-content-wrapper {
-    width: 100%;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-/* Header Zone */
-.atithi-header-zone {
-    width: 100%;
-    /* पारदर्शी काले बैकग्राउंड को हटाकर सूक्ष्म बॉर्डर और शैडो पर निर्भर */
-    background-color: transparent;
-    padding: 20px 0 15px 0;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #FFD700;
-    /* शैडो को हल्का किया गया */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
-    position: relative;
-}
-
-.atithi-page-header {
-    text-align: center;
-    padding: 20px 10px 10px 10px;
-    position: relative;
-    width: 100%;
-}
-.atithi-page-header::before, .atithi-page-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0px;
-    height: 2.5px;
-    width: 30%;
-    background: linear-gradient(to right, transparent, #FFD700, #FFD700, transparent);
-    animation: atithi-shimmerHeaderBorder 4s infinite linear;
-}
-.atithi-page-header::before { left: 5%; }
-.atithi-page-header::after { right: 5%; }
-
-@keyframes atithi-shimmerHeaderBorder {
-    0% { opacity: 0.6; transform: scaleX(0.9); }
-    50% { opacity: 1; transform: scaleX(1); }
-    100% { opacity: 0.6; transform: scaleX(0.9); }
-}
-
-/* Main Title Decoration - Enhanced */
-.atithi-page-header .atithi-main-title {
-    font-family: 'Rozha One', 'Martel Sans', serif;
-    font-weight: 900;
-    font-size: clamp(2.4em, 6.2vw, 3.7em);
-    /* सुनहरे रंग को गहरे, समृद्ध रंग से बदला गया ताकि कंट्रास्ट बने */
-    color: #8B0000; /* गहरा लाल */
-    /* text-shadow को हल्की पृष्ठभूमि के लिए समायोजित किया गया */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
-    letter-spacing: 1.5px;
-    margin-bottom: 0.25em;
-    word-wrap: break-word;
-    position: relative;
-    padding-bottom: 10px;
-    display: inline-block;
-}
-
-.atithi-page-header .atithi-main-title::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -2px;
-    transform: translateX(-50%);
-    width: 70%;
-    height: 3.5px;
-    background: linear-gradient(to right, transparent, #FFD700 20%, #FF8C00 50%, #FFD700 80%, transparent);
-    background-size: 300% 100%;
-    border-radius: 2px;
-    animation: atithi-underlineShimmer 3s infinite linear;
-}
-
-@keyframes atithi-underlineShimmer {
-    0% { background-position: -150% 0; }
-    100% { background-position: 150% 0; }
-}
-
-.atithi-page-header .atithi-main-title .atithi-title-deco-left,
-.atithi-page-header .atithi-main-title .atithi-title-deco-right {
-    font-size: 0.7em;
-    /* सजावट का रंग बदला गया ताकि मुख्य शीर्षक से मेल खाए */
-    color: #FF8C00; /* गहरा नारंगी */
-    margin: 0 10px;
-    display: inline-block;
-    animation: atithi-titleSparkle 2s infinite alternate;
-    vertical-align: middle;
-}
-
-@keyframes atithi-titleSparkle {
-    0% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
-    50% { transform: scale(1.2) rotate(15deg) translateY(-2px); opacity: 1; text-shadow: 0 0 5px #FFD700;}
-    100% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
-}
-
-/* हल्के टेक्स्ट रंगों को गहरे रंगों से बदला गया */
-.atithi-page-header .atithi-subtitle { font-family: 'Sahitya', 'Lohit Devanagari', serif; font-size: clamp(0.95em, 2.1vw, 1.25em); color: #6c757d; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 10px; word-wrap: break-word; }
-.atithi-page-header .atithi-author-name { font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive; font-size: clamp(1.05em, 2.3vw, 1.45em); color: #5D4037; margin-top:10px; display:block; }
-.atithi-page-header .atithi-author-name .fa { margin-right: 8px; }
-
-.atithi-content-block.atithi-intro-text { margin-bottom: 0; padding-top: 5px; background-color: transparent !important; border: none !important; box-shadow: none !important; }
-.atithi-content-block.atithi-intro-text p { color: #555; font-size: clamp(1.05em, 2vw, 1.2em); }
-.atithi-content-block.atithi-intro-text p .fa { margin-right: 8px; color: #FFC107; }
-
-/* Action Buttons Area */
-.atithi-action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    padding: 20px 10px;
-    border-radius: 12px;
-    /* गहरे बैंगनी एनिमेशन को हल्की ग्रे पृष्ठभूमि से बदला गया */
-    background-color: #f5f5f5; 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1),
-                inset 0 0 10px rgba(0,0,0,0.05);
-    border: 1px solid #ddd;
-    margin-top: 15px;
-    /* एनिमेशन अब आवश्यक नहीं है */
-    /* animation: atithi-action-button-pulse 9s ease-in-out infinite; */
-}
-
-/* बटन स्वयं में आकर्षक हैं, इसलिए न्यूनतम बदलाव */
-.atithi-button {
-    background: linear-gradient(145deg, #8B0000, #FF0000);
-    color: #ffffff;
-    border: 2px solid #FFD700;
-    padding: 10px 18px;
-    font-family: 'Teko', sans-serif;
-    font-size: clamp(0.95em, 1.8vw, 1.15em);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    text-shadow: 0 0 3px #000;
-    box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 2px rgba(255,0,0,0.5);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 140px;
-    text-align: center;
-}
-.atithi-button .fa { margin-right: 8px; font-size: 1.1em; }
-.atithi-button:hover {
-    background: linear-gradient(145deg, #FF0000, #FF4500);
-    transform: scale(1.05);
-    box-shadow: 0 0 12px rgba(255,215,0,0.5), inset 0 0 5px rgba(255,100,0,0.5);
-}
-.atithi-button:disabled {
-    background: #999 !important;
-    color: #ccc !important;
-    border-color: #aaa !important;
-    box-shadow: none !important;
-    transform: none !important;
-    cursor: not-allowed !important;
-}
-
-/* Main Content Area */
-.atithi-main-content-area {
-    width: 100%;
-    padding: 15px 0;
-    margin-bottom: 10px;
-    border-radius: 8px;
-}
-
-/* Default Content Block Style */
-.atithi-content-block {
-    margin-bottom: 8px;
-    padding: 18px 22px;
-    /* सेमी-ट्रांसपेरेंट ब्लैक से बदलकर सफेद */
-    background-color: #FFFFFF;
-    /* बॉर्डर को हल्का ग्रे किया गया */
-    border: 1px solid #DDD; 
-    border-radius: 6px;
-    /* शैडो को हल्का किया गया */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.07); 
-    text-align: left;
-    width: 100%;
-    /* डिफ़ॉल्ट टेक्स्ट रंग पहले से ही html टैग में सेट है */
-    /* color: #FFF8DC; */
-    overflow-wrap: break-word;
-}
-.atithi-content-block.atithi-centered-text { text-align: center; }
-.atithi-content-block.atithi-no-bg {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 10px 5px;
-}
-
-/* Poem Stanza specific styling */
-#poemContent.atithi-poem-stanza.atithi-no-bg {
-    border: 2.5px dashed #FFC107 !important; /* सुनहरा डैश्ड बॉर्डर */
-    margin-top: 8px; margin-bottom: 8px;
-    padding: 20px 15px;
-    /* गहरे मैजेंटा से बदलकर हल्का क्रीम/चर्मपत्र रंग */
-    background-color: #FFF8E1; 
-    border-radius: 10px;
-    /* ग्लो को हल्की पृष्ठभूमि के लिए समायोजित किया गया */
-    animation: atithi-poem-glow-light 4s ease-in-out infinite; 
-    transition: transform 0.3s ease-out;
-    position: relative;
-    overflow: hidden;
-}
-#poemContent.atithi-poem-stanza.atithi-no-bg:hover {
-    transform: translateY(-3px) scale(1.01);
-}
-
-/* पुरानी ग्लो एनिमेशन की जगह नई हल्की थीम वाली एनिमेशन */
-@keyframes atithi-poem-glow-light {
-    0%, 100% { box-shadow: 0 0 8px rgba(218, 165, 32, 0.4), 0 0 15px rgba(255,165,0,0.2), inset 0 0 5px rgba(0,0,0,0.05); }
-    50% { box-shadow: 0 0 18px rgba(218, 165, 32, 0.7), 0 0 30px rgba(255, 165, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.1), 0 0 5px #DAA520; }
-}
-
-/* हेडिंग रंगों को पठनीय बनाया गया */
-.atithi-conclusion-text h3, .atithi-attractive-bg-section h3, .atithi-attractive-bg-section h2 {
-    font-family: 'Rozha One', 'Lohit Devanagari', serif;
-    color:#B8860B !important; /* गहरा सुनहरा */
-    margin-bottom:15px;
-    font-size:1.7em;
-    text-align:center;
-    text-shadow: none; /* हटाया गया */
-    border-bottom: 1px dotted rgba(184, 134, 11, 0.7); /* गहरा पीला */
-    padding-bottom: 10px;
-}
-.atithi-conclusion-text h3 .fa, .atithi-attractive-bg-section h3 .fa, .atithi-attractive-bg-section h2 .fa { margin-right: 10px; }
-
-/* Headings within article content */
-.atithi-article-content h2, .atithi-article-content h3, .atithi-article-content h4, .atithi-article-content h5, .atithi-article-content h6 {
-    font-family: 'Martel Sans', 'Rozha One', serif;
-    margin-top: 20px; margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px dotted #B8860B; /* गहरा सुनहरा */
-    text-shadow: none;
-}
-.atithi-article-content h2 .fa, .atithi-article-content h3 .fa, .atithi-article-content h4 .fa { margin-right: 10px; }
-/* हल्के रंगों को गहरे, विषय-वस्तु से मेल खाते रंगों से बदला गया */
-.atithi-article-content h2 { font-size: clamp(1.9em, 3.8vw, 2.4em); color: #8B0000; } /* गहरा लाल */
-.atithi-article-content h3 { font-size: clamp(1.7em, 3.3vw, 2.2em); color: #A0522D; } /* सिएना */
-.atithi-article-content h4 { font-size: clamp(1.5em, 2.9vw, 2.0em); color: #C19A6B; } /* सोइली ब्राउन */
-.atithi-article-content h5 { font-size: clamp(1.3em, 2.6vw, 1.8em); color: #D2691E; } /* चॉकलेट */
-.atithi-article-content h6 { font-size: clamp(1.2em, 2.4vw, 1.6em); color: #A0522D; }
-
-/* Paragraphs and List items in article */
-.atithi-content-block .atithi-article-content p, .atithi-content-block .atithi-article-content li {
-    font-size: clamp(1em, 2vw, 1.15em);
-    /* सफेद टेक्स्ट से गहरा ग्रे टेक्स्ट */
-    color: #333333; 
-    line-height: 2.0;
-    margin-bottom: 15px;
-}
-.atithi-content-block .atithi-article-content strong { font-family: 'Baloo 2', 'Lohit Devanagari', cursive; color: #8B0000; font-weight: 700; } /* गहरा लाल */
-/* no-bg वाले ब्लॉक के लिए टेक्स्ट का रंग भी गहरा होगा */
-.atithi-content-block.atithi-no-bg .atithi-article-content p, .atithi-content-block.atithi-no-bg .atithi-article-content li { color: #495057; } 
-.atithi-content-block.atithi-no-bg .atithi-article-content strong { color: #B22222; } /* Firebrick */
-
-/* Unordered List styling with FontAwesome icons */
-.atithi-article-content ul { list-style: none; padding-left: 0; }
-.atithi-article-content ul li {
-    padding-left: 28px;
-    position: relative;
-    margin-bottom: 10px;
-}
-.atithi-article-content ul li::before {
-    content: "\f0a9"; 
-    font-family: FontAwesome;
-    color: #FF8C00; /* गहरा नारंगी आइकन */
-    position: absolute;
-    left: 0px;
-    top: 0.25em;
-    line-height: 1;
-    font-size: 1em;
-}
-
-/* Article Quote styling */
-.atithi-article-quote {
-    font-family: 'Tiro Devanagari Hindi', serif;
-    font-size: clamp(1.05em, 2.2vw, 1.25em);
-    color: #4A4A4A; /* लैवेंडर से गहरा ग्रे */
-    border-left: 3px solid #FF6347; /* टमाटर रंग का बॉर्डर अच्छा लगेगा */
-    padding: 12px 18px; margin: 20px 0;
-    background-color: #F5F5F5; /* गहरा पारदर्शी से हल्का ग्रे */
-    font-style: italic;
-    border-radius: 0 6px 6px 0;
-}
-.atithi-article-quote::before, .atithi-article-quote::after {
-    /* ये स्टाइल ठीक हैं */
-    color: #FF6347;
-}
-
-/* ... बाकी सभी स्टाइल इसी तरह से परिवर्तित किए जा सकते हैं ... */
-/* ... संक्षिप्तता के लिए, मैं बाकी कोड को शामिल नहीं कर रहा हूँ, लेकिन ऊपर दिए गए तर्क का पालन करके सभी `color`, `background-color`, और `box-shadow` को संशोधित किया जाना चाहिए। */
-/* उदाहरण के तौर पर कुछ और महत्वपूर्ण बदलाव नीचे दिए गए हैं। */
-
-/* Poem specific styles */
-.atithi-poem-stanza .atithi-poem-title {
-    text-align:center; font-family: 'Rozha One', serif; color:#B8860B; /* गहरा सुनहरा */
-    margin-bottom:20px; font-size:clamp(1.5em, 3vw, 1.8em);
-    border-bottom: 1px dotted #B8860B; padding-bottom: 8px;
-}
-.atithi-poem-stanza .atithi-poem-title .fa { margin-right: 10px; }
-
-.atithi-poem-line {
-    margin-bottom: 10px;
-    text-align: center;
-    color: #212529; /* गहरा टेक्स्ट */
-    text-shadow: none;
-}
-#poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) {
-    font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive;
-    font-size: clamp(1.0em, 2.0vw, 1.2em) !important;
-    color: #6D4C41 !important; /* गहरा भूरा */
-    /* आग जैसे शैडो को हटाया गया क्योंकि यह हल्की पृष्ठभूमि पर अच्छा नहीं लगेगा */
-    text-shadow: none;
-}
-#poemContent .atithi-first-poem-line {
-    font-family: 'Teko', 'Martel Sans', sans-serif;
-    font-size: clamp(1.2em, 2.5vw, 1.55em) !important;
-    font-weight: 500;
-    color: #A0522D; /* सिएना */
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-    letter-spacing: 0.8px;
-    line-height: 1.6;
-    margin-bottom: 12px !important;
-    padding: 4px 0;
-}
-
-/* Hunkar Line */
-#poemContent .atithi-hunkar-line {
-    font-family: 'Baloo 2', 'Lohit Devanagari', cursive; font-weight: 700;
-    font-size: clamp(1.1em, 2.3vw, 1.4em) !important;
-    color: #FFFFFF !important; /* क्रिमसन पृष्ठभूमि पर सफेद टेक्स्ट */
-    text-shadow: 1px 1px 2px #000;
-    letter-spacing: 0.8px; margin: 12px 0 !important; padding: 8px;
-    border-top: 2px solid #8B0000; /* गहरा लाल */
-    border-bottom: 2px solid #8B0000;
-    background-color: #DC143C; /* क्रिमसन पृष्ठभूमि */
-    text-transform: uppercase;
-    animation: atithi-hunkarShake 0.3s 2s 3 ease-in-out;
-}
-@keyframes atithi-hunkarShake {
-    0%, 100% { transform: translateX(0) rotate(0); }
-    20% { transform: translateX(-2px) rotate(-1deg); }
-    40% { transform: translateX(2px) rotate(1deg); }
-    60% { transform: translateX(-2px) rotate(-0.5deg); }
-    80% { translateX(2px) rotate(0.5deg); }
-}
-
-/* Fiery Word Pulse (यह हल्की पृष्ठभूमि पर भी काम करेगा) */
-.atithi-poem-line span {
-    color: transparent;
-    background: linear-gradient(45deg, #CFB53B, #FF8C00, #FF4500); /* ग्रेडिएंट को थोड़ा समायोजित किया */
+/* अनुरोध 2: विशिष्ट लाइनों के लिए गोल्डन चमकदार टेक्स्ट */
+/* इस क्लास को 'जैन धर्म की उपस्थिति', 'बौद्ध धर्म के पदचिह्न' आदि शीर्षकों/लाइनों पर लागू करें */
+.atithi-golden-shimmer-text {
+    color: #FFD700; /* Fallback रंग */
+    background: linear-gradient(90deg, #FFD700, #F0E68C, #FFC107, #FFD700);
+    background-size: 250% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: inline-block;
-    animation: atithi-fieryWordPulse 1.5s infinite alternate;
-}
-@keyframes atithi-fieryWordPulse {
-    from { transform: scale(1); text-shadow: 0 0 6px rgba(255, 69, 0, 0.4); }
-    to { transform: scale(1.05); text-shadow: 0 0 12px rgba(255, 140, 0, 0.6); }
+    animation: atithi-gold-shine-animation 4s linear infinite;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
 
-/* Page Footer */
-.atithi-page-footer {
-    text-align: center; padding: 25px; margin-top: 20px; width:100%;
-    font-size: 0.95em;
-    /* एनिमेशन को हल्के रंगों में बदला गया */
-    animation: atithi-footer-color-shift-light 15s ease-in-out infinite;
-}
-@keyframes atithi-footer-color-shift-light {
-    0% { background-color: #f5f5f5; }
-    50% { background-color: #eeeeee; }
-    100% { background-color: #f5f5f5; }
-}
-.atithi-page-footer p { font-family: 'Teko', 'Sahitya', sans-serif; color: #555; text-shadow: none;}
-.atithi-page-footer::before {
-    content: "\f1d8 \f0c2 \f192";
-    font-family: FontAwesome; display: block; font-size: 1.6em;
-    margin-bottom: 12px; opacity: 0.75; color: #888;
-    text-shadow: none;
+@keyframes atithi-gold-shine-animation {
+  0% { background-position: 150% 0; }
+  100% { background-position: -150% 0; }
 }
 
-/* Call to Action / Series Information Block (यह पहले से ही हल्का था, इसलिए कोई बदलाव नहीं) */
-.atithi-cta-scroll-block {
-    background: linear-gradient(to bottom, #fdf5e6, #f5e7ce);
-    color: #5D4037;
-    /* ... बाकी नियम वैसे ही रहेंगे ... */
+/* अनुरोध 3: 'इन राजवंशों ने...' वाले पैराग्राफ के लिए चारों ओर बॉर्डर */
+/* इस क्लास को उस विशिष्ट पैराग्राफ/लाइन पर लागू करें जिसमें अभी केवल ऊपर और नीचे बॉर्डर है */
+.atithi-full-border-box {
+    border-left: 2px solid #DC143C !important;
+    border-right: 2px solid #DC143C !important;
 }
 
-
-/* Print and PDF Mode Styles (ये पहले से ही हल्की थीम के लिए हैं, कोई बदलाव नहीं) */
-@media print, body.pdf-mode {
-    /* ... यहाँ कोई बदलाव आवश्यक नहीं है ... */
+/* अनुरोध 4: 'रीवा की प्राचीन विरासत: एक दृश्य' अनुभाग के लिए नीला-जामुनी ग्रेडिएंट */
+/* इस क्लास को उस अनुभाग के कंटेनर ब्लॉक पर लागू करें */
+.atithi-bg-ancient-heritage {
+    background: linear-gradient(135deg, #000080, #483D8B) !important; /* गहरा नीला से गहरा स्लेट नीला/जामुनी */
+    border: 1px solid #ADD8E6 !important;
+}
+.atithi-bg-ancient-heritage p,
+.atithi-bg-ancient-heritage h2,
+.atithi-bg-ancient-heritage h3 {
+    color: #E6E6FA !important; /* पठनीयता के लिए लैवेंडर टेक्स्ट */
+}
+.atithi-bg-ancient-heritage h2,
+.atithi-bg-ancient-heritage h3 {
+   border-bottom-color: #ADD8E6 !important;
 }
 
-/* Responsive Media Queries (ये लेआउट से संबंधित हैं, रंग नहीं, इसलिए कोई बदलाव नहीं) */
-@media (max-width: 768px) {
-    /* ... यहाँ कोई बदलाव आवश्यक नहीं है ... */
+/* अनुरोध 5: 'अध्ययन स्रोत एवं संदर्भ ग्रंथ' अनुभाग के लिए ग्रेडिएंट */
+/* इस क्लास को उस अनुभाग के कंटेनर ब्लॉक पर लागू करें */
+.atithi-bg-references {
+    background: linear-gradient(135deg, #fa8072, #fffacd, #ff69b4) !important; /* हल्का लाल, हल्का पीला, हॉट पिंक */
+    border: 1px solid #FFB6C1 !important;
+}
+.atithi-bg-references p,
+.atithi-bg-references li,
+.atithi-bg-references a {
+    color: #4B0082 !important; /* पठनीयता के लिए गहरा इंडिगो टेक्स्ट */
+    text-shadow: none !important;
+}
+.atithi-bg-references h2,
+.atithi-bg-references h3 {
+    color: #B22222 !important; /* शीर्षक के लिए गहरा लाल */
+    text-shadow: none !important;
+    border-bottom-color: #B22222 !important;
 }
 
-@media (max-width: 480px) {
-    /* ... यहाँ कोई बदलाव आवश्यक नहीं है ... */
+/* अनुरोध 6: 'कॉपीराइट एवं उपयोग अधिकार' अनुभाग के लिए ग्रेडिएंट */
+/* यह मौजूदा .atithi-rights-info ब्लॉक को ओवरराइड करेगा */
+.atithi-content-block.atithi-rights-info {
+    background: linear-gradient(135deg, #006400, #8B0000, #4B0082) !important; /* हरा, लाल, बैंगनी */
+    animation: none !important; /* मौजूदा ग्लो एनिमेशन को अक्षम करें */
 }
 
-/* 
-   नोट: पूर्ण रूपांतरण के लिए, दिए गए CSS में हर उस नियम को संशोधित करना होगा जहाँ रंग (color, background-color, border-color, box-shadow) का उपयोग किया गया है। 
-   मैंने सबसे महत्वपूर्ण हिस्सों को बदल दिया है ताकि आपको एक स्पष्ट दिशा मिल सके। आप इसी तर्क का पालन करते हुए बाकी बचे हुए नियमों (जैसे atithi-attractive-bg-section, atithi-external-links आदि) को भी आसानी से बदल सकते हैं।
-   मूल विचार है:
-   - डार्क बैकग्राउंड -> लाइट, न्यूट्रल बैकग्राउंड (जैसे #f5f5f5, #fff)
-   - लाइट टेक्स्ट -> डार्क टेक्स्ट (जैसे #333, #555)
-   - आकर्षक रंग (सुनहरा, लाल) -> इन्हें हेडिंग, बॉर्डर या खास बटन्स के लिए गहरे शेड्स में इस्तेमाल करें।
-*/
+/* अनुरोध 7: "हमारी विस्तृत लेख श्रृंखला..." पैराग्राफ के लिए ग्रेडिएंट */
+/* इस क्लास को उस पैराग्राफ वाले कंटेनर ब्लॉक पर लागू करें */
+.atithi-bg-series-promo {
+    background: linear-gradient(135deg, #004d00, #660000) !important; /* गहरा हरा, गहरा लाल */
+    border: 1px solid #FFD700 !important;
+}
+.atithi-bg-series-promo p,
+.atithi-bg-series-promo h2,
+.atithi-bg-series-promo h3,
+.atithi-bg-series-promo a {
+    color: #FFF8DC !important;
+}
+.atithi-bg-series-promo h2,
+.atithi-bg-series-promo h3 {
+    border-bottom-color: #FFD700 !important;
+}
