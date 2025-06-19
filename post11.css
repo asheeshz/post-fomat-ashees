@@ -17,40 +17,16 @@ html {
     padding: 0;
 }
 
-/* ========================================================= */
-/* === ANIMATED GALAXY BACKGROUND (STABLE & CORRECTED) === */
-/* ========================================================= */
+/* --- MAIN SITE CONTAINER (अब स्थिर, गहरा नीला) --- */
 .atithi-main-site-container {
-    width: 98% !important;
-    max-width: 1400px !important;
-    margin: 15px auto !important;
-    border-radius: 12px;
-    background-size: 300% 300%;
-    background-image: radial-gradient(
-        circle at 25% 30%,
-        #05052d 0%,
-        #4b0082 35%,
-        #006400 50%,
-        #8b008b 65%,
-        #05052d 100%
-    );
-    animation: atithi-galaxy-swirl 25s linear infinite alternate;
     position: relative;
-    min-height: 100vh; 
-    border: 1.5px solid rgba(255, 215, 0, 0.25); 
-    overflow: hidden;
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-}
-
-@keyframes atithi-galaxy-swirl {
-    0% {
-        background-position: 0% 0%;
-    }
-    100% {
-        background-position: 100% 100%;
-    }
+    width: 100%;
+    min-height: 100vh;
+    background-color: #05052d;
+    border: 1.5px solid rgba(255, 215, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .atithi-main-site-container::before {
@@ -68,7 +44,6 @@ html {
     background-size: 400% 100%;
     animation: atithi-top-border-shine 10s linear infinite;
     z-index: 10;
-    border-radius: 12px 12px 0 0;
 }
 
 @keyframes atithi-top-border-shine {
@@ -76,19 +51,42 @@ html {
     100% { background-position: -150% 0; }
 }
 
+/* ========================================================= */
+/* === ANIMATED GALAXY ON PAGE CONTAINER (नया और सही स्थान) === */
+/* ========================================================= */
 .atithi-page-container {
+    width: 98% !important;
+    max-width: 1400px !important;
+    margin: 15px auto !important;
+    border-radius: 12px;
+    
+    background-size: 300% 300%;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        radial-gradient(
+            circle at 25% 30%,
+            #05052d 0%,
+            #4b0082 35%,
+            #006400 50%,
+            #8b008b 65%,
+            #05052d 100%
+        );
+    animation: atithi-galaxy-swirl 25s linear infinite alternate;
+    
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    
     padding-top: 15px;
     padding-bottom: 15px;
-    overflow-x: hidden !important;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    z-index: 1;
-    background-color: rgba(5, 5, 45, 0.7);
-    backdrop-filter: blur(2px);
-    border-radius: 12px;
+}
+
+@keyframes atithi-galaxy-swirl {
+    0% { background-position: 0% 0%, 0% 0%; }
+    100% { background-position: 0% 0%, 100% 100%; }
 }
 
 .atithi-content-wrapper {
@@ -888,6 +886,7 @@ html {
 
 /* Responsive Media Queries */
 @media (max-width: 768px) {
+    .atithi-page-container { width: 100% !important; margin: 0 !important; border-radius: 0; }
     .atithi-content-wrapper { padding: 0 8px; }
     .atithi-page-header .atithi-main-title { font-size: clamp(1.9em, 5.2vw, 2.6em); }
     .atithi-page-header .atithi-subtitle { font-size: clamp(0.85em, 1.9vw, 1.05em); }
@@ -912,7 +911,7 @@ html {
 }
 
 @media (max-width: 480px) {
-    .atithi-main-site-container { border-left: none; border-right: none; border-radius: 0; width: 100% !important; margin: 0 !important; }
+    .atithi-main-site-container { border-left: none; border-right: none; }
     .atithi-main-site-container::before { height: 3px; top: -1.5px; }
     .atithi-content-wrapper { padding: 0 5px; }
     .atithi-page-header .atithi-main-title { font-size: clamp(1.7em, 5.8vw, 2.3em); }
