@@ -52,7 +52,7 @@ html {
 }
 
 /* ========================================================= */
-/* === ANIMATED GALAXY ON PAGE CONTAINER (नया और सही स्थान) === */
+/* === TUMBLING GALAXY ANIMATION ON PAGE CONTAINER === */
 /* ========================================================= */
 .atithi-page-container {
     width: 98% !important;
@@ -60,18 +60,15 @@ html {
     margin: 15px auto !important;
     border-radius: 12px;
     
-    background-size: 300% 300%;
+    background-size: 400% 400%; /* <<<< ग्रेडिएंट को बहुत बड़ा बनाया */
     background-image: 
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        radial-gradient(
-            circle at 25% 30%,
-            #05052d 0%,
-            #4b0082 35%,
-            #006400 50%,
-            #8b008b 65%,
-            #05052d 100%
-        );
-    animation: atithi-galaxy-swirl 25s linear infinite alternate;
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        radial-gradient(at 0% 0%, #05052d 0%, transparent 50%),
+        radial-gradient(at 90% 10%, #C71585 0%, transparent 50%), /* सुर्ख गुलाबी */
+        radial-gradient(at 20% 85%, #006400 0%, transparent 50%), /* गहरा हरा */
+        radial-gradient(at 90% 90%, #05052d 0%, transparent 50%);
+        
+    animation: atithi-galaxy-tumble 30s ease-in-out infinite;
     
     position: relative;
     z-index: 1;
@@ -84,14 +81,17 @@ html {
     align-items: center;
 }
 
-@keyframes atithi-galaxy-swirl {
-    0% { background-position: 0% 0%, 0% 0%; }
-    100% { background-position: 0% 0%, 100% 100%; }
+@keyframes atithi-galaxy-tumble {
+    0%   { background-position: 0% 0%, 0% 0%, 90% 10%, 20% 85%, 90% 90%; }
+    25%  { background-position: 0% 0%, 100% 0%, 90% 10%, 20% 85%, 90% 90%; }
+    50%  { background-position: 0% 0%, 100% 100%, 90% 10%, 20% 85%, 90% 90%; }
+    75%  { background-position: 0% 0%, 0% 100%, 90% 10%, 20% 85%, 90% 90%; }
+    100% { background-position: 0% 0%, 0% 0%, 90% 10%, 20% 85%, 90% 90%; }
 }
 
 .atithi-content-wrapper {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px; /* <<<< चौड़ाई और बढ़ाई गई */
     margin-left: auto;
     margin-right: auto;
     padding-left: 15px;
