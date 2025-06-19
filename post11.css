@@ -1,5 +1,64 @@
 /* --- Global Styles & Reset --- */
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
+    color: #FFF8DC;
+    line-height: 1.8;
+    background-color: #1a0d20; /* गहरा बैंगनी पृष्ठभूमि - body से यहाँ शिफ्ट किया गया */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important; /* <<< हॉरिजॉन्टल स्क्रॉल को सख्ती से रोकें */
+}
 
+*, *:before, *:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+/* .atithi-main-site-container को body के समकक्ष मानें यदि body टैग नहीं है */
+.atithi-main-site-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* यह सुनिश्चित करता है कि कंटेंट कम होने पर भी कंटेनर पूरी ऊंचाई ले */
+    background-color: #05052d; /* मुख्य सामग्री क्षेत्र के लिए गहरा नीला बैकग्राउंड */
+    border: 1.5px solid rgba(255, 215, 0, 0.25); /* पतला, सूक्ष्म सुनहरा बॉर्डर */
+    overflow: visible; /* ::before को बाहर निकलने देने के लिए visible */
+    display: flex; /* page-container को ठीक से केंद्र में लाने में मदद करता है */
+    flex-direction: column; /* page-container को स्टैक करने के लिए */
+    align-items: center; /* page-container को क्षैतिज रूप से केंद्र में रखता है */
+}
+
+/* टॉप पर शानदार ग्रेडिएंट बॉर्डर */
+.atithi-main-site-container::before {
+    content: '';
+    position: absolute;
+    top: -2px; /* ग्रेडिएंट बार को ऊपर चढ़ाएं ताकि निचला हिस्सा सटा रहे */
+    left: 0;
+    width: 100%;
+    height: 4px; /* ग्रेडिएंट 'बॉर्डर' की मोटाई */
+    background: linear-gradient(
+        90deg,
+        #FFD700, /* Gold */
+        #FFB347, /* Light Orange (Apricot/Melon) */
+        #FF8C00, /* Dark Orange */
+        #FF4500, /* OrangeRed */
+        #DC143C, /* Crimson */
+        #FF4500, /* OrangeRed */
+        #FF8C00, /* Dark Orange */
+        #FFB347, /* Light Orange */
+        #FFD700  /* Gold */
+    );
+    background-size: 400% 100%;
+    animation: atithi-top-border-shine 10s linear infinite;
+    z-index: 10; /* सुनिश्चित करें कि यह सामग्री के ऊपर है */
+}
+
+@keyframes atithi-top-border-shine {
+    0% { background-position: 150% 0; }
+    100% { background-position: -150% 0; }
+}
 
 .atithi-page-container {
     padding-top: 15px;
@@ -189,15 +248,15 @@
 
 /* Default Content Block Style */
 .atithi-content-block {
-    margin-bottom: 8px; !important;
-    padding: 18px 22px; !important;
-    background-color: rgba(0,0,0, 0.25); /* सेमी-ट्रांसपेरेंट ब्लैक */ !important;
-    border: 1px solid rgba(184, 134, 11, 0.6); /* गहरा पीला बॉर्डर */ !important;
+    margin-bottom: 8px;
+    padding: 18px 22px;
+    background-color: rgba(0,0,0, 0.25); /* सेमी-ट्रांसपेरेंट ब्लैक */
+    border: 1px solid rgba(184, 134, 11, 0.6); /* गहरा पीला बॉर्डर */
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* सूक्ष्म शैडो */ !important;
-    text-align: left; !important;
-    width: 100%; !important;
-    color: #FFF8DC; /* डिफ़ॉल्ट टेक्स्ट रंग */ !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* सूक्ष्म शैडो */
+    text-align: left;
+    width: 100%;
+    color: #FFF8DC; /* डिफ़ॉल्ट टेक्स्ट रंग */
     overflow-wrap: break-word;
 }
 .atithi-content-block.atithi-centered-text { text-align: center; }
@@ -287,8 +346,6 @@
     line-height: 1;
     font-size: 1em;
 }
-/* .atithi-article-content ul li > .fa { display: none; } /* यदि ::before का उपयोग कर रहे हैं तो इसे छिपाएं */
-
 
 /* Article Quote styling */
 .atithi-article-quote {
@@ -318,7 +375,6 @@
     line-height: 0;
     vertical-align: -0.2em;
 }
-/* .atithi-article-quote .fa-quote-left, .atithi-article-quote .fa-quote-right { display: none; } /* यदि ::before/:after का उपयोग कर रहे हैं */
 
 .atithi-content-block.atithi-no-bg .atithi-article-quote {
     background-color: rgba(255,255,255,0.05); /* हल्का पारदर्शी बैकग्राउंड */
@@ -503,7 +559,6 @@
     top: 0.2em; /* वर्टिकल अलाइनमेंट */
     color: #FFD700; /* आइकन का रंग */
 }
-/* .atithi-guidance-content ul li .fa { display: none; } /* यदि ::before का उपयोग कर रहे हैं तो इसे छिपाएं */
 .atithi-guidance-content strong { color: #FFD700; font-family: 'Martel Sans', 'Baloo 2', sans-serif; }
 
 
@@ -821,8 +876,10 @@
 .atithi-link-card-scroll:hover .atithi-link-card-scroll-arrow { opacity: 1; transform: translateX(3px); }
 
 
-/* Print and PDF Mode Styles */
-@media print, body.pdf-mode {
+/* Print and PDF Mode Styles (CORRECTED) */
+
+/* --- Block 1: Styles for PRINT media ONLY --- */
+@media print {
     html, .atithi-main-site-container { background: #fff !important; color: #000 !important; }
     .atithi-page-container, .atithi-page-container * { font-family: 'Tiro Devanagari Hindi', 'Times New Roman', serif !important; background-color: transparent !important; color: #000 !important; text-shadow: none !important; box-shadow: none !important; border-color: #999 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;}
     .atithi-page-container { padding:5px !important; animation: none !important; }
@@ -854,8 +911,43 @@
     .atithi-page-footer::before { display: none !important; }
     img { max-width: 100% !important; height: auto !important; display: block !important; page-break-inside: avoid !important; border: 1px solid #ccc !important; }
     .atithi-media-placeholder img { border: 1px solid #ccc !important; }
-    [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; } /* Disable AOS for PDF */
+    [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; } /* Disable AOS for Print */
 }
+
+/* --- Block 2: Styles for when body has the "pdf-mode" class --- */
+body.pdf-mode { background: #fff !important; color: #000 !important; }
+body.pdf-mode .atithi-main-site-container { background: #fff !important; color: #000 !important; }
+body.pdf-mode .atithi-page-container, body.pdf-mode .atithi-page-container * { font-family: 'Tiro Devanagari Hindi', 'Times New Roman', serif !important; background-color: transparent !important; color: #000 !important; text-shadow: none !important; box-shadow: none !important; border-color: #999 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;}
+body.pdf-mode .atithi-page-container { padding:5px !important; animation: none !important; }
+body.pdf-mode .atithi-main-site-container::before { display: none !important; }
+body.pdf-mode .atithi-header-zone { border-bottom-color: #999 !important; box-shadow: none !important; padding: 10px 0 !important; margin-bottom: 10px !important;}
+body.pdf-mode .atithi-content-wrapper { max-width: 100% !important; padding: 0 !important; }
+body.pdf-mode .atithi-page-header { padding: 15px 0 !important; margin-bottom: 10px !important; border-bottom: none !important; }
+body.pdf-mode .atithi-page-header .atithi-main-title { font-size: 20pt !important; }
+body.pdf-mode .atithi-page-header .atithi-subtitle, body.pdf-mode .atithi-page-header .atithi-author-name { font-size: 12pt !important; }
+body.pdf-mode .atithi-page-header::before, body.pdf-mode .atithi-page-header::after, body.pdf-mode .atithi-main-title::after, body.pdf-mode .atithi-main-title .atithi-title-deco-left, body.pdf-mode .atithi-main-title .atithi-title-deco-right { display: none !important; }
+body.pdf-mode .atithi-action-buttons, body.pdf-mode .atithi-copy-button, body.pdf-mode .atithi-media-content .atithi-video-player, body.pdf-mode .atithi-email-display, body.pdf-mode .atithi-cta-scroll-block, body.pdf-mode .atithi-related-link-box, body.pdf-mode .atithi-external-links { display: none !important; }
+body.pdf-mode .atithi-content-block { border-width: 0.5px !important; border-style: solid !important; padding: 10px !important; margin-bottom:5px !important; border-radius: 0 !important; }
+body.pdf-mode .atithi-content-block.atithi-no-bg { border: none !important;}
+body.pdf-mode .atithi-poem-stanza.atithi-no-bg { background-color: #f8f8f8 !important; border: 1px dashed #ccc !important; border-image: none !important; }
+body.pdf-mode .atithi-poem-stanza.atithi-no-bg .atithi-hunkar-line,
+body.pdf-mode #poemContent .atithi-hunkar-line { border: 1px dashed #aaa !important; background-color: #f0f0f0 !important; border-image: none !important; animation: none !important; }
+body.pdf-mode .atithi-article-content h2, body.pdf-mode .atithi-article-content h3, body.pdf-mode .atithi-article-content h4, body.pdf-mode .atithi-article-content h5, body.pdf-mode .atithi-article-content h6 { font-size: 14pt !important; border-bottom-style: solid !important;}
+body.pdf-mode .atithi-article-content p, body.pdf-mode .atithi-article-content li, body.pdf-mode .atithi-poem-line { font-size: 10pt !important; line-height: 1.5 !important;}
+body.pdf-mode .atithi-article-content ul li::before { content: "- " !important; color: #333 !important; font-family: serif !important; }
+body.pdf-mode .atithi-article-content ul li > .fa { display:none !important; }
+body.pdf-mode .atithi-article-quote { border-left-width: 2px !important; background-color: #f5f5f5 !important; }
+body.pdf-mode .atithi-article-quote .fa-quote-left, body.pdf-mode .atithi-article-quote .fa-quote-right {display:none !important;}
+body.pdf-mode .atithi-article-quote::before { display: inline !important; content: '\201C'; font-size: 1.2em; color: #555; margin-right: 3px; line-height: 0; vertical-align: -0.1em;}
+body.pdf-mode .atithi-article-quote::after { display: inline !important; content: '\201D'; font-size: 1.2em; color: #555; margin-left: 3px; line-height: 0; vertical-align: -0.1em;}
+body.pdf-mode .atithi-poem-line span { background: none !important; -webkit-text-fill-color: inherit !important; animation:none !important; color: #000 !important;}
+body.pdf-mode .atithi-code-block pre { font-size: 9pt !important; background: #f0f0f0 !important; }
+body.pdf-mode .atithi-page-footer { padding: 10px !important; margin-top: 15px !important; font-size: 9pt !important; background-color: #fff !important; animation: none !important;}
+body.pdf-mode .atithi-page-footer p, body.pdf-mode .atithi-page-footer::before { color: #555 !important; text-shadow: none !important;}
+body.pdf-mode .atithi-page-footer::before { display: none !important; }
+body.pdf-mode img { max-width: 100% !important; height: auto !important; display: block !important; page-break-inside: avoid !important; border: 1px solid #ccc !important; }
+body.pdf-mode .atithi-media-placeholder img { border: 1px solid #ccc !important; }
+body.pdf-mode [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; } /* Disable AOS for PDF */
 
 
 /* Responsive Media Queries */
