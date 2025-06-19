@@ -62,7 +62,7 @@ html {
     z-index: 1 !important;
 }
 .atithi-content-wrapper {
-    width: 90% 
+    width: 80% 
     max-width: 1200px  /* <<< चौड़ाई 900px से बढ़ाकर 1200px की गई */
     margin-left: auto !important;
     margin-right: auto !important;
