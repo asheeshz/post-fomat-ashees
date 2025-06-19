@@ -18,38 +18,39 @@ html {
 }
 
 /* ========================================================= */
-/* === ANIMATED GALAXY BACKGROUND (WIDER & BLOGGER-FRIENDLY) === */
+/* === ANIMATED GALAXY BACKGROUND (STABLE & CORRECTED) === */
 /* ========================================================= */
 .atithi-main-site-container {
     width: 98% !important;
     max-width: 1400px !important;
     margin: 15px auto !important;
     border-radius: 12px;
+    background-size: 300% 300%;
+    background-image: radial-gradient(
+        circle at 25% 30%,
+        #05052d 0%,
+        #4b0082 35%,
+        #006400 50%,
+        #8b008b 65%,
+        #05052d 100%
+    );
+    animation: atithi-galaxy-swirl 25s linear infinite alternate;
     position: relative;
     min-height: 100vh; 
-    background-size: 400% 400%; 
-    background-image: radial-gradient(
-        circle at 20% 25%,
-        rgba(5, 5, 45, 1) 0%,      
-        rgba(139, 0, 139, 0.8) 30%, 
-        rgba(0, 100, 0, 0.7) 50%,   
-        rgba(139, 0, 139, 0.8) 70%, 
-        rgba(5, 5, 45, 1) 100%     
-    );
-    animation: atithi-galaxy-swirl 40s ease-in-out infinite;
     border: 1.5px solid rgba(255, 215, 0, 0.25); 
-    overflow: visible; 
+    overflow: hidden;
     display: flex; 
     flex-direction: column; 
     align-items: center; 
 }
 
 @keyframes atithi-galaxy-swirl {
-    0% { background-position: 0% 50%; transform: rotate(0deg) scale(1.1); }
-    25% { background-position: 50% 100%; transform: rotate(1deg) scale(1.15); }
-    50% { background-position: 100% 50%; transform: rotate(0deg) scale(1.1); }
-    75% { background-position: 50% 0%; transform: rotate(-1deg) scale(1.15); }
-    100% { background-position: 0% 50%; transform: rotate(0deg) scale(1.1); }
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
 }
 
 .atithi-main-site-container::before {
@@ -67,7 +68,7 @@ html {
     background-size: 400% 100%;
     animation: atithi-top-border-shine 10s linear infinite;
     z-index: 10;
-    border-radius: 12px 12px 0 0; /* बॉर्डर को भी गोल कर दिया */
+    border-radius: 12px 12px 0 0;
 }
 
 @keyframes atithi-top-border-shine {
