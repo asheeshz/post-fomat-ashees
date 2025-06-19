@@ -1,215 +1,232 @@
-/* --- Global Styles & Reset with !important & Increased Width --- */
+/* --- Global Styles & Reset --- */
 html {
-    box-sizing: border-box !important;
-    scroll-behavior: smooth !important;
-    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif !important;
-    color: #FFF8DC !important;
-    line-height: 1.8 !important;
-    background-color: #1a0d20 !important; /* गहरा बैंगनी पृष्ठभूमि */
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden !important;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
+    color: #FFF8DC;
+    line-height: 1.8;
+    background-color: #1a0d20; /* गहरा बैंगनी पृष्ठभूमि - body से यहाँ शिफ्ट किया गया */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important; /* <<< हॉरिजॉन्टल स्क्रॉल को सख्ती से रोकें */
 }
 
 *, *:before, *:after {
-    box-sizing: inherit !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
 }
 
+/* .atithi-main-site-container को body के समकक्ष मानें यदि body टैग नहीं है */
 .atithi-main-site-container {
-    position: relative !important;
-    width: 100% !important;
-    min-height: 100vh !important;
-    background-color: #05052d !important; /* मुख्य सामग्री क्षेत्र के लिए गहरा नीला बैकग्राउंड */
-    border: 1.5px solid rgba(255, 215, 0, 0.25) !important;
-    overflow: visible !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* यह सुनिश्चित करता है कि कंटेंट कम होने पर भी कंटेनर पूरी ऊंचाई ले */
+    background-color: #05052d; /* मुख्य सामग्री क्षेत्र के लिए गहरा नीला बैकग्राउंड */ !important;
+    border: 1.5px solid rgba(255, 215, 0, 0.25); /* पतला, सूक्ष्म सुनहरा बॉर्डर */ !important;
+    overflow: visible; /* ::before को बाहर निकलने देने के लिए visible */
+    display: flex; /* page-container को ठीक से केंद्र में लाने में मदद करता है */
+    flex-direction: column; /* page-container को स्टैक करने के लिए */
+    align-items: center; /* page-container को क्षैतिज रूप से केंद्र में रखता है */
 }
 
+/* टॉप पर शानदार ग्रेडिएंट बॉर्डर */
 .atithi-main-site-container::before {
-    content: '' !important;
-    position: absolute !important;
-    top: -2px !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 4px !important;
+    content: '';
+    position: absolute;
+    top: -2px; /* ग्रेडिएंट बार को ऊपर चढ़ाएं ताकि निचला हिस्सा सटा रहे */ !important;
+    left: 0; !important;
+    width: 100%; 
+    height: 4px; !important;
     background: linear-gradient(
         90deg,
-        #FFD700, #FFB347, #FF8C00, #FF4500, #DC143C, #FF4500, #FF8C00, #FFB347, #FFD700
-    ) !important;
-    background-size: 400% 100% !important;
-    animation: atithi-top-border-shine 10s linear infinite !important;
-    z-index: 10 !important;
+        #FFD700, /* Gold */
+        #FFB347, /* Light Orange (Apricot/Melon) */
+        #FF8C00, /* Dark Orange */
+        #FF4500, /* OrangeRed */
+        #DC143C, /* Crimson */
+        #FF4500, /* OrangeRed */
+        #FF8C00, /* Dark Orange */
+        #FFB347, /* Light Orange */
+        #FFD700  /* Gold */
+    ); !important;
+    background-size: 400% 100%;
+    animation: atithi-top-border-shine 10s linear infinite;
+    z-index: 10; /* सुनिश्चित करें कि यह सामग्री के ऊपर है */
 }
 
 @keyframes atithi-top-border-shine {
-    0% { background-position: 150% 0 !important; }
-    100% { background-position: -150% 0 !important; }
+    0% { background-position: 150% 0; }
+    100% { background-position: -150% 0; }
 }
 
 .atithi-page-container {
-    padding-top: 15px !important;
-    padding-bottom: 15px !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
     overflow-x: hidden !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    position: relative !important;
-    z-index: 1 !important;
+    width: 100%; /* main-site-container के अंदर पूरी चौड़ाई ले */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* ::before के ऊपर z-index काम करे इसके लिए */
+    z-index: 1; /* ::before pseudo-element के ऊपर पेज कंटेंट */
 }
 .atithi-content-wrapper {
-    width: 80% 
-    max-width: 1200px  /* <<< चौड़ाई 900px से बढ़ाकर 1200px की गई */
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    width: 100%;
+    max-width: 900px; /* सामग्री की अधिकतम चौड़ाई */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /* Header Zone */
 .atithi-header-zone {
-    width: 100% !important;
-    background-color: rgba(0, 0, 0, 0.2) !important;
-    padding: 20px 0 15px 0 !important;
-    margin-bottom: 10px !important;
-    border-bottom: 2px solid #FFD700 !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
-    position: relative !important;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* थोड़ा पारदर्शी काला बैकग्राउंड */
+    padding: 20px 0 15px 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #FFD700;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative; /* ::before और ::after को पोजीशन करने के लिए */
 }
 .atithi-page-header {
-    text-align: center !important;
-    padding: 20px 10px 10px 10px !important;
-    position: relative !important;
-    width: 100% !important;
+    text-align: center;
+    padding: 20px 10px 10px 10px;
+    position: relative; /* ::before और ::after को पोजीशन करने के लिए */
+    width: 100%;
 }
 .atithi-page-header::before, .atithi-page-header::after {
-    content: '' !important;
-    position: absolute !important;
-    bottom: 0px !important;
-    height: 2.5px !important;
-    width: 30% !important;
-    background: linear-gradient(to right, transparent, #FFD700, #FFD700, transparent) !important;
-    animation: atithi-shimmerHeaderBorder 4s infinite linear !important;
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    height: 2.5px;
+    width: 30%;
+    background: linear-gradient(to right, transparent, #FFD700, #FFD700, transparent);
+    animation: atithi-shimmerHeaderBorder 4s infinite linear;
 }
-.atithi-page-header::before { left: 5% !important; }
-.atithi-page-header::after { right: 5% !important; }
+.atithi-page-header::before { left: 5%; }
+.atithi-page-header::after { right: 5%; }
 
 @keyframes atithi-shimmerHeaderBorder {
-    0% { opacity: 0.6 !important; transform: scaleX(0.9) !important; }
-    50% { opacity: 1 !important; transform: scaleX(1) !important; }
-    100% { opacity: 0.6 !important; transform: scaleX(0.9) !important; }
+    0% { opacity: 0.6; transform: scaleX(0.9); }
+    50% { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0.6; transform: scaleX(0.9); }
 }
 
+/* Main Title Decoration - Enhanced */
 .atithi-page-header .atithi-main-title {
-    font-family: 'Rozha One', 'Martel Sans', serif !important;
-    font-weight: 900 !important;
-    font-size: clamp(2.4em, 6.2vw, 3.7em) !important;
-    color: #FFD700 !important;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.65) !important;
-    letter-spacing: 1.5px !important;
-    margin-bottom: 0.25em !important;
-    word-wrap: break-word !important;
-    position: relative !important;
-    padding-bottom: 10px !important;
-    display: inline-block !important;
+    font-family: 'Rozha One', 'Martel Sans', serif;
+    font-weight: 900;
+    font-size: clamp(2.4em, 6.2vw, 3.7em);
+    color: #FFD700;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.65);
+    letter-spacing: 1.5px;
+    margin-bottom: 0.25em;
+    word-wrap: break-word;
+    position: relative;
+    padding-bottom: 10px; /* शिमरिंग अंडरलाइन के लिए जगह */
+    display: inline-block; /* display:block से inline-block में बदला ताकि ::after सही से काम करे */
 }
 
 .atithi-page-header .atithi-main-title::after {
-    content: '' !important;
-    position: absolute !important;
-    left: 50% !important;
-    bottom: -2px !important;
-    transform: translateX(-50%) !important;
-    width: 70% !important;
-    height: 3.5px !important;
-    background: linear-gradient(to right, transparent, #FFD700 20%, #FF8C00 50%, #FFD700 80%, transparent) !important;
-    background-size: 300% 100% !important;
-    border-radius: 2px !important;
-    animation: atithi-underlineShimmer 3s infinite linear !important;
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -2px; /* शीर्षक के थोड़ा नीचे */
+    transform: translateX(-50%);
+    width: 70%; /* अंडरलाइन की चौड़ाई */
+    height: 3.5px; /* अंडरलाइन की मोटाई */
+    background: linear-gradient(to right, transparent, #FFD700 20%, #FF8C00 50%, #FFD700 80%, transparent);
+    background-size: 300% 100%; /* एनिमेशन के लिए ग्रेडिएंट को बड़ा करें */
+    border-radius: 2px;
+    animation: atithi-underlineShimmer 3s infinite linear;
 }
 
 @keyframes atithi-underlineShimmer {
-    0% { background-position: -150% 0 !important; }
-    100% { background-position: 150% 0 !important; }
+    0% { background-position: -150% 0; } /* ग्रेडिएंट को बाईं ओर से शुरू करें */
+    100% { background-position: 150% 0; } /* ग्रेडिएंट को दाईं ओर ले जाएं */
 }
 
 .atithi-page-header .atithi-main-title .atithi-title-deco-left,
 .atithi-page-header .atithi-main-title .atithi-title-deco-right {
-    font-size: 0.7em !important;
-    color: #FFC107 !important;
-    margin: 0 10px !important;
-    display: inline-block !important;
-    animation: atithi-titleSparkle 2s infinite alternate !important;
-    vertical-align: middle !important;
+    font-size: 0.7em; /* मुख्य शीर्षक के सापेक्ष आकार */
+    color: #FFC107; /* सजावट का रंग */
+    margin: 0 10px; /* शीर्षक और सजावट के बीच मार्जिन */
+    display: inline-block;
+    animation: atithi-titleSparkle 2s infinite alternate;
+    vertical-align: middle; /* शीर्षक के साथ लंबवत संरेखित करें */
 }
 
 @keyframes atithi-titleSparkle {
-    0% { transform: scale(1) rotate(0deg) translateY(0) !important; opacity: 0.7 !important; }
-    50% { transform: scale(1.2) rotate(15deg) translateY(-2px) !important; opacity: 1 !important; text-shadow: 0 0 5px #FFD700 !important; }
-    100% { transform: scale(1) rotate(0deg) translateY(0) !important; opacity: 0.7 !important; }
+    0% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
+    50% { transform: scale(1.2) rotate(15deg) translateY(-2px); opacity: 1; text-shadow: 0 0 5px #FFD700;}
+    100% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
 }
 
-.atithi-page-header .atithi-subtitle { font-family: 'Sahitya', 'Lohit Devanagari', serif !important; font-size: clamp(0.95em, 2.1vw, 1.25em) !important; color: #F0E68C !important; text-transform: uppercase !important; letter-spacing: 1px !important; opacity: 0.9 !important; margin-bottom: 10px !important; word-wrap: break-word !important; }
-.atithi-page-header .atithi-author-name { font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive !important; font-size: clamp(1.05em, 2.3vw, 1.45em) !important; color: #FFDEAD !important; margin-top:10px !important; display:block !important; }
-.atithi-page-header .atithi-author-name .fa { margin-right: 8px !important; }
+.atithi-page-header .atithi-subtitle { font-family: 'Sahitya', 'Lohit Devanagari', serif; font-size: clamp(0.95em, 2.1vw, 1.25em); color: #F0E68C; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 10px; word-wrap: break-word; }
+.atithi-page-header .atithi-author-name { font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive; font-size: clamp(1.05em, 2.3vw, 1.45em); color: #FFDEAD; margin-top:10px; display:block; }
+.atithi-page-header .atithi-author-name .fa { margin-right: 8px; /* आइकन और टेक्स्ट के बीच स्पेस */ }
 
-.atithi-content-block.atithi-intro-text { margin-bottom: 0 !important; padding-top: 5px !important; background-color: transparent !important; border: none !important; box-shadow: none !important; }
-.atithi-content-block.atithi-intro-text p { color: #F5DEB3 !important; font-size: clamp(1.05em, 2vw, 1.2em) !important; }
-.atithi-content-block.atithi-intro-text p .fa { margin-right: 8px !important; color: #FFD700 !important; }
 
+.atithi-content-block.atithi-intro-text { margin-bottom: 0; padding-top: 5px; background-color: transparent !important; border: none !important; box-shadow: none !important; }
+.atithi-content-block.atithi-intro-text p { color: #F5DEB3; font-size: clamp(1.05em, 2vw, 1.2em); }
+.atithi-content-block.atithi-intro-text p .fa { margin-right: 8px; color: #FFD700; }
+
+
+/* Action Buttons Area */
 .atithi-action-buttons {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    margin-bottom: 20px !important;
-    position: relative !important;
-    z-index: 2 !important;
-    width: 100% !important;
-    padding: 20px 10px !important;
-    border-radius: 12px !important;
-    animation: atithi-action-button-pulse 9s ease-in-out infinite !important;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.3), 0 0 30px rgba(173, 216, 230, 0.1) !important;
-    border: 1px solid rgba(128, 0, 128, 0.6) !important;
-    margin-top: 15px !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* बटन के बीच गैप */
+    margin-bottom: 20px; /* कंटेंट से दूरी */
+    position: relative; /* स्टैकिंग के लिए */
+    z-index: 2; /* कंटेंट के ऊपर रहे */
+    width: 100%;
+    padding: 20px 10px; /* अंदरूनी पैडिंग */
+    border-radius: 12px;
+    animation: atithi-action-button-pulse 9s ease-in-out infinite;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4),
+                inset 0 0 10px rgba(0,0,0,0.3),
+                0 0 30px rgba(173, 216, 230, 0.1); /* सूक्ष्म चमक */
+    border: 1px solid rgba(128, 0, 128, 0.6); /* बैंगनी बॉर्डर */
+    margin-top: 15px;
 }
 
 @keyframes atithi-action-button-pulse {
-    0% { background-color: #2a003a !important; }
-    50% { background-color: #4d0066 !important; }
-    100% { background-color: #2a003a !important; }
+    0% { background-color: #2a003a; } /* गहरा बैंगनी */
+    50% { background-color: #4d0066; } /* थोड़ा और स्पष्ट बैंगनी */
+    100% { background-color: #2a003a; }
 }
 
+
 .atithi-button {
-    background: linear-gradient(145deg, #8B0000, #FF0000) !important;
-    color: #ffffff !important;
-    border: 2px solid #FFD700 !important;
-    padding: 10px 18px !important;
-    font-family: 'Teko', sans-serif !important;
-    font-size: clamp(0.95em, 1.8vw, 1.15em) !important;
-    letter-spacing: 0.5px !important;
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    border-radius: 6px !important;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    text-shadow: 0 0 3px #000 !important;
-    box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 2px rgba(255,0,0,0.5) !important;
-    text-decoration: none !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 140px !important;
-    text-align: center !important;
+    background: linear-gradient(145deg, #8B0000, #FF0000); /* गहरा लाल से लाल ग्रेडिएंट */
+    color: #ffffff;
+    border: 2px solid #FFD700; /* सुनहरा बॉर्डर */
+    padding: 10px 18px;
+    font-family: 'Teko', sans-serif;
+    font-size: clamp(0.95em, 1.8vw, 1.15em);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* स्मूथ ट्रांजीशन */
+    text-shadow: 0 0 3px #000; /* टेक्स्ट शैडो */
+    box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 2px rgba(255,0,0,0.5); /* बटन शैडो */
+    text-decoration: none;
+    display: inline-flex; /* आइकन और टेक्स्ट को संरेखित करने के लिए */
+    align-items: center;
+    justify-content: center;
+    min-width: 140px; /* न्यूनतम चौड़ाई */
+    text-align: center;
 }
-.atithi-button .fa { margin-right: 8px !important; font-size: 1.1em !important; }
+.atithi-button .fa { margin-right: 8px; font-size: 1.1em; }
 .atithi-button:hover {
-    background: linear-gradient(145deg, #FF0000, #FF4500) !important;
-    transform: scale(1.05) !important;
-    box-shadow: 0 0 12px rgba(255,215,0,0.5), inset 0 0 5px rgba(255,100,0,0.5) !important;
+    background: linear-gradient(145deg, #FF0000, #FF4500); /* होवर पर ग्रेडिएंट बदला */
+    transform: scale(1.05); /* थोड़ा बड़ा करें */
+    box-shadow: 0 0 12px rgba(255,215,0,0.5), inset 0 0 5px rgba(255,100,0,0.5); /* होवर पर शैडो */
 }
 .atithi-button:disabled {
     background: #555 !important;
@@ -220,720 +237,650 @@ html {
     cursor: not-allowed !important;
 }
 
+/* Main Content Area */
 .atithi-main-content-area {
-    width: 100% !important;
-    padding: 15px 0 !important;
-    margin-bottom: 10px !important;
-    border-radius: 8px !important;
+    width: 100%;
+    padding: 15px 0; /* कंटेंट और पेज किनारों के बीच स्पेस */
+    margin-bottom: 10px;
+    border-radius: 8px;
 }
 
+
+/* Default Content Block Style */
 .atithi-content-block {
-    margin-bottom: 8px !important;
-    padding: 18px 22px !important;
-    background-color: rgba(0,0,0, 0.25) !important;
-    border: 1px solid rgba(184, 134, 11, 0.6) !important;
-    border-radius: 6px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-    text-align: left !important;
-    width: 100% !important;
-    color: #FFF8DC !important;
-    overflow-wrap: break-word !important;
+    margin-bottom: 8px; !important;
+    padding: 18px 22px; !important;
+    background-color: rgba(0,0,0, 0.25); /* सेमी-ट्रांसपेरेंट ब्लैक */ !important;
+    border: 1px solid rgba(184, 134, 11, 0.6); /* गहरा पीला बॉर्डर */ !important;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* सूक्ष्म शैडो */ !important;
+    text-align: left; !important;
+    width: 100%; !important;
+    color: #FFF8DC; /* डिफ़ॉल्ट टेक्स्ट रंग */ !important;
+    overflow-wrap: break-word;
 }
-.atithi-content-block.atithi-centered-text { text-align: center !important; }
+.atithi-content-block.atithi-centered-text { text-align: center; }
 .atithi-content-block.atithi-no-bg {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 10px 5px !important;
+    padding: 10px 5px;
 }
 
+
+/* Poem Stanza specific styling */
 #poemContent.atithi-poem-stanza.atithi-no-bg {
-    border: 2.5px dashed #FFD700 !important;
-    margin-top: 8px !important;
-    margin-bottom: 8px !important;
-    padding: 20px 15px !important;
-    background-color: #2F002F !important;
-    border-radius: 10px !important;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.4) !important;
-    animation: atithi-poem-glow 4s ease-in-out infinite !important;
-    transition: transform 0.3s ease-out !important;
-    position: relative !important;
-    overflow: hidden !important;
+    border: 2.5px dashed #FFD700 !important; /* सुनहरा डैश्ड बॉर्डर */
+    margin-top: 8px; margin-bottom: 8px;
+    padding: 20px 15px;
+    background-color: #2F002F; /* गहरा मैजेंटा बैकग्राउंड */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.4); /* अंदर और बाहर शैडो */
+    animation: atithi-poem-glow 4s ease-in-out infinite; /* पहले से था, यदि रखना चाहें */
+    transition: transform 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
 }
 #poemContent.atithi-poem-stanza.atithi-no-bg:hover {
-     transform: translateY(-3px) scale(1.01) !important;
+     transform: translateY(-3px) scale(1.01);
 }
-@keyframes atithi-poem-glow {
-    0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255,165,0,0.2), inset 0 0 5px rgba(0,0,0,0.2) !important; }
-    50% { box-shadow: 0 0 18px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 165, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.3), 0 0 5px #FFD700 !important; }
+@keyframes atithi-poem-glow { /* पहले से था */
+    0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255,165,0,0.2), inset 0 0 5px rgba(0,0,0,0.2); }
+    50% { box-shadow: 0 0 18px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 165, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.3), 0 0 5px #FFD700; }
 }
+
 
 .atithi-conclusion-text h3, .atithi-attractive-bg-section h3, .atithi-attractive-bg-section h2 {
-    font-family: 'Rozha One', 'Lohit Devanagari', serif !important;
-    color:#FFD700 !important;
-    margin-bottom:15px !important;
-    font-size:1.7em !important;
-    text-align:center !important;
-    text-shadow: 1px 1px 2px #000 !important;
-    border-bottom: 1px dotted rgba(255,215,0,0.7) !important;
-    padding-bottom: 10px !important;
+    font-family: 'Rozha One', 'Lohit Devanagari', serif;
+    color:#FFD700 !important; /* सुनहरा रंग */
+    margin-bottom:15px;
+    font-size:1.7em;
+    text-align:center;
+    text-shadow: 1px 1px 2px #000; /* टेक्स्ट शैडो */
+    border-bottom: 1px dotted rgba(255,215,0,0.7); /* सुनहरा डोटेड अंडरलाइन */
+    padding-bottom: 10px;
 }
-.atithi-conclusion-text h3 .fa, .atithi-attractive-bg-section h3 .fa, .atithi-attractive-bg-section h2 .fa { margin-right: 10px !important; }
+.atithi-conclusion-text h3 .fa, .atithi-attractive-bg-section h3 .fa, .atithi-attractive-bg-section h2 .fa { margin-right: 10px; }
 
+/* Headings within article content */
 .atithi-article-content h2, .atithi-article-content h3, .atithi-article-content h4, .atithi-article-content h5, .atithi-article-content h6 {
-    font-family: 'Martel Sans', 'Rozha One', serif !important;
-    margin-top: 20px !important;
-    margin-bottom: 12px !important;
-    padding-bottom: 8px !important;
-    border-bottom: 1px dotted #FFD700 !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.4) !important;
+    font-family: 'Martel Sans', 'Rozha One', serif;
+    margin-top: 20px; margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dotted #FFD700; /* सुनहरा डोटेड अंडरलाइन */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4); /* टेक्स्ट शैडो */
 }
-.atithi-article-content h2 .fa, .atithi-article-content h3 .fa, .atithi-article-content h4 .fa { margin-right: 10px !important; }
-.atithi-article-content h2 { font-size: clamp(1.9em, 3.8vw, 2.4em) !important; color: #FFD700 !important; }
-.atithi-article-content h3 { font-size: clamp(1.7em, 3.3vw, 2.2em) !important; color: #F0E68C !important; }
-.atithi-article-content h4 { font-size: clamp(1.5em, 2.9vw, 2.0em) !important; color: #FFDEAD !important; }
-.atithi-article-content h5 { font-size: clamp(1.3em, 2.6vw, 1.8em) !important; color: #FFC107 !important; }
-.atithi-article-content h6 { font-size: clamp(1.2em, 2.4vw, 1.6em) !important; color: #FFDEAD !important; }
+.atithi-article-content h2 .fa, .atithi-article-content h3 .fa, .atithi-article-content h4 .fa { margin-right: 10px; }
+.atithi-article-content h2 { font-size: clamp(1.9em, 3.8vw, 2.4em); color: #FFD700; }
+.atithi-article-content h3 { font-size: clamp(1.7em, 3.3vw, 2.2em); color: #F0E68C; } /* हल्का पीला */
+.atithi-article-content h4 { font-size: clamp(1.5em, 2.9vw, 2.0em); color: #FFDEAD; } /* हल्का आड़ू जैसा */
+.atithi-article-content h5 { font-size: clamp(1.3em, 2.6vw, 1.8em); color: #FFC107; } /* थोड़ा गहरा पीला */
+.atithi-article-content h6 { font-size: clamp(1.2em, 2.4vw, 1.6em); color: #FFDEAD; }
 
+/* Paragraphs and List items in article */
 .atithi-content-block .atithi-article-content p, .atithi-content-block .atithi-article-content li {
-    font-size: clamp(1em, 2vw, 1.15em) !important;
-    color: #FFFFFF !important;
-    line-height: 2.0 !important;
-    margin-bottom: 15px !important;
+    font-size: clamp(1em, 2vw, 1.15em);
+    color: #FFFFFF; /* सफेद टेक्स्ट */
+    line-height: 2.0; /* बढ़ी हुई लाइन हाइट */
+    margin-bottom: 15px;
 }
-.atithi-content-block .atithi-article-content strong { font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important; color: #FFFFE0 !important; font-weight: 700 !important; }
-.atithi-content-block.atithi-no-bg .atithi-article-content p, .atithi-content-block.atithi-no-bg .atithi-article-content li { color: #E0FFFF !important; }
-.atithi-content-block.atithi-no-bg .atithi-article-content strong { color: #FFD700 !important; }
+.atithi-content-block .atithi-article-content strong { font-family: 'Baloo 2', 'Lohit Devanagari', cursive; color: #FFFFE0; font-weight: 700; }
+.atithi-content-block.atithi-no-bg .atithi-article-content p, .atithi-content-block.atithi-no-bg .atithi-article-content li { color: #E0FFFF; } /* हल्के नीले रंग का टेक्स्ट */
+.atithi-content-block.atithi-no-bg .atithi-article-content strong { color: #FFD700; }
 
-.atithi-article-content ul { list-style: none !important; padding-left: 0 !important; }
+
+/* Unordered List styling with FontAwesome icons */
+.atithi-article-content ul { list-style: none; padding-left: 0; }
 .atithi-article-content ul li {
-    padding-left: 28px !important;
-    position: relative !important;
-    margin-bottom: 10px !important;
+    padding-left: 28px; /* आइकन के लिए जगह */
+    position: relative; /* ::before को पोजीशन करने के लिए */
+    margin-bottom: 10px;
 }
 .atithi-article-content ul li::before {
-    content: "\f0a9" !important;
-    font-family: FontAwesome !important;
-    color: #FFC107 !important;
-    position: absolute !important;
-    left: 0px !important;
-    top: 0.25em !important;
-    line-height: 1 !important;
-    font-size: 1em !important;
+    content: "\f0a9"; /* FontAwesome राइट एरो आइकन */
+    font-family: FontAwesome;
+    color: #FFC107; /* आइकन का रंग */
+    position: absolute;
+    left: 0px;
+    top: 0.25em; /* वर्टिकल अलाइनमेंट */
+    line-height: 1;
+    font-size: 1em;
 }
+/* .atithi-article-content ul li > .fa { display: none; } /* यदि ::before का उपयोग कर रहे हैं तो इसे छिपाएं */
 
+
+/* Article Quote styling */
 .atithi-article-quote {
-    font-family: 'Tiro Devanagari Hindi', serif !important;
-    font-size: clamp(1.05em, 2.2vw, 1.25em) !important;
-    color: #E6E6FA !important;
-    border-left: 3px solid #FF6347 !important;
-    padding: 12px 18px !important;
-    margin: 20px 0 !important;
-    background-color: rgba(0,0,0, 0.3) !important;
-    font-style: italic !important;
-    border-radius: 0 6px 6px 0 !important;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: clamp(1.05em, 2.2vw, 1.25em);
+    color: #E6E6FA; /* लैवेंडर टेक्स्ट */
+    border-left: 3px solid #FF6347; /* टमाटर रंग का बॉर्डर */
+    padding: 12px 18px; margin: 20px 0;
+    background-color: rgba(0,0,0, 0.3); /* गहरा पारदर्शी बैकग्राउंड */
+    font-style: italic;
+    border-radius: 0 6px 6px 0; /* दाहिनी ओर गोल कोने */
 }
+/* उद्धरण चिह्नों के लिए pseudo-elements */
 .atithi-article-quote::before {
-    content: '\201C' !important;
-    font-size: 1.4em !important;
-    color: #FF6347 !important;
-    margin-right: 5px !important;
-    line-height: 0 !important;
-    vertical-align: -0.2em !important;
+    content: '\201C'; /* बायाँ दोहरा उद्धरण चिह्न */
+    font-size: 1.4em; /* बड़ा आकार */
+    color: #FF6347; /* बॉर्डर जैसा रंग */
+    margin-right: 5px;
+    line-height: 0; /* बेसलाइन के साथ संरेखित करने में मदद करता है */
+    vertical-align: -0.2em; /* वर्टिकल एडजस्टमेंट */
 }
 .atithi-article-quote::after {
-    content: '\201D' !important;
-    font-size: 1.4em !important;
-    color: #FF6347 !important;
-    margin-left: 5px !important;
-    line-height: 0 !important;
-    vertical-align: -0.2em !important;
+    content: '\201D'; /* दायाँ दोहरा उद्धरण चिह्न */
+    font-size: 1.4em;
+    color: #FF6347;
+    margin-left: 5px;
+    line-height: 0;
+    vertical-align: -0.2em;
 }
+/* .atithi-article-quote .fa-quote-left, .atithi-article-quote .fa-quote-right { display: none; } /* यदि ::before/:after का उपयोग कर रहे हैं */
 
 .atithi-content-block.atithi-no-bg .atithi-article-quote {
-    background-color: rgba(255,255,255,0.05) !important;
-    border-left-color: #FF8C00 !important;
-    color: #ADD8E6 !important;
+    background-color: rgba(255,255,255,0.05); /* हल्का पारदर्शी बैकग्राउंड */
+    border-left-color: #FF8C00; /* गहरा नारंगी बॉर्डर */
+    color: #ADD8E6; /* हल्का नीला टेक्स्ट */
 }
 .atithi-content-block.atithi-no-bg .atithi-article-quote::before,
 .atithi-content-block.atithi-no-bg .atithi-article-quote::after {
-    color: #FF8C00 !important;
+    color: #FF8C00; /* उद्धरण चिह्नों का रंग */
 }
 
+
+/* Poem specific styles */
 .atithi-poem-stanza .atithi-poem-title {
-    text-align:center !important;
-    font-family: 'Rozha One', serif !important;
-    color:#FFD700 !important;
-    margin-bottom:20px !important;
-    font-size:clamp(1.5em, 3vw, 1.8em) !important;
-    border-bottom: 1px dotted #FFD700 !important;
-    padding-bottom: 8px !important;
+    text-align:center; font-family: 'Rozha One', serif; color:#FFD700;
+    margin-bottom:20px; font-size:clamp(1.5em, 3vw, 1.8em);
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
 }
-.atithi-poem-stanza .atithi-poem-title .fa { margin-right: 10px !important; }
+.atithi-poem-stanza .atithi-poem-title .fa { margin-right: 10px; }
 
 .atithi-poem-line {
-    margin-bottom: 10px !important;
-    text-align: center !important;
-    color: #FFFFFF !important;
-    text-shadow: 0 0 2px rgba(0,0,0,0.4) !important;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #FFFFFF;
+    text-shadow: 0 0 2px rgba(0,0,0,0.4);
 }
 #poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) {
-    font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive !important;
+    font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive;
     font-size: clamp(1.0em, 2.0vw, 1.2em) !important;
-    color: #FFEFD5 !important;
-    text-shadow: 0 0 3px #000, 0 0 6px rgba(255,69,0,0.7) !important;
+    color: #FFEFD5 !important; /* पपीता व्हिप */
+    text-shadow: 0 0 3px #000, 0 0 6px rgba(255,69,0,0.7); /* आग जैसा शैडो */
 }
 #poemContent .atithi-first-poem-line {
-    font-family: 'Teko', 'Martel Sans', sans-serif !important;
+    font-family: 'Teko', 'Martel Sans', sans-serif;
     font-size: clamp(1.2em, 2.5vw, 1.55em) !important;
-    font-weight: 500 !important;
-    color: #FFDB58 !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7), 0 0 5px rgba(255, 165, 0, 0.5) !important;
-    letter-spacing: 0.8px !important;
-    line-height: 1.6 !important;
+    font-weight: 500;
+    color: #FFDB58; /* हल्का सुनहरा */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7), 0 0 5px rgba(255, 165, 0, 0.5);
+    letter-spacing: 0.8px;
+    line-height: 1.6;
     margin-bottom: 12px !important;
-    padding: 4px 0 !important;
+    padding: 4px 0;
 }
 
+/* Hunkar Line with shake animation and gradient border */
 #poemContent .atithi-hunkar-line {
-    font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important;
-    font-weight: 700 !important;
+    font-family: 'Baloo 2', 'Lohit Devanagari', cursive; font-weight: 700;
     font-size: clamp(1.1em, 2.3vw, 1.4em) !important;
-    color: #FFD700 !important;
-    text-shadow: 1px 1px 3px #000 !important;
-    letter-spacing: 0.8px !important;
-    margin: 12px 0 !important;
-    padding: 8px !important;
-    border-top: 2px solid #DC143C !important;
-    border-bottom: 2px solid #DC143C !important;
-    background-color: rgba(220, 20, 60, 0.1) !important;
-    text-transform: uppercase !important;
-    animation: atithi-hunkarShake 0.3s 2s 3 ease-in-out !important;
+    color: #FFD700 !important; text-shadow: 1px 1px 3px #000;
+    letter-spacing: 0.8px; margin: 12px 0 !important; padding: 8px; /* पैडिंग थोड़ी कम की */
+    border-top: 2px solid #DC143C; /* क्रिमसन टॉप बॉर्डर */
+    border-bottom: 2px solid #DC143C; /* क्रिमसन बॉटम बॉर्डर */
+    background-color: rgba(220, 20, 60, 0.1); /* हल्का क्रिमसन बैकग्राउंड */
+    text-transform: uppercase;
+    animation: atithi-hunkarShake 0.3s 2s 3 ease-in-out; /* शेक एनिमेशन */
 }
 @keyframes atithi-hunkarShake {
-    0%, 100% { transform: translateX(0) rotate(0) !important; }
-    20% { transform: translateX(-2px) rotate(-1deg) !important; }
-    40% { transform: translateX(2px) rotate(1deg) !important; }
-    60% { transform: translateX(-2px) rotate(-0.5deg) !important; }
-    80% { transform: translateX(2px) rotate(0.5deg) !important; }
+    0%, 100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-2px) rotate(-1deg); }
+    40% { transform: translateX(2px) rotate(1deg); }
+    60% { transform: translateX(-2px) rotate(-0.5deg); }
+    80% { transform: translateX(2px) rotate(0.5deg); }
 }
 
+
+/* Fiery Word Pulse for span within poem lines */
 .atithi-poem-line span {
-    color: transparent !important;
-    background: linear-gradient(45deg, #FFD700, #FF8C00, #FF4500) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    display: inline-block !important;
-    animation: atithi-fieryWordPulse 1.5s infinite alternate !important;
+    color: transparent; /* टेक्स्ट को छिपाएं ताकि ग्रेडिएंट दिखे */
+    background: linear-gradient(45deg, #FFD700, #FF8C00, #FF4500); /* आग जैसा ग्रेडिएंट */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Safari के लिए */
+    display: inline-block; /* एनिमेशन के लिए */
+    animation: atithi-fieryWordPulse 1.5s infinite alternate; /* पल्सिंग एनिमेशन */
 }
 @keyframes atithi-fieryWordPulse {
-    from { transform: scale(1) !important; text-shadow: 0 0 6px #FF4500 !important; }
-    to { transform: scale(1.05) !important; text-shadow: 0 0 12px #FF8C00 !important; }
+    from { transform: scale(1); text-shadow: 0 0 6px #FF4500; }
+    to { transform: scale(1.05); text-shadow: 0 0 12px #FF8C00; }
 }
 
+/* Poem Stanza with no-bg specific overrides */
 #poemContent.atithi-poem-stanza.atithi-no-bg .atithi-hunkar-line {
-    background-color: rgba(255, 215, 0, 0.1) !important;
-    border-top: 2.5px solid #FF4500 !important;
+    background-color: rgba(255, 215, 0, 0.1) !important; /* हल्का सुनहरा पारदर्शी */
+    border-top: 2.5px solid #FF4500 !important; /* ऑरेंजरेड बॉर्डर */
     border-bottom: 2.5px solid #FF4500 !important;
-    border-left: none !important;
+    border-left: none !important; /* साइड बॉर्डर हटाएं */
     border-right: none !important;
-    color: #FFFFE0 !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7) !important;
-    padding: 8px !important;
-    margin: 12px 0 !important;
+    color: #FFFFE0 !important; /* हल्का पीला टेक्स्ट */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    padding: 8px; margin: 12px 0 !important;
     font-size: clamp(1.2em, 2.6vw, 1.5em) !important;
 }
 
+
+/* Attractive Background Sections */
 .atithi-attractive-bg-section {
-    padding: 20px !important;
-    margin: 20px 0 !important;
-    border-radius: 8px !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4) !important;
+    padding: 20px; margin: 20px 0; border-radius: 8px; color: #FFFFFF !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    /* Specific gradient for each type is applied below */
 }
 .atithi-attractive-bg-section > h2, .atithi-attractive-bg-section > h3 {
-    color: #FFDB58 !important;
-    text-shadow: 1px 1px 3px #000 !important;
-    border-bottom: 1px dotted rgba(255,215,0,0.7) !important;
-    margin-bottom: 15px !important;
-    padding-bottom: 10px !important;
-    text-align: center !important;
+    color: #FFDB58 !important; text-shadow: 1px 1px 3px #000;
+    border-bottom: 1px dotted rgba(255,215,0,0.7); margin-bottom: 15px; padding-bottom: 10px; text-align: center;
 }
-.atithi-attractive-bg-section p { color: #F0F8FF !important; font-size: clamp(1.05em, 2.1vw, 1.2em) !important; line-height: 1.9 !important; }
+.atithi-attractive-bg-section p { color: #F0F8FF !important; font-size: clamp(1.05em, 2.1vw, 1.2em); line-height: 1.9; }
 
-.atithi-bg-conclusion { background: linear-gradient(135deg, #2A002A, #500750) !important; border: 1px solid #FFD700 !important; }
+/* Specific background gradients */
+.atithi-bg-conclusion { background: linear-gradient(135deg, #2A002A, #500750); border: 1px solid #FFD700;} /* गहरा बैंगनी */
 .atithi-bg-rajvansh-pink-purple { background: linear-gradient(135deg, rgba(199, 21, 133, 0.85), rgba(138, 43, 226, 0.9)) !important; border: 1px solid rgba(218, 112, 214, 0.7) !important; }
-.atithi-bg-suffering { background: linear-gradient(135deg, #4A1F04, #803608) !important; border: 1px solid #FFD700 !important; }
+.atithi-bg-suffering { background: linear-gradient(135deg, #4A1F04, #803608); border: 1px solid #FFD700;} /* गहरा भूरा/नारंगी */
 
+/* Styles for elements within atithi-bg-rajvansh-pink-purple */
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box {
     background: linear-gradient(145deg, rgba(100, 0, 50, 0.75), rgba(60, 0, 80, 0.9)) !important;
     border: 1px solid rgba(218, 112, 214, 0.65) !important;
-    border-left-width: 5px !important;
-    border-left-color: #C71585 !important;
+    border-left-width: 5px !important; border-left-color: #C71585 !important;
 }
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-link-label-read-more {
-    background-color: #B71C1C !important;
-    box-shadow: 0 0 8px #B71C1C !important;
+    background-color: #B71C1C !important; box-shadow: 0 0 8px #B71C1C !important;
 }
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-related-link-text { color: #FFEFD5 !important; }
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-related-link-text:hover {
-    color: #FFDAB9 !important;
-    text-shadow: 0 0 5px rgba(255, 218, 185, 0.7) !important;
+    color: #FFDAB9 !important; text-shadow: 0 0 5px rgba(255, 218, 185, 0.7) !important;
 }
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote {
-    background-color: rgba(40, 0, 30, 0.45) !important;
-    border-left-color: #FF69B4 !important;
-    color: #FFF5EE !important;
+    background-color: rgba(40, 0, 30, 0.45) !important; border-left-color: #FF69B4 !important; color: #FFF5EE !important;
 }
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote::before,
 #poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote::after { color: #FFB6C1 !important; }
 
+
+/* Media Content (Images & Videos) */
 .atithi-media-content h3 {
-    font-family: 'Rozha One', serif !important;
-    color: #FFD700 !important;
-    font-size: clamp(1.5em, 2.9vw, 1.8em) !important;
-    margin-bottom: 15px !important;
-    text-transform: uppercase !important;
-    text-align: center !important;
-    border-bottom: 1px dotted #FFD700 !important;
-    padding-bottom: 8px !important;
+    font-family: 'Rozha One', serif; color: #FFD700; font-size: clamp(1.5em, 2.9vw, 1.8em);
+    margin-bottom: 15px; text-transform: uppercase; text-align: center;
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
 }
-.atithi-media-content h3 .fa { margin-right: 10px !important; }
+.atithi-media-content h3 .fa { margin-right: 10px; }
 .atithi-media-placeholder img {
-    max-width: 100% !important;
-    height: auto !important;
-    border: 2px solid #FFD700 !important;
-    border-radius: 5px !important;
-    margin-bottom:10px !important;
-    display: block !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    max-width: 100%; height: auto; border: 2px solid #FFD700; border-radius: 5px;
+    margin-bottom:10px; display: block; margin-left: auto; margin-right: auto;
 }
 .atithi-media-placeholder p {
-    font-family: 'Lohit Devanagari', 'Sahitya', serif !important;
-    font-size:clamp(0.8em, 1.8vw, 0.9em) !important;
-    color:#ccc !important;
-    margin-bottom: 15px !important;
-    text-align: center !important;
+    font-family: 'Lohit Devanagari', 'Sahitya', serif; font-size:clamp(0.8em, 1.8vw, 0.9em);
+    color:#ccc; margin-bottom: 15px; text-align: center;
 }
 .atithi-video-player {
-    position: relative !important;
-    padding-bottom: 56.25% !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    max-width: 100% !important;
-    background: #000 !important;
-    border: 2px solid #DC143C !important;
-    border-radius: 5px !important;
-    margin: 0 auto 15px auto !important;
+    position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0; overflow: hidden; max-width: 100%;
+    background: #000; border: 2px solid #DC143C; /* क्रिमसन बॉर्डर */
+    border-radius: 5px; margin: 0 auto 15px auto;
 }
-.atithi-video-player iframe { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border: none !important; }
+.atithi-video-player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
+
+/* Guidance & Reference Content */
 .atithi-guidance-content h2 {
-    font-family: 'Rozha One', serif !important;
-    color: #FFD700 !important;
-    font-size: clamp(1.7em, 3.3vw, 2.1em) !important;
-    text-align: center !important;
-    margin-bottom: 18px !important;
-    border-bottom: 1px dotted #FFD700 !important;
-    padding-bottom: 9px !important;
+    font-family: 'Rozha One', serif; color: #FFD700; font-size: clamp(1.7em, 3.3vw, 2.1em);
+    text-align: center; margin-bottom: 18px; border-bottom: 1px dotted #FFD700; padding-bottom: 9px;
 }
-.atithi-guidance-content h2 .fa { margin-right: 10px !important; }
+.atithi-guidance-content h2 .fa { margin-right: 10px; }
 .atithi-guidance-content h3 {
-    font-family: 'Teko', 'Rozha One', sans-serif !important;
-    color: #F0E68C !important;
-    font-size: clamp(1.4em, 2.9vw, 1.8em) !important;
-    margin-top: 18px !important;
-    margin-bottom: 9px !important;
+    font-family: 'Teko', 'Rozha One', sans-serif; color: #F0E68C; font-size: clamp(1.4em, 2.9vw, 1.8em);
+    margin-top: 18px; margin-bottom: 9px;
 }
-.atithi-guidance-content h3 .fa { margin-right: 8px !important; }
+.atithi-guidance-content h3 .fa { margin-right: 8px; }
 .atithi-guidance-content p, .atithi-guidance-content ul {
-    font-family: 'Lohit Devanagari', 'Sahitya', serif !important;
-    font-size: clamp(1em, 2vw, 1.1em) !important;
-    color: #e0e0e0 !important;
-    line-height: 1.8 !important;
-    margin-bottom: 9px !important;
+    font-family: 'Lohit Devanagari', 'Sahitya', serif; font-size: clamp(1em, 2vw, 1.1em);
+    color: #e0e0e0; line-height: 1.8; margin-bottom: 9px;
 }
-.atithi-guidance-content ul { list-style-position: inside !important; padding-left: 0px !important; list-style-type: none !important; }
+.atithi-guidance-content ul { list-style-position: inside; padding-left: 0px; list-style-type: none; } /* पहले से था */
 .atithi-guidance-content ul li {
-    margin-bottom: 4px !important;
-    position: relative !important;
-    padding-left: 25px !important;
+    margin-bottom: 4px;
+    position: relative;
+    padding-left: 25px; /* आइकन के लिए जगह */
 }
-.atithi-guidance-content ul li::before {
-    content: "\f058" !important;
-    font-family: FontAwesome !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0.2em !important;
-    color: #FFD700 !important;
+.atithi-guidance-content ul li::before { /* FontAwesome आइकन का उपयोग */
+    content: "\f058"; /* FontAwesome check-circle-o */
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    top: 0.2em; /* वर्टिकल अलाइनमेंट */
+    color: #FFD700; /* आइकन का रंग */
 }
-.atithi-guidance-content strong { color: #FFD700 !important; font-family: 'Martel Sans', 'Baloo 2', sans-serif !important; }
+/* .atithi-guidance-content ul li .fa { display: none; } /* यदि ::before का उपयोग कर रहे हैं तो इसे छिपाएं */
+.atithi-guidance-content strong { color: #FFD700; font-family: 'Martel Sans', 'Baloo 2', sans-serif; }
 
-.atithi-code-block { background: #1e1e1e !important; border: 1px solid #444 !important; border-radius: 5px !important; padding: 15px !important; margin-top: 10px !important; position: relative !important; }
+
+/* Code Block */
+.atithi-code-block { background: #1e1e1e; border: 1px solid #444; border-radius: 5px; padding: 15px; margin-top: 10px; position: relative; }
 .atithi-code-block pre {
-    font-family: 'Roboto Mono', monospace !important;
-    font-size: clamp(0.9em, 1.8vw, 1em) !important;
-    color: #d4d4d4 !important;
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-    word-break: break-all !important;
-    max-height: 380px !important;
-    overflow: auto !important;
+    font-family: 'Roboto Mono', monospace;
+    font-size: clamp(0.9em, 1.8vw, 1em);
+    color: #d4d4d4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 380px;
+    overflow: auto;
 }
 .atithi-copy-button {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    background: #FF4500 !important;
-    color: white !important;
-    border: none !important;
-    padding: 5px 10px !important;
-    font-size: 0.8em !important;
-    cursor: pointer !important;
-    border-radius: 4px !important;
-    display: inline-flex !important;
-    align-items: center !important;
+    position: absolute; top: 10px; right: 10px; background: #FF4500; color: white; border: none;
+    padding: 5px 10px; font-size: 0.8em; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center;
 }
-.atithi-copy-button .fa { margin-right: 5px !important; }
-.atithi-copy-button:hover { background: #FF0000 !important; }
+.atithi-copy-button .fa { margin-right: 5px;}
+.atithi-copy-button:hover { background: #FF0000; }
 
+
+/* Rights Info & External Links Section Headers */
 .atithi-rights-info h3, .atithi-external-links h3 {
-    font-family: 'Rozha One', serif !important;
-    color: #FFD700 !important;
-    font-size: clamp(1.5em, 2.9vw, 1.8em) !important;
-    margin-bottom: 15px !important;
-    text-transform: uppercase !important;
-    text-align:center !important;
-    border-bottom: 1px dotted #FFD700 !important;
-    padding-bottom: 8px !important;
+    font-family: 'Rozha One', serif; color: #FFD700; font-size: clamp(1.5em, 2.9vw, 1.8em);
+    margin-bottom: 15px; text-transform: uppercase; text-align:center;
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
 }
-.atithi-rights-info h3 .fa, .atithi-external-links h3 .fa { margin-right: 10px !important; }
+.atithi-rights-info h3 .fa, .atithi-external-links h3 .fa { margin-right: 10px; }
 
+
+/* Rights Info Block */
 .atithi-content-block.atithi-rights-info {
-    animation: atithi-info-block-glow 12s ease-in-out infinite alternate !important;
-    text-align: center !important;
+    animation: atithi-info-block-glow 12s ease-in-out infinite alternate;
+    text-align: center;
 }
-@keyframes atithi-info-block-glow {
-    0% { background-color: rgba(15, 5, 40, 0.4) !important; }
-    50% { background-color: rgba(30, 10, 65, 0.6) !important; }
-    100% { background-color: rgba(15, 5, 40, 0.4) !important; }
+@keyframes atithi-info-block-glow { /* पहले से था */
+    0% { background-color: rgba(15, 5, 40, 0.4); }
+    50% { background-color: rgba(30, 10, 65, 0.6); }
+    100% { background-color: rgba(15, 5, 40, 0.4); }
 }
 .atithi-rights-info p {
-    font-size: clamp(0.9em, 1.9vw, 1.05em) !important;
-    color: #FFF0F5 !important;
-    line-height: 1.7 !important;
-    margin-bottom: 10px !important;
-    font-family: 'Sahitya', 'Lohit Devanagari', serif !important;
+    font-size: clamp(0.9em, 1.9vw, 1.05em); color: #FFF0F5; /* लैवेंडर ब्लश */
+    line-height: 1.7; margin-bottom: 10px; font-family: 'Sahitya', 'Lohit Devanagari', serif;
 }
-.atithi-rights-info .atithi-copyright-text .fa { margin-right: 6px !important; color: #FFD700 !important; font-size: 0.9em !important; }
-.atithi-rights-info strong { font-family: 'Baloo 2', cursive !important; color: #F0E68C !important; }
+.atithi-rights-info .atithi-copyright-text .fa { margin-right: 6px; color: #FFD700; font-size: 0.9em;}
+.atithi-rights-info strong { font-family: 'Baloo 2', cursive; color: #F0E68C; }
 
+
+/* Page Footer */
 .atithi-page-footer {
-    text-align: center !important;
-    padding: 25px !important;
-    margin-top: 20px !important;
-    width:100% !important;
-    font-size: 0.95em !important;
-    color: #FFD700 !important;
-    animation: atithi-footer-color-shift 15s ease-in-out infinite !important;
+    text-align: center; padding: 25px; margin-top: 20px; width:100%;
+    font-size: 0.95em; color: #FFD700;
+    animation: atithi-footer-color-shift 15s ease-in-out infinite;
 }
-@keyframes atithi-footer-color-shift {
-    0% { background-color: rgba(15, 0, 15, 0.65) !important; }
-    50% { background-color: rgba(30, 0, 30, 0.85) !important; }
-    100% { background-color: rgba(15, 0, 15, 0.65) !important; }
+@keyframes atithi-footer-color-shift { /* पहले से था */
+    0% { background-color: rgba(15, 0, 15, 0.65); }
+    50% { background-color: rgba(30, 0, 30, 0.85); }
+    100% { background-color: rgba(15, 0, 15, 0.65); }
 }
-.atithi-page-footer p { font-family: 'Teko', 'Sahitya', sans-serif !important; color: #FFD700 !important; text-shadow: 1px 1px 2px #000 !important; }
+.atithi-page-footer p { font-family: 'Teko', 'Sahitya', sans-serif; color: #FFD700; text-shadow: 1px 1px 2px #000;}
 .atithi-page-footer::before {
-    content: "\f1d8 \f0c2 \f192" !important;
-    font-family: FontAwesome !important;
-    display: block !important;
-    font-size: 1.6em !important;
-    margin-bottom: 12px !important;
-    opacity: 0.75 !important;
-    color: #FFD700 !important;
-    text-shadow: 1px 1px 2px #000 !important;
+    content: "\f1d8 \f0c2 \f192"; /* पेपर प्लेन, बादल, कैमरा आइकन */
+    font-family: FontAwesome; display: block; font-size: 1.6em;
+    margin-bottom: 12px; opacity: 0.75; color: #FFD700;
+    text-shadow: 1px 1px 2px #000;
 }
 
+
+/* Related Link Box (In-content) */
 .atithi-related-link-box {
-    background: linear-gradient(145deg, rgba(80, 7, 80, 0.5), rgba(42, 0, 42, 0.7)) !important;
-    border: 1px solid #FFD700 !important;
-    border-left: 5px solid #FF6347 !important;
-    padding: 15px 20px !important;
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.3) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-    width: 100% !important;
+    background: linear-gradient(145deg, rgba(80, 7, 80, 0.5), rgba(42, 0, 42, 0.7)); /* गहरा बैंगनी ग्रेडिएंट */
+    border: 1px solid #FFD700; /* सुनहरा बॉर्डर */
+    border-left: 5px solid #FF6347; /* टमाटर रंग का एक्सेंट */
+    padding: 15px 20px;
+    margin-top: 20px; margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
 }
 .atithi-related-link-box:hover {
-    transform: translateY(-3px) scale(1.01) !important;
-    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.4) !important;
+    transform: translateY(-3px) scale(1.01); /* हल्का उठाव और ज़ूम */
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.4); /* सुनहरा होवर शैडो */
 }
 .atithi-link-label {
-    font-family: 'Teko', 'Rozha One', sans-serif !important;
-    font-size: clamp(0.9em, 2vw, 1.1em) !important;
-    color: #FFFFFF !important;
-    padding: 4px 10px !important;
-    border-radius: 4px !important;
-    margin-bottom: 10px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    font-weight: 500 !important;
-    display: inline-block !important;
+    font-family: 'Teko', 'Rozha One', sans-serif;
+    font-size: clamp(0.9em, 2vw, 1.1em);
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    display: inline-block;
+    /* विभिन्न प्रकार के लेबल के लिए विशिष्ट बैकग्राउंड पहले से परिभाषित हैं */
 }
-.atithi-link-label-new { background-color: #FF4500 !important; box-shadow: 0 0 8px #FF4500 !important; }
-.atithi-link-label-deep-dive { background-color: #8A2BE2 !important; box-shadow: 0 0 8px #8A2BE2 !important; }
-.atithi-link-label-read-more { background-color: #32CD32 !important; box-shadow: 0 0 8px #32CD32 !important; }
-.atithi-link-label-next-part { background-color: #1E90FF !important; box-shadow: 0 0 8px #1E90FF !important; }
+.atithi-link-label-new { background-color: #FF4500; box-shadow: 0 0 8px #FF4500; }
+.atithi-link-label-deep-dive { background-color: #8A2BE2; box-shadow: 0 0 8px #8A2BE2; }
+.atithi-link-label-read-more { background-color: #32CD32; box-shadow: 0 0 8px #32CD32; }
+.atithi-link-label-next-part { background-color: #1E90FF; box-shadow: 0 0 8px #1E90FF; }
 .atithi-link-label-must-read,
-.atithi-link-label-must-see { background-color: #FFD700 !important; color: #2F002F !important; box-shadow: 0 0 8px #FFD700 !important; }
+.atithi-link-label-must-see { background-color: #FFD700; color: #2F002F; box-shadow: 0 0 8px #FFD700; }
 
 .atithi-related-link-text {
-    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif !important;
-    font-size: clamp(1.05em, 2.2vw, 1.25em) !important;
-    color: #FFDEAD !important;
-    text-decoration: none !important;
-    line-height: 1.6 !important;
-    transition: color 0.3s ease, text-shadow 0.3s ease !important;
+    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
+    font-size: clamp(1.05em, 2.2vw, 1.25em);
+    color: #FFDEAD; /* हल्का आड़ू रंग */
+    text-decoration: none;
+    line-height: 1.6;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 .atithi-related-link-text:hover {
-    color: #FFC107 !important;
-    text-decoration: underline !important;
-    text-shadow: 0 0 5px rgba(255, 193, 7, 0.7) !important;
+    color: #FFC107; /* सुनहरा होवर रंग */
+    text-decoration: underline;
+    text-shadow: 0 0 5px rgba(255, 193, 7, 0.7); /* सुनहरा टेक्स्ट शैडो */
 }
 
+
+/* Call to Action / Series Information Block Styles (Bhojpuri/Scroll Theme) */
 .atithi-cta-scroll-block {
-    background: linear-gradient(to bottom, #fdf5e6, #f5e7ce) !important;
-    color: #5D4037 !important;
-    padding: 25px !important;
-    margin: 40px auto !important;
-    border-radius: 10px !important;
-    max-width: 100% !important;
-    border: 3px solid #8B4513 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(139, 69, 19, 0.2) !important;
-    position: relative !important;
-    font-family: 'Tiro Devanagari Hindi', 'Sahitya', serif !important;
-    width: 100% !important;
-    clear: both !important;
+    background: linear-gradient(to bottom, #fdf5e6, #f5e7ce); /* क्रीम/चर्मपत्र ग्रेडिएंट */
+    color: #5D4037; /* गहरा भूरा टेक्स्ट */
+    padding: 25px;
+    margin: 40px auto; /* ऊपर-नीचे मार्जिन और केंद्र में */
+    border-radius: 10px;
+    max-width: 100%; /* यह .atithi-content-wrapper के अंदर फिट होगा */
+    border: 3px solid #8B4513; /* गहरा भूरा "लकड़ी" बॉर्डर */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 15px rgba(139, 69, 19, 0.2); /* अंदर और बाहर शैडो */
+    position: relative;
+    font-family: 'Tiro Devanagari Hindi', 'Sahitya', serif;
+    width: 100%;
+    clear: both; /* फ्लोटिंग एलिमेंट्स को क्लियर करें */
 }
 
 .atithi-cta-scroll-header,
 .atithi-cta-scroll-content,
 .atithi-cta-scroll-footer {
-    width: 100% !important;
-    overflow-x: hidden !important;
+    width: 100%;
+    overflow-x: hidden; /* केवल क्षैतिज ओवरफ्लो छिपाएं */
 }
 
 .atithi-cta-scroll-header {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding-bottom: 15px !important;
-    margin-bottom: 20px !important;
-    border-bottom: 2px dashed #8B4513 !important;
-    text-align: center !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #8B4513; /* डैश्ड बॉर्डर */
+    text-align: center;
 }
 
 .atithi-scroll-deco {
-    font-size: 2.5em !important;
-    color: #8B4513 !important;
-    margin: 0 15px !important;
-    line-height: 1 !important;
-    animation: atithi-decoPulse 2s infinite alternate !important;
+    font-size: 2.5em;
+    color: #8B4513; /* बॉर्डर जैसा रंग */
+    margin: 0 15px;
+    line-height: 1;
+    animation: atithi-decoPulse 2s infinite alternate; /* पल्सिंग एनिमेशन */
 }
 @keyframes atithi-decoPulse {
-    from { transform: scale(0.95) !important; opacity: 0.8 !important; }
-    to { transform: scale(1.05) !important; opacity: 1 !important; }
+    from { transform: scale(0.95); opacity: 0.8; }
+    to { transform: scale(1.05); opacity: 1; }
 }
 
 .atithi-cta-scroll-block .atithi-cta-title {
-    font-family: 'Rozha One', 'Martel Sans', serif !important;
-    font-size: clamp(1.6em, 3.5vw, 2.3em) !important;
-    color: #654321 !important;
-    text-shadow: 1px 1px 0px #fff5e1 !important;
-    margin: 0 !important;
-    line-height: 1.3 !important;
+    font-family: 'Rozha One', 'Martel Sans', serif;
+    font-size: clamp(1.6em, 3.5vw, 2.3em);
+    color: #654321; /* गहरा भूरा शीर्षक */
+    text-shadow: 1px 1px 0px #fff5e1; /* हल्का शैडो */
+    margin: 0;
+    line-height: 1.3;
 }
 
 .atithi-cta-scroll-content .atithi-cta-text {
-    font-size: clamp(1.05em, 2.2vw, 1.2em) !important;
-    line-height: 1.9 !important;
-    margin-bottom: 25px !important;
-    text-align: center !important;
-    color: #795548 !important;
+    font-size: clamp(1.05em, 2.2vw, 1.2em);
+    line-height: 1.9;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #795548; /* थोड़ा हल्का भूरा टेक्स्ट */
 }
 
 .atithi-cta-scroll-content .atithi-highlight-text {
-    font-weight: bold !important;
-    color: #D2691E !important;
-    background-color: rgba(255, 228, 196, 0.5) !important;
-    padding: 0px 5px !important;
-    border-radius: 3px !important;
+    font-weight: bold;
+    color: #D2691E; /* चॉकलेटी रंग */
+    background-color: rgba(255, 228, 196, 0.5); /* हल्का पीच बैकग्राउंड */
+    padding: 0px 5px;
+    border-radius: 3px;
 }
 
 .atithi-cta-interaction-box {
-    background-color: rgba(240, 220, 190, 0.5) !important;
-    border: 1px solid #D2B48C !important;
-    padding: 20px !important;
-    border-radius: 8px !important;
-    margin-top: 20px !important;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05) !important;
-    text-align: center !important;
+    background-color: rgba(240, 220, 190, 0.5); /* हल्का क्रीम बैकग्राउंड */
+    border: 1px solid #D2B48C; /* टैन बॉर्डर */
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* सूक्ष्म इनसेट शैडो */
+    text-align: center;
 }
 
 .atithi-interaction-title {
-    font-family: 'Rakkas', cursive !important;
-    font-size: clamp(1.4em, 2.8vw, 1.8em) !important;
-    color: #A0522D !important;
-    margin-bottom: 12px !important;
+    font-family: 'Rakkas', cursive;
+    font-size: clamp(1.4em, 2.8vw, 1.8em);
+    color: #A0522D; /* सिएना रंग */
+    margin-bottom: 12px;
 }
-.atithi-interaction-title .fa-comments-o { margin-right: 10px !important; color: #8B4513 !important; }
+.atithi-interaction-title .fa-comments-o { margin-right: 10px; color: #8B4513; }
 
 .atithi-interaction-text {
-    font-size: clamp(0.95em, 2vw, 1.1em) !important;
-    color: #5D4037 !important;
-    margin-bottom: 20px !important;
-    line-height: 1.7 !important;
+    font-size: clamp(0.95em, 2vw, 1.1em);
+    color: #5D4037; /* गहरा भूरा टेक्स्ट */
+    margin-bottom: 20px;
+    line-height: 1.7;
 }
 
-.atithi-email-connect { margin-top: 15px !important; padding-top: 15px !important; border-top: 1px dashed #D2B48C !important; }
+.atithi-email-connect { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #D2B48C; }
 .atithi-email-connect .fa-envelope-open-o {
-    font-size: 1.8em !important;
-    color: #8B4513 !important;
-    margin-bottom: 8px !important;
-    display: block !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    font-size: 1.8em; color: #8B4513; margin-bottom: 8px;
+    display: block; margin-left: auto; margin-right: auto;
 }
-.atithi-email-connect p { font-size: clamp(0.9em, 1.9vw, 1.05em) !important; color: #795548 !important; margin-bottom: 8px !important; }
+.atithi-email-connect p { font-size: clamp(0.9em, 1.9vw, 1.05em); color: #795548; margin-bottom: 8px; }
 .atithi-email-link {
-    font-family: 'Roboto Mono', monospace !important;
-    font-size: clamp(0.95em, 2vw, 1.1em) !important;
-    color: #006400 !important;
-    text-decoration: none !important;
-    border-bottom: 1px dotted #006400 !important;
-    padding-bottom: 2px !important;
-    transition: color 0.3s ease, border-bottom-color 0.3s ease !important;
-    display: inline-block !important;
+    font-family: 'Roboto Mono', monospace; font-size: clamp(0.95em, 2vw, 1.1em);
+    color: #006400; /* गहरा हरा */
+    text-decoration: none; border-bottom: 1px dotted #006400;
+    padding-bottom: 2px; transition: color 0.3s ease, border-bottom-color 0.3s ease; display: inline-block;
 }
-.atithi-email-link:hover { color: #228B22 !important; border-bottom-color: #228B22 !important; }
+.atithi-email-link:hover { color: #228B22; border-bottom-color: #228B22; } /* फॉरेस्ट ग्रीन होवर */
 
-.atithi-cta-scroll-footer { text-align: center !important; margin-top: 25px !important; padding-top: 15px !important; border-top: 2px dashed #8B4513 !important; }
+.atithi-cta-scroll-footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 2px dashed #8B4513; }
 .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action {
-    background: linear-gradient(145deg, #D2691E, #A0522D) !important;
-    color: #fff !important;
-    border: 2px solid #F4A460 !important;
-    font-size: clamp(1em, 2.1vw, 1.25em) !important;
-    padding: 10px 22px !important;
-    border-radius: 25px !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 10px rgba(210, 105, 30, 0.4) !important;
-    transition: all 0.3s ease-in-out !important;
+    background: linear-gradient(145deg, #D2691E, #A0522D); /* चॉकलेटी ग्रेडिएंट */
+    color: #fff; border: 2px solid #F4A460; /* सैंडी ब्राउन बॉर्डर */
+    font-size: clamp(1em, 2.1vw, 1.25em); padding: 10px 22px; border-radius: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 10px rgba(210, 105, 30, 0.4);
+    transition: all 0.3s ease-in-out;
 }
 .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action:hover {
-    background: linear-gradient(145deg, #A0522D, #8B4513) !important;
-    transform: scale(1.03) translateY(-1px) !important;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 15px rgba(244, 164, 96, 0.6) !important;
+    background: linear-gradient(145deg, #A0522D, #8B4513); /* गहरा ग्रेडिएंट होवर */
+    transform: scale(1.03) translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 15px rgba(244, 164, 96, 0.6);
 }
 .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action .fa {
-    margin-left: 10px !important;
-    font-size: 1.1em !important;
-    transition: transform 0.3s ease-out !important;
+    margin-left: 10px; font-size: 1.1em; transition: transform 0.3s ease-out;
 }
-.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action:hover .fa { transform: translateX(4px) rotate(10deg) !important; }
+.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action:hover .fa { transform: translateX(4px) rotate(10deg); }
 
+
+/* External Links Section Styles - Scrollable List */
 .atithi-external-links {
-    width: 100% !important;
-    background-color: rgba(25, 0, 25, 0.3) !important;
-    padding: 25px 15px !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(170, 0, 170, 0.5) !important;
-    margin-top: 30px !important;
-    margin-bottom: 30px !important;
+    width: 100%;
+    background-color: rgba(25, 0, 25, 0.3); /* गहरा बैंगनी पारदर्शी */
+    padding: 25px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(170, 0, 170, 0.5); /* मध्यम बैंगनी बॉर्डर */
+    margin-top: 30px; margin-bottom: 30px;
 }
 .atithi-external-links h3 {
-    color: #FFD700 !important;
-    font-family: 'Rozha One', serif !important;
-    font-size: clamp(1.6em, 3vw, 2.1em) !important;
-    margin-bottom: 10px !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
+    color: #FFD700; font-family: 'Rozha One', serif; font-size: clamp(1.6em, 3vw, 2.1em);
+    margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 .atithi-external-links-intro {
-    font-size: clamp(0.9em, 1.8vw, 1.05em) !important;
-    color: #E0E0E0 !important;
-    margin-bottom: 20px !important;
-    max-width: 700px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    line-height: 1.7 !important;
+    font-size: clamp(0.9em, 1.8vw, 1.05em); color: #E0E0E0; margin-bottom: 20px;
+    max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.7;
 }
 .atithi-scrollable-links-container {
-    max-height: 450px !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    padding-right: 10px !important;
-    margin-right: -10px !important;
-    border: 1px solid rgba(170, 0, 170, 0.3) !important;
-    border-radius: 8px !important;
-    background-color: rgba(0,0,0,0.1) !important;
+    max-height: 450px; overflow-y: auto; overflow-x: hidden;
+    padding-right: 10px; margin-right: -10px;
+    border: 1px solid rgba(170, 0, 170, 0.3); /* हल्का बैंगनी बॉर्डर */
+    border-radius: 8px; background-color: rgba(0,0,0,0.1); /* बहुत हल्का काला बैकग्राउंड */
 }
-.atithi-scrollable-links-container::-webkit-scrollbar { width: 8px !important; }
-.atithi-scrollable-links-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05) !important; border-radius: 10px !important; }
-.atithi-scrollable-links-container::-webkit-scrollbar-thumb { background: #8A2BE2 !important; border-radius: 10px !important; }
-.atithi-scrollable-links-container::-webkit-scrollbar-thumb:hover { background: #9932CC !important; }
-.atithi-scrollable-links-container { scrollbar-width: thin !important; scrollbar-color: #8A2BE2 rgba(255,255,255,0.05) !important; }
+.atithi-scrollable-links-container::-webkit-scrollbar { width: 8px; }
+.atithi-scrollable-links-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+.atithi-scrollable-links-container::-webkit-scrollbar-thumb { background: #8A2BE2; border-radius: 10px; } /* नीला-बैंगनी स्क्रॉलबार */
+.atithi-scrollable-links-container::-webkit-scrollbar-thumb:hover { background: #9932CC; } /* गहरा आर्किड होवर */
+.atithi-scrollable-links-container { scrollbar-width: thin; scrollbar-color: #8A2BE2 rgba(255,255,255,0.05); }
 
 .atithi-link-card-scroll {
-    display: flex !important;
-    align-items: center !important;
-    background: linear-gradient(135deg, rgba(75, 0, 130, 0.3), rgba(128, 0, 128, 0.4)) !important;
-    border: 1px solid rgba(138, 43, 226, 0.4) !important;
-    border-radius: 8px !important;
-    padding: 12px 15px !important;
-    margin-bottom: 10px !important;
-    text-decoration: none !important;
-    color: #FFF8DC !important;
-    transition: all 0.3s ease !important;
-    position: relative !important;
+    display: flex; align-items: center;
+    background: linear-gradient(135deg, rgba(75, 0, 130, 0.3), rgba(128, 0, 128, 0.4)); /* इंडिगो/बैंगनी ग्रेडिएंट */
+    border: 1px solid rgba(138, 43, 226, 0.4); /* नीला-बैंगनी बॉर्डर */
+    border-radius: 8px; padding: 12px 15px; margin-bottom: 10px;
+    text-decoration: none; color: #FFF8DC; /* डिफ़ॉल्ट टेक्स्ट रंग */
+    transition: all 0.3s ease; position: relative;
 }
-.atithi-link-card-scroll:last-child { margin-bottom: 0 !important; }
+.atithi-link-card-scroll:last-child { margin-bottom: 0; }
 .atithi-link-card-scroll:hover {
-    transform: translateX(5px) scale(1.01) !important;
-    background: linear-gradient(135deg, rgba(75, 0, 130, 0.5), rgba(128, 0, 128, 0.6)) !important;
-    border-color: #FFD700 !important;
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3) !important;
+    transform: translateX(5px) scale(1.01); /* हल्का सा दाईं ओर और ज़ूम */
+    background: linear-gradient(135deg, rgba(75, 0, 130, 0.5), rgba(128, 0, 128, 0.6)); /* होवर पर गहरा ग्रेडिएंट */
+    border-color: #FFD700; /* सुनहरा होवर बॉर्डर */
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); /* नीला-बैंगनी ग्लो */
 }
-.atithi-link-card-scroll-icon { font-size: 1.8em !important; color: #FFD700 !important; margin-right: 15px !important; min-width: 30px !important; text-align: center !important; }
-.atithi-link-card-scroll-text { flex-grow: 1 !important; text-align: left !important; }
+.atithi-link-card-scroll-icon { font-size: 1.8em; color: #FFD700; margin-right: 15px; min-width: 30px; text-align: center; }
+.atithi-link-card-scroll-text { flex-grow: 1; text-align: left; }
 .atithi-link-card-scroll-title {
-    font-family: 'Teko', 'Rozha One', sans-serif !important;
-    font-size: clamp(1.1em, 2vw, 1.35em) !important;
-    color: #FFDEAD !important;
-    margin-bottom: 3px !important;
-    letter-spacing: 0.3px !important;
+    font-family: 'Teko', 'Rozha One', sans-serif; font-size: clamp(1.1em, 2vw, 1.35em);
+    color: #FFDEAD; /* हल्का पीच शीर्षक */
+    margin-bottom: 3px; letter-spacing: 0.3px;
 }
 .atithi-link-card-scroll-desc {
-    font-family: 'Sahitya', serif !important;
-    font-size: clamp(0.8em, 1.5vw, 0.9em) !important;
-    color: #E0FFFF !important;
-    line-height: 1.5 !important;
-    opacity: 0.9 !important;
+    font-family: 'Sahitya', serif; font-size: clamp(0.8em, 1.5vw, 0.9em);
+    color: #E0FFFF; /* हल्का सियान विवरण */
+    line-height: 1.5; opacity: 0.9;
 }
 .atithi-link-card-scroll-arrow {
-    font-size: 1.5em !important;
-    color: #FFD700 !important;
-    opacity: 0.6 !important;
-    margin-left: 10px !important;
-    transition: transform 0.3s ease, opacity 0.3s ease !important;
+    font-size: 1.5em; color: #FFD700; opacity: 0.6; margin-left: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.atithi-link-card-scroll:hover .atithi-link-card-scroll-arrow { opacity: 1 !important; transform: translateX(3px) !important; }
+.atithi-link-card-scroll:hover .atithi-link-card-scroll-arrow { opacity: 1; transform: translateX(3px); }
 
+
+/* Print and PDF Mode Styles */
 @media print, body.pdf-mode {
     html, .atithi-main-site-container { background: #fff !important; color: #000 !important; }
     .atithi-page-container, .atithi-page-container * { font-family: 'Tiro Devanagari Hindi', 'Times New Roman', serif !important; background-color: transparent !important; color: #000 !important; text-shadow: none !important; box-shadow: none !important; border-color: #999 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;}
@@ -957,8 +904,8 @@ html {
     .atithi-article-content ul li > .fa { display:none !important; }
     .atithi-article-quote { border-left-width: 2px !important; background-color: #f5f5f5 !important; }
     .atithi-article-quote .fa-quote-left, .atithi-article-quote .fa-quote-right {display:none !important;}
-    .atithi-article-quote::before { display: inline !important; content: '\201C' !important; font-size: 1.2em !important; color: #555 !important; margin-right: 3px !important; line-height: 0 !important; vertical-align: -0.1em !important;}
-    .atithi-article-quote::after { display: inline !important; content: '\201D' !important; font-size: 1.2em !important; color: #555 !important; margin-left: 3px !important; line-height: 0 !important; vertical-align: -0.1em !important;}
+    .atithi-article-quote::before { display: inline !important; content: '\201C'; font-size: 1.2em; color: #555; margin-right: 3px; line-height: 0; vertical-align: -0.1em;}
+    .atithi-article-quote::after { display: inline !important; content: '\201D'; font-size: 1.2em; color: #555; margin-left: 3px; line-height: 0; vertical-align: -0.1em;}
     .atithi-poem-line span { background: none !important; -webkit-text-fill-color: inherit !important; animation:none !important; color: #000 !important;}
     .atithi-code-block pre { font-size: 9pt !important; background: #f0f0f0 !important; }
     .atithi-page-footer { padding: 10px !important; margin-top: 15px !important; font-size: 9pt !important; background-color: #fff !important; animation: none !important;}
@@ -966,43 +913,56 @@ html {
     .atithi-page-footer::before { display: none !important; }
     img { max-width: 100% !important; height: auto !important; display: block !important; page-break-inside: avoid !important; border: 1px solid #ccc !important; }
     .atithi-media-placeholder img { border: 1px solid #ccc !important; }
-    [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; }
+    [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; } /* Disable AOS for PDF */
 }
 
+
+/* Responsive Media Queries */
 @media (max-width: 768px) {
-    .atithi-content-wrapper { padding: 0 8px !important; }
-    .atithi-page-header .atithi-main-title { font-size: clamp(1.9em, 5.2vw, 2.6em) !important; }
-    .atithi-page-header .atithi-subtitle { font-size: clamp(0.85em, 1.9vw, 1.05em) !important; }
-    .atithi-article-content p, .atithi-article-content li, .atithi-poem-line { font-size: clamp(0.95em, 2.2vw, 1.1em) !important; }
-    .atithi-content-block { padding: 15px 18px !important; margin-bottom: 8px !important; }
-    .atithi-button { padding: 8px 15px !important; font-size: clamp(0.9em, 1.7vw, 1.05em) !important; }
-    .atithi-article-content h2 { font-size: clamp(1.7em, 4.3vw, 2.0em) !important; }
-    .atithi-article-content h3 { font-size: clamp(1.5em, 3.8vw, 1.8em) !important; }
-    .atithi-cta-scroll-block { padding: 20px 15px !important; margin: 30px 10px !important; width: calc(100% - 20px) !important; }
-    .atithi-scroll-deco { font-size: 2em !important; margin: 0 10px !important; }
-    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.4em, 3vw, 2em) !important; }
-    .atithi-external-links { padding: 20px 10px !important; }
-    .atithi-scrollable-links-container { max-height: 400px !important; padding-right: 5px !important; margin-right: -5px !important; }
-    .atithi-link-card-scroll-icon { font-size: 1.6em !important; margin-right: 10px !important; }
-    .atithi-link-card-scroll-title { font-size: clamp(1em, 1.8vw, 1.25em) !important; }
-    .atithi-link-card-scroll-desc { font-size: clamp(0.75em, 1.4vw, 0.85em) !important; }
+    .atithi-content-wrapper { padding: 0 8px; }
+    .atithi-page-header .atithi-main-title { font-size: clamp(1.9em, 5.2vw, 2.6em); }
+    .atithi-page-header .atithi-subtitle { font-size: clamp(0.85em, 1.9vw, 1.05em); }
+    .atithi-article-content p, .atithi-article-content li, .atithi-poem-line { font-size: clamp(0.95em, 2.2vw, 1.1em); }
+    .atithi-content-block { padding: 15px 18px; margin-bottom: 8px; }
+    .atithi-button { padding: 8px 15px; font-size: clamp(0.9em, 1.7vw, 1.05em); }
+    .atithi-article-content h2 { font-size: clamp(1.7em, 4.3vw, 2.0em); }
+    .atithi-article-content h3 { font-size: clamp(1.5em, 3.8vw, 1.8em); }
+    #poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) { font-size: clamp(0.95em, 1.9vw, 1.15em) !important; }
+    #poemContent .atithi-first-poem-line { font-size: clamp(1.1em, 2.3vw, 1.4em) !important; }
+    #poemContent .atithi-hunkar-line { font-size: clamp(1.0em, 2.1vw, 1.3em) !important; }
+
+    .atithi-cta-scroll-block { padding: 20px 15px; margin: 30px 10px; width: calc(100% - 20px); }
+    .atithi-scroll-deco { font-size: 2em; margin: 0 10px; }
+    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.4em, 3vw, 2em); }
+
+    .atithi-external-links { padding: 20px 10px; }
+    .atithi-scrollable-links-container { max-height: 400px; padding-right: 5px; margin-right: -5px; }
+    .atithi-link-card-scroll-icon { font-size: 1.6em; margin-right: 10px; }
+    .atithi-link-card-scroll-title { font-size: clamp(1em, 1.8vw, 1.25em); }
+    .atithi-link-card-scroll-desc { font-size: clamp(0.75em, 1.4vw, 0.85em); }
 }
 
 @media (max-width: 480px) {
-    .atithi-main-site-container { border-left: none !important; border-right: none !important; border-radius: 0 !important; }
-    .atithi-main-site-container::before { height: 3px !important; top: -1.5px !important; }
-    .atithi-content-wrapper { padding: 0 5px !important; }
-    .atithi-page-header .atithi-main-title { font-size: clamp(1.7em, 5.8vw, 2.3em) !important; }
-    .atithi-content-block { padding: 12px 15px !important; margin-bottom:5px !important; }
-    .atithi-article-content h2 { font-size: clamp(1.6em, 4.6vw, 1.9em) !important; }
-    .atithi-article-content h3 { font-size: clamp(1.4em, 3.9vw, 1.7em) !important; }
-    .atithi-cta-scroll-block { width: calc(100% - 10px) !important; margin-left:5px !important; margin-right:5px !important; }
-    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.3em, 4.5vw, 1.8em) !important; }
-    .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action { padding: 10px 18px !important; font-size: clamp(0.9em, 2.5vw, 1.1em) !important; }
-    .atithi-scrollable-links-container { max-height: 350px !important; }
-    .atithi-link-card-scroll { flex-direction: column !important; align-items: flex-start !important; text-align: left !important; padding: 10px !important; }
-    .atithi-link-card-scroll-icon { margin-bottom: 8px !important; }
-    .atithi-link-card-scroll-arrow { position: absolute !important; top: 50% !important; right: 10px !important; transform: translateY(-50%) !important; }
-    .atithi-action-buttons { gap: 8px !important; }
-    .atithi-button { padding: 8px 12px !important; font-size: clamp(0.85em, 1.9vw, 1em) !important; }
+    .atithi-main-site-container { border-left: none; border-right: none; border-radius: 0; }
+    .atithi-main-site-container::before { height: 3px; top: -1.5px; }
+    .atithi-content-wrapper { padding: 0 5px; }
+    .atithi-page-header .atithi-main-title { font-size: clamp(1.7em, 5.8vw, 2.3em); }
+    .atithi-content-block { padding: 12px 15px; margin-bottom:5px; }
+    .atithi-article-content h2 { font-size: clamp(1.6em, 4.6vw, 1.9em); }
+    .atithi-article-content h3 { font-size: clamp(1.4em, 3.9vw, 1.7em); }
+    #poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) { font-size: clamp(0.9em, 1.8vw, 1.1em) !important; }
+    #poemContent .atithi-first-poem-line { font-size: clamp(1.0em, 2.1vw, 1.3em) !important; }
+    #poemContent .atithi-hunkar-line { font-size: clamp(0.95em, 2.0vw, 1.25em) !important; }
+
+    .atithi-cta-scroll-block { width: calc(100% - 10px); margin-left:5px; margin-right:5px; }
+    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.3em, 4.5vw, 1.8em); }
+    .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action { padding: 10px 18px; font-size: clamp(0.9em, 2.5vw, 1.1em); }
+
+    .atithi-scrollable-links-container { max-height: 350px; }
+    .atithi-link-card-scroll { flex-direction: column; align-items: flex-start; text-align: left; padding: 10px; }
+    .atithi-link-card-scroll-icon { margin-bottom: 8px; }
+    .atithi-link-card-scroll-arrow { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); }
+
+    .atithi-action-buttons { gap: 8px; }
+    .atithi-button { padding: 8px 12px; font-size: clamp(0.85em, 1.9vw, 1em); }
 }
