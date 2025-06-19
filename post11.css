@@ -63,7 +63,7 @@ html {
 }
 .atithi-content-wrapper {
     width: 100% !important;
-    max-width: 1200px !important; /* <<< चौड़ाई 900px से बढ़ाकर 1200px की गई */
+    max-width: 900px !important; /* <<< चौड़ाई 900px से बढ़ाकर 1200px की गई */
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 10px !important;
