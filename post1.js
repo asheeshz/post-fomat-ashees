@@ -1,366 +1,876 @@
-// --- Helper function to get text from HTML elements ---
-function getTextFromElement(elementId, defaultValue) {
-    const element = document.getElementById(elementId);
-    if (element && element.textContent.trim()) {
-        return element.textContent.trim();
-    }
-    return defaultValue;
-}
-function getHtmlFromElement(elementId, defaultValue) {
-    const element = document.getElementById(elementId);
-    if (element && element.innerHTML.trim()) {
-        return element.innerHTML.trim();
-    }
-    return defaultValue;
+/* --- Global Styles & Reset --- */
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
+    color: #FFF8DC;
+    line-height: 1.8;
+    background-color: #1a0d20;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
 }
 
-
-// --- Year Update ---
-try {
-    const footerYearEl = document.getElementById('currentYearFooter');
-    const copyrightYearSpanEl = document.getElementById('copyrightYear');
-    const currentYear = new Date().getFullYear();
-
-    if (footerYearEl) footerYearEl.textContent = currentYear;
-
-    if (copyrightYearSpanEl) {
-        copyrightYearSpanEl.textContent = currentYear;
-    } else {
-        const copyrightTextEl = document.querySelector('.atithi-copyright-text');
-        if (copyrightTextEl) {
-             copyrightTextEl.innerHTML = copyrightTextEl.innerHTML.replace(/\d{4}/, currentYear.toString());
-        }
-    }
-} catch (e) {
-    console.error("Year update failed:", e);
+*, *:before, *:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
 }
 
-// --- PDF Download Button ---
-const downloadPdfAnchor = document.getElementById('downloadPdfButton');
-if (downloadPdfAnchor && downloadPdfAnchor.tagName === 'A') {
-    const originalPdfButtonHtml = downloadPdfAnchor.innerHTML;
-    const pdfOpeningText = getTextFromElement('pdfDownloadingText', "डाउनलोड हो रहा है..."); // HTML से या डिफ़ॉल्ट
-
-    downloadPdfAnchor.addEventListener('click', function() {
-        this.innerHTML = `<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> ${pdfOpeningText}`;
-        setTimeout(() => {
-            this.innerHTML = originalPdfButtonHtml;
-        }, 3000);
-    });
+.atithi-main-site-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #05052d;
+    border: 1.5px solid rgba(255, 215, 0, 0.25);
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-// --- Share Functionality ---
-const atithi_sharePostButton = document.getElementById('sharePostButton');
-
-function getShareDetailsFromHTML() {
-    let pageTitle = document.title; // Fallback to document.title
-
-    // Attempt to get title from meta tags first for better SEO/sharing context
-    const pageTitleMetaOG = document.querySelector('meta[property="og:title"]');
-    const pageTitleMetaTwitter = document.querySelector('meta[name="twitter:title"]');
-
-    if (pageTitleMetaOG && pageTitleMetaOG.content) {
-        pageTitle = pageTitleMetaOG.content;
-    } else if (pageTitleMetaTwitter && pageTitleMetaTwitter.content) {
-        pageTitle = pageTitleMetaTwitter.content;
-    } else {
-        // Fallback to h1 if meta tags are not specific enough or missing
-        const mainTitleElement = document.querySelector('.atithi-page-header .atithi-main-title');
-        if (mainTitleElement) {
-            let tempTitle = "";
-            // Iterate through child nodes to avoid including deco spans
-            mainTitleElement.childNodes.forEach(node => {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    tempTitle += node.textContent.trim();
-                } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SPAN') { // Exclude known deco spans
-                     tempTitle += node.textContent.trim();
-                }
-            });
-            if (tempTitle) pageTitle = tempTitle.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-        }
-    }
-     // Final fallback if all else fails or results in an empty string
-    if (!pageTitle || pageTitle.toLowerCase() === "undefined" || pageTitle.trim() === "") {
-        pageTitle = getTextFromElement('defaultPageTitle', "विंध्य की प्राचीन धरोहर");
-    }
-
-
-    let authorName = getTextFromElement('defaultAuthorName', "आचार्य आशीष मिश्र"); // Default author
-    const authorMeta = document.querySelector('meta[name="author"]');
-    if (authorMeta && authorMeta.content) {
-        authorName = authorMeta.content;
-    } else {
-        const authorElement = document.getElementById('metaAuthorName'); // Specific ID for author in HTML
-        if (authorElement) {
-            const rawAuthorText = authorElement.getAttribute('data-author-name') || authorElement.textContent;
-            authorName = rawAuthorText.replace(/शोध एवं संपादन:/i, '').replace(/<i[^>]*><\/i>/g, '').trim() || authorName;
-        }
-    }
-
-    const shareSuffixText = getTextFromElement('shareSuffixText', "इस अद्वितीय ऐतिहासिक अन्वेषण को अवश्य पढ़ें और साझा करें! #विंध्यधरोहर #रीवाइतिहास");
-
-    return { pageTitle, authorName, shareSuffixText };
-}
-
-
-if (atithi_sharePostButton) {
-    atithi_sharePostButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const pageUrl = window.location.href;
-        const { pageTitle, authorName, shareSuffixText } = getShareDetailsFromHTML();
-
-        const shareTextForUrl = `📜 "${pageTitle}" 📜\n${authorName}\n${shareSuffixText}`;
-
-        if (navigator.share) {
-            navigator.share({ title: pageTitle, text: shareTextForUrl, url: pageUrl })
-                .then(() => console.log('Successful share via Web Share API'))
-                .catch((error) => {
-                    console.log('Error sharing via Web Share API or share cancelled:', error);
-                    atithi_fallbackShareWithMessage(shareTextForUrl, pageUrl, pageTitle);
-                });
-        } else {
-            atithi_fallbackShareWithMessage(shareTextForUrl, pageUrl, pageTitle);
-        }
-    });
-}
-
-function atithi_fallbackShareWithMessage(shareText, pageUrl, pageTitleForEmail) {
-    const copySuccessMessage = getTextFromElement('copySuccessAlertText', "लिंक क्लिपबोर्ड पर कॉपी किया गया।");
-    // Fallback prompt text is no longer used as prompt is removed
-    // const copyFallbackPrompt = getTextFromElement('copyFallbackPromptText', "साझा करने के लिए यह टेक्स्ट कॉपी करें:");
-
-    const fullShareText = `${shareText}\nलिंक: ${pageUrl}`;
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(fullShareText).then(() => {
-            alert(copySuccessMessage);
-        }).catch(err => {
-            console.error("Clipboard copy failed:", err);
-            // alert("क्लिपबोर्ड पर कॉपी करने में विफल। आप मैन्युअल रूप से कॉपी कर सकते हैं।");
-        });
-    } else {
-        console.warn("Clipboard API not supported.");
-        // alert("आपका ब्राउज़र क्लिपबोर्ड पर सीधी कॉपी का समर्थन नहीं करता है।");
-    }
-    // The prompt() call has been removed to avoid blocking UI.
-    // Consider a custom non-blocking notification for copy success/failure if desired.
-}
-
-
-function atithi_copyPoemGuidance() {
-    const textToCopyEl = document.getElementById('poemGuidanceText');
-    const successMessage = getTextFromElement('refCopySuccessAlertText', 'संदर्भ कॉपी हुए!');
-    const errorMessage = getTextFromElement('refCopyErrorAlertText', 'कॉपी में त्रुटि!');
-    const fallbackSuccess = getTextFromElement('refCopyFallbackSuccessText', 'संदर्भ कॉपी हुए (fallback)!');
-    const fallbackError = getTextFromElement('refCopyFallbackErrorText', 'कॉपी में त्रुटि (fallback)!');
-
-
-    if (textToCopyEl) {
-        let textToCopy = textToCopyEl.innerText || textToCopyEl.textContent;
-        textToCopy = textToCopy.replace(/\/\*[\s\S]*?\*\/|^\s*[\r\n]/gm, "").trim();
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert(successMessage);
-            }).catch(err => {
-                console.error('Async copy failed: ', err);
-                atithi_fallbackCopyTextToClipboard(textToCopy, fallbackSuccess, fallbackError);
-            });
-        } else {
-            atithi_fallbackCopyTextToClipboard(textToCopy, fallbackSuccess, fallbackError);
-        }
-    } else {
-        console.error("Element 'poemGuidanceText' not found for copying.");
-    }
-}
-const copyPoemButton = document.querySelector('.atithi-code-block .atithi-copy-button');
-if (copyPoemButton) {
-    if (document.getElementById('poemGuidanceText')) {
-        copyPoemButton.addEventListener('click', atithi_copyPoemGuidance);
-    } else {
-        copyPoemButton.style.display = 'none';
-    }
-}
-
-function atithi_fallbackCopyTextToClipboard(text, successMessage, errorMessage) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed"; textArea.style.top = "-9999px"; textArea.style.left = "-9999px";
-    (document.body || document.documentElement).appendChild(textArea);
-    textArea.focus(); textArea.select();
-    try {
-        const successful = document.execCommand('copy');
-        alert(successful ? successMessage : errorMessage);
-    } catch (err) {
-        console.error('Fallback copy error', err);
-        alert(errorMessage + ' (exception)');
-    }
-    (document.body || document.documentElement).removeChild(textArea);
-}
-
-const atithi_synth = window.speechSynthesis;
-const atithi_ttsPlayButton = document.getElementById('playTTSButton');
-const atithi_ttsStopButton = document.getElementById('stopTTSButton');
-let atithi_utteranceQueue = [];
-let atithi_currentUtteranceIndex = 0;
-let atithi_isPlayingTTS = false;
-let atithi_isPausedTTS = false;
-let atithi_voices = [];
-
-const defaultPlayButtonHTML = getHtmlFromElement('ttsDefaultPlayButtonHTML', '<i class="fa fa-volume-up"></i> पूरा पोस्ट सुनें');
-const originalPlayTTSButtonHTML = atithi_ttsPlayButton ? atithi_ttsPlayButton.innerHTML : defaultPlayButtonHTML;
-
-
-if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-
-function atithi_populateVoiceListDelayed() {
-    if(typeof speechSynthesis === 'undefined') {
-        if(atithi_ttsPlayButton) {
-            atithi_ttsPlayButton.disabled = true;
-            // Get default message from HTML or use fallback
-            atithi_ttsPlayButton.innerHTML = getTextFromElement('ttsNotSupportedButtonText', 'TTS असमर्थित');
-        }
-        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-        console.warn("Speech Synthesis not supported.");
-        return;
-    }
-    try { atithi_voices = speechSynthesis.getVoices(); }
-    catch (e) { console.error("Error getting voices initially:", e); if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true; if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true; return; }
-
-    if(atithi_voices.length === 0 && speechSynthesis.onvoiceschanged !== undefined) {
-         speechSynthesis.onvoiceschanged = function() {
-            try { atithi_voices = speechSynthesis.getVoices(); }
-            catch (e) { console.error("Error getting voices onvoiceschanged:", e); return; }
-            console.log("TTS Voices loaded (onvoiceschanged):", atithi_voices.filter(v => v.lang.startsWith('hi')));
-            speechSynthesis.onvoiceschanged = null; // Important to avoid multiple calls
-         };
-    } else if (atithi_voices.length === 0) { // Fallback polling if onvoiceschanged is not reliable
-         let attempts = 0; const maxAttempts = 10;
-         function pollVoices() {
-            try { atithi_voices = speechSynthesis.getVoices(); }
-            catch (e) { console.error("Error getting voices during polling:", e); return; }
-            attempts++;
-            if (atithi_voices.length === 0 && attempts < maxAttempts) { setTimeout(pollVoices, 200); }
-            else if (atithi_voices.length > 0) { console.log(`TTS Voices loaded (polling attempt ${attempts}):`, atithi_voices.filter(v => v.lang.startsWith('hi'))); }
-            else {
-                console.warn("TTS voices still not available after polling.");
-                if(atithi_ttsPlayButton) atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsVoiceNotAvailableButtonText', '<i class="fa fa-exclamation-triangle"></i> आवाज़ अनुपलब्ध');
-            }
-         }
-         setTimeout(pollVoices, 200);
-    } else {
-        console.log("TTS Voices loaded (initial attempt):", atithi_voices.filter(v => v.lang.startsWith('hi')));
-    }
-}
-// Call directly as defer will ensure DOM is ready
-atithi_populateVoiceListDelayed();
-
-function atithi_speakNextUtterance() {
-    if (!atithi_isPlayingTTS || atithi_currentUtteranceIndex >= atithi_utteranceQueue.length) {
-        atithi_isPlayingTTS = false; atithi_isPausedTTS = false;
-        if(atithi_ttsPlayButton) { atithi_ttsPlayButton.disabled = false; atithi_ttsPlayButton.innerHTML = originalPlayTTSButtonHTML; }
-        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-        return;
-    }
-    const utterance = atithi_utteranceQueue[atithi_currentUtteranceIndex];
-    utterance.onstart = () => { if(atithi_ttsPlayButton && atithi_isPlayingTTS && !atithi_isPausedTTS) atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsSpeakingButtonText','<i class="fa fa-microphone"></i> बोल रहा है...'); };
-    utterance.onend = () => { atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); };
-    utterance.onerror = (event) => { console.error('SpeechSynthesisUtterance.onerror', event); atithi_currentUtteranceIndex++; atithi_speakNextUtterance(); };
-    if(atithi_synth) { atithi_synth.speak(utterance); }
-}
-
-if (atithi_ttsPlayButton) {
-    atithi_ttsPlayButton.addEventListener('click', () => {
-        if (!atithi_synth) {
-            alert(getTextFromElement('ttsNotSupportedAlertText', "भाषण संश्लेषण आपके ब्राउज़र में समर्थित नहीं है।"));
-            if(atithi_ttsPlayButton) atithi_ttsPlayButton.disabled = true;
-            if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-            return;
-        }
-        if (atithi_synth.speaking && atithi_isPlayingTTS && !atithi_isPausedTTS) { atithi_synth.pause(); atithi_isPausedTTS = true; atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsResumeButtonText', '<i class="fa fa-play"></i> जारी रखें'); return; }
-        if (atithi_synth.paused && atithi_isPausedTTS) { atithi_synth.resume(); atithi_isPausedTTS = false; if(atithi_ttsPlayButton) atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsSpeakingButtonText','<i class="fa fa-microphone"></i> बोल रहा है...'); return; }
-
-        // If voices are still loading (e.g., on a slow connection or first load)
-        if (atithi_voices.length === 0) {
-            if(atithi_ttsPlayButton) atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsVoiceLoadingButtonText', '<i class="fa fa-spinner fa-spin"></i> आवाज़ लोड हो रही है...');
-            // Attempt to populate voices again, then try to play
-            atithi_populateVoiceListDelayed();
-             setTimeout(() => { // Give a small delay for voices to potentially load
-                if (atithi_voices.length === 0) {
-                    alert(getTextFromElement('ttsVoiceNotAvailableAlertText', "आवाज़ लोड नहीं हो सकी, कृपया कुछ क्षण बाद पुनः प्रयास करें या पृष्ठ को रीफ़्रेश करें।"));
-                    if(atithi_ttsPlayButton) { atithi_ttsPlayButton.disabled = false; atithi_ttsPlayButton.innerHTML = originalPlayTTSButtonHTML; }
-                    return;
-                }
-                startTTSPlayback();
-            }, 1000); // Increased delay
-            return;
-        }
-        // If voices are loaded, proceed to play
-        startTTSPlayback();
-    });
-} else if(atithi_ttsPlayButton) { atithi_ttsPlayButton.disabled = true; } // Should not happen if defer is used
-
-function startTTSPlayback() {
-    if (!atithi_ttsPlayButton) return;
-
-    atithi_ttsPlayButton.disabled = true;
-    atithi_ttsPlayButton.innerHTML = getHtmlFromElement('ttsTextLoadingButtonText', '<i class="fa fa-spinner fa-spin"></i> टेक्स्ट लोड हो रहा है...');
-
-    const elementsToRead = document.querySelectorAll(
-        '.atithi-page-header .atithi-main-title, .atithi-page-header .atithi-subtitle, #introContent p, #articleContent h2, #articleContent h3, #articleContent h4, #articleContent p, #articleContent blockquote, #articleContent li, #poemContent .atithi-poem-title, #poemContent .atithi-poem-line, #conclusionContent h3, #conclusionContent p'
+.atithi-main-site-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        #FFD700, #FFB347, #FF8C00, #FF4500, #DC143C,
+        #FF4500, #FF8C00, #FFB347, #FFD700
     );
-    atithi_utteranceQueue = []; atithi_currentUtteranceIndex = 0;
-    elementsToRead.forEach(element => {
-        let text = "";
-        if (element.classList.contains('atithi-main-title')) {
-            let tempTitle = "";
-            element.childNodes.forEach(node => {
-                if (node.nodeType === Node.TEXT_NODE) { tempTitle += node.textContent.trim(); }
-                else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SPAN') { tempTitle += node.textContent.trim(); }
-            });
-            text = tempTitle.replace(/\s+/g, ' ').trim();
-        } else { text = (element.innerText || element.textContent || "").replace(/\s+/g, ' ').trim(); }
-
-        // Additional cleaning for specific elements if needed
-        if (element.tagName === 'BLOCKQUOTE' && text) { text = "एक उद्धरण: " + text; }
-
-        // Ensure text is meaningful and not just button text from within content
-        if (text && text.toLowerCase() !== 'संदर्भ कॉपी' && text.length > 2 && !element.classList.contains('atithi-copy-button')) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            // Prioritize Google Hindi voice, then any Hindi, then default if it's Hindi
-            const hindiVoice = atithi_voices.find(voice => voice.lang.startsWith('hi-IN') && (voice.name.includes('Google') || voice.name.toLowerCase().includes('hindi')));
-            utterance.voice = hindiVoice || atithi_voices.find(voice => voice.lang.startsWith('hi')) || atithi_voices.find(voice => voice.default && voice.lang.startsWith('hi')) || null;
-
-            utterance.lang = utterance.voice ? utterance.voice.lang : 'hi-IN'; // Set lang based on chosen voice or default to hi-IN
-            utterance.rate = 0.92;
-            utterance.pitch = 1.0;
-            atithi_utteranceQueue.push(utterance);
-        }
-    });
-
-    if (atithi_utteranceQueue.length > 0) {
-        atithi_isPlayingTTS = true; atithi_isPausedTTS = false;
-        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = false;
-        atithi_speakNextUtterance();
-    } else {
-        atithi_ttsPlayButton.disabled = false; atithi_ttsPlayButton.innerHTML = originalPlayTTSButtonHTML;
-        alert(getTextFromElement('ttsNoTextAlertText',"पढ़ने के लिए कोई टेक्स्ट नहीं मिला।"));
-    }
+    background-size: 400% 100%;
+    animation: atithi-top-border-shine 10s linear infinite;
+    z-index: 10;
 }
 
-if (atithi_ttsStopButton) {
-    atithi_ttsStopButton.addEventListener('click', () => {
-        if (!atithi_synth) return;
-        atithi_synth.cancel(); // Stops all current and queued utterances
-        atithi_isPlayingTTS = false; atithi_isPausedTTS = false;
-        atithi_currentUtteranceIndex = 0; // Reset queue index
-        atithi_utteranceQueue = []; // Clear the queue
-        if(atithi_ttsPlayButton) { atithi_ttsPlayButton.disabled = false; atithi_ttsPlayButton.innerHTML = originalPlayTTSButtonHTML; }
-        if(atithi_ttsStopButton) atithi_ttsStopButton.disabled = true;
-        console.log("TTS Stopped and queue cleared.");
-    });
-} else if (atithi_ttsStopButton) { atithi_ttsStopButton.disabled = true; }
+@keyframes atithi-top-border-shine {
+    0% { background-position: 150% 0; }
+    100% { background-position: -150% 0; }
+}
 
-// Clean up TTS on page unload
-window.addEventListener('beforeunload', () => { if (atithi_synth && atithi_synth.speaking) { atithi_synth.cancel(); } });
+.atithi-page-container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    overflow-x: hidden !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
 
-console.log("JavaScript initialized (defer expected).");
+.atithi-content-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Header Zone */
+.atithi-header-zone {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px 0 15px 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #FFD700;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.atithi-page-header {
+    text-align: center;
+    padding: 20px 10px 10px 10px;
+    position: relative;
+    width: 100%;
+}
+
+.atithi-page-header::before, .atithi-page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    height: 2.5px;
+    width: 30%;
+    background: linear-gradient(to right, transparent, #FFD700, #FFD700, transparent);
+    animation: atithi-shimmerHeaderBorder 4s infinite linear;
+}
+
+.atithi-page-header::before { left: 5%; }
+.atithi-page-header::after { right: 5%; }
+
+@keyframes atithi-shimmerHeaderBorder {
+    0% { opacity: 0.6; transform: scaleX(0.9); }
+    50% { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0.6; transform: scaleX(0.9); }
+}
+
+.atithi-page-header .atithi-main-title {
+    font-family: 'Rozha One', 'Martel Sans', serif;
+    font-weight: 900;
+    font-size: clamp(2.4em, 6.2vw, 3.7em);
+    color: #FFD700 !important;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.65);
+    letter-spacing: 1.5px;
+    margin-bottom: 0.25em;
+    word-wrap: break-word;
+    position: relative;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.atithi-page-header .atithi-main-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 3.5px;
+    background: linear-gradient(to right, transparent, #FFD700 20%, #FF8C00 50%, #FFD700 80%, transparent);
+    background-size: 300% 100%;
+    border-radius: 2px;
+    animation: atithi-underlineShimmer 3s infinite linear;
+}
+
+@keyframes atithi-underlineShimmer {
+    0% { background-position: -150% 0; }
+    100% { background-position: 150% 0; }
+}
+
+.atithi-page-header .atithi-main-title .atithi-title-deco-left,
+.atithi-page-header .atithi-main-title .atithi-title-deco-right {
+    font-size: 0.7em;
+    color: #FFC107 !important;
+    margin: 0 10px;
+    display: inline-block;
+    animation: atithi-titleSparkle 2s infinite alternate;
+    vertical-align: middle;
+}
+
+@keyframes atithi-titleSparkle {
+    0% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
+    50% { transform: scale(1.2) rotate(15deg) translateY(-2px); opacity: 1; text-shadow: 0 0 5px #FFD700;}
+    100% { transform: scale(1) rotate(0deg) translateY(0); opacity: 0.7; }
+}
+
+.atithi-page-header .atithi-subtitle { font-family: 'Sahitya', 'Lohit Devanagari', serif; font-size: clamp(0.95em, 2.1vw, 1.25em); color: #F0E68C !important; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 10px; word-wrap: break-word; }
+.atithi-page-header .atithi-author-name { font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive; font-size: clamp(1.05em, 2.3vw, 1.45em); color: #FFDEAD !important; margin-top:10px; display:block; }
+.atithi-page-header .atithi-author-name .fa { margin-right: 8px; }
+
+.atithi-content-block.atithi-intro-text { margin-bottom: 0; padding-top: 5px; background-color: transparent !important; border: none !important; box-shadow: none !important; }
+.atithi-content-block.atithi-intro-text p { color: #F5DEB3 !important; font-size: clamp(1.05em, 2vw, 1.2em); }
+.atithi-content-block.atithi-intro-text p .fa { margin-right: 8px; color: #FFD700 !important; }
+
+/* Action Buttons Area */
+.atithi-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px 10px;
+    border-radius: 12px;
+    animation: atithi-action-button-pulse 9s ease-in-out infinite;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.3), 0 0 30px rgba(173, 216, 230, 0.1);
+    border: 1px solid rgba(128, 0, 128, 0.6);
+    margin-top: 15px;
+}
+
+@keyframes atithi-action-button-pulse {
+    0% { background-color: #2a003a; }
+    50% { background-color: #4d0066; }
+    100% { background-color: #2a003a; }
+}
+
+.atithi-button {
+    background: linear-gradient(145deg, #8B0000, #FF0000);
+    color: #ffffff;
+    border: 2px solid #FFD700;
+    padding: 10px 18px;
+    font-family: 'Teko', sans-serif;
+    font-size: clamp(0.95em, 1.8vw, 1.15em);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-shadow: 0 0 3px #000;
+    box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 2px rgba(255,0,0,0.5);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    text-align: center;
+}
+.atithi-button .fa { margin-right: 8px; font-size: 1.1em; }
+.atithi-button:hover {
+    background: linear-gradient(145deg, #FF0000, #FF4500);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(255,215,0,0.5), inset 0 0 5px rgba(255,100,0,0.5);
+}
+.atithi-button:disabled {
+    background: #555 !important;
+    color: #999 !important;
+    border-color: #777 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    cursor: not-allowed !important;
+}
+
+/* Main Content Area */
+.atithi-main-content-area {
+    width: 100%;
+    padding: 15px 0;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+/* Default Content Block Style */
+.atithi-content-block {
+    margin-bottom: 8px;
+    padding: 18px 22px;
+    background-color: rgba(0,0,0, 0.25);
+    border: 1px solid rgba(184, 134, 11, 0.6);
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: left;
+    width: 100%;
+    color: #FFF8DC;
+    overflow-wrap: break-word;
+}
+.atithi-content-block.atithi-centered-text { text-align: center; }
+.atithi-content-block.atithi-no-bg {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 10px 5px;
+}
+
+/* Poem Stanza specific styling */
+#poemContent.atithi-poem-stanza.atithi-no-bg {
+    border: 2.5px dashed #FFD700 !important;
+    margin-top: 8px; margin-bottom: 8px;
+    padding: 20px 15px;
+    background-color: #2F002F;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.4);
+    animation: atithi-poem-glow 4s ease-in-out infinite;
+    transition: transform 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+#poemContent.atithi-poem-stanza.atithi-no-bg:hover {
+     transform: translateY(-3px) scale(1.01);
+}
+@keyframes atithi-poem-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255,165,0,0.2), inset 0 0 5px rgba(0,0,0,0.2); }
+    50% { box-shadow: 0 0 18px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 165, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.3), 0 0 5px #FFD700; }
+}
+
+.atithi-conclusion-text h3, .atithi-attractive-bg-section h3, .atithi-attractive-bg-section h2 {
+    font-family: 'Rozha One', 'Lohit Devanagari', serif;
+    color:#FFD700 !important;
+    margin-bottom:15px;
+    font-size:1.7em;
+    text-align:center;
+    text-shadow: 1px 1px 2px #000;
+    border-bottom: 1px dotted rgba(255,215,0,0.7);
+    padding-bottom: 10px;
+}
+.atithi-conclusion-text h3 .fa, .atithi-attractive-bg-section h3 .fa, .atithi-attractive-bg-section h2 .fa { margin-right: 10px; }
+
+/* Headings within article content - CORRECTED WITH !important */
+.atithi-article-content h2, .atithi-article-content h3, .atithi-article-content h4, .atithi-article-content h5, .atithi-article-content h6 {
+    font-family: 'Martel Sans', 'Rozha One', serif;
+    margin-top: 20px; margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dotted #FFD700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+.atithi-article-content h2 .fa, .atithi-article-content h3 .fa, .atithi-article-content h4 .fa { margin-right: 10px; }
+.atithi-article-content h2 { font-size: clamp(1.9em, 3.8vw, 2.4em); color: #FFD700 !important; }
+.atithi-article-content h3 { font-size: clamp(1.7em, 3.3vw, 2.2em); color: #F0E68C !important; }
+.atithi-article-content h4 { font-size: clamp(1.5em, 2.9vw, 2.0em); color: #FFDEAD !important; }
+.atithi-article-content h5 { font-size: clamp(1.3em, 2.6vw, 1.8em); color: #FFC107 !important; }
+.atithi-article-content h6 { font-size: clamp(1.2em, 2.4vw, 1.6em); color: #FFDEAD !important; }
+
+/* Paragraphs and List items in article - CORRECTED WITH !important */
+.atithi-content-block .atithi-article-content p, .atithi-content-block .atithi-article-content li {
+    font-size: clamp(1em, 2vw, 1.15em);
+    color: #FFFFFF !important;
+    line-height: 2.0;
+    margin-bottom: 15px;
+}
+.atithi-content-block .atithi-article-content strong { font-family: 'Baloo 2', 'Lohit Devanagari', cursive; color: #FFFFE0 !important; font-weight: 700; }
+.atithi-content-block.atithi-no-bg .atithi-article-content p, .atithi-content-block.atithi-no-bg .atithi-article-content li { color: #E0FFFF !important; }
+.atithi-content-block.atithi-no-bg .atithi-article-content strong { color: #FFD700 !important; }
+
+/* Unordered List styling */
+.atithi-article-content ul { list-style: none; padding-left: 0; }
+.atithi-article-content ul li {
+    padding-left: 28px;
+    position: relative;
+    margin-bottom: 10px;
+}
+.atithi-article-content ul li::before {
+    content: "\f0a9";
+    font-family: FontAwesome;
+    color: #FFC107 !important;
+    position: absolute;
+    left: 0px;
+    top: 0.25em;
+    line-height: 1;
+    font-size: 1em;
+}
+
+/* Article Quote styling */
+.atithi-article-quote {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: clamp(1.05em, 2.2vw, 1.25em);
+    color: #E6E6FA !important;
+    border-left: 3px solid #FF6347;
+    padding: 12px 18px; margin: 20px 0;
+    background-color: rgba(0,0,0, 0.3);
+    font-style: italic;
+    border-radius: 0 6px 6px 0;
+}
+.atithi-article-quote::before {
+    content: '\201C';
+    font-size: 1.4em;
+    color: #FF6347 !important;
+    margin-right: 5px;
+    line-height: 0;
+    vertical-align: -0.2em;
+}
+.atithi-article-quote::after {
+    content: '\201D';
+    font-size: 1.4em;
+    color: #FF6347 !important;
+    margin-left: 5px;
+    line-height: 0;
+    vertical-align: -0.2em;
+}
+
+.atithi-content-block.atithi-no-bg .atithi-article-quote {
+    background-color: rgba(255,255,255,0.05);
+    border-left-color: #FF8C00;
+    color: #ADD8E6 !important;
+}
+.atithi-content-block.atithi-no-bg .atithi-article-quote::before,
+.atithi-content-block.atithi-no-bg .atithi-article-quote::after {
+    color: #FF8C00 !important;
+}
+
+/* Poem specific styles */
+.atithi-poem-stanza .atithi-poem-title {
+    text-align:center; font-family: 'Rozha One', serif; color:#FFD700 !important;
+    margin-bottom:20px; font-size:clamp(1.5em, 3vw, 1.8em);
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
+}
+.atithi-poem-stanza .atithi-poem-title .fa { margin-right: 10px; }
+
+.atithi-poem-line {
+    margin-bottom: 10px;
+    text-align: center;
+    color: #FFFFFF !important;
+    text-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+#poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) {
+    font-family: 'Rakkas', 'Tiro Devanagari Hindi', cursive;
+    font-size: clamp(1.0em, 2.0vw, 1.2em) !important;
+    color: #FFEFD5 !important;
+    text-shadow: 0 0 3px #000, 0 0 6px rgba(255,69,0,0.7);
+}
+#poemContent .atithi-first-poem-line {
+    font-family: 'Teko', 'Martel Sans', sans-serif;
+    font-size: clamp(1.2em, 2.5vw, 1.55em) !important;
+    font-weight: 500;
+    color: #FFDB58 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7), 0 0 5px rgba(255, 165, 0, 0.5);
+    letter-spacing: 0.8px;
+    line-height: 1.6;
+    margin-bottom: 12px !important;
+    padding: 4px 0;
+}
+
+#poemContent .atithi-hunkar-line {
+    font-family: 'Baloo 2', 'Lohit Devanagari', cursive; font-weight: 700;
+    font-size: clamp(1.1em, 2.3vw, 1.4em) !important;
+    color: #FFD700 !important; text-shadow: 1px 1px 3px #000;
+    letter-spacing: 0.8px; margin: 12px 0 !important; padding: 8px;
+    border-top: 2px solid #DC143C;
+    border-bottom: 2px solid #DC143C;
+    background-color: rgba(220, 20, 60, 0.1);
+    text-transform: uppercase;
+    animation: atithi-hunkarShake 0.3s 2s 3 ease-in-out;
+}
+@keyframes atithi-hunkarShake {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-2px) rotate(-1deg); }
+    40% { transform: translateX(2px) rotate(1deg); }
+    60% { transform: translateX(-2px) rotate(-0.5deg); }
+    80% { transform: translateX(2px) rotate(0.5deg); }
+}
+
+.atithi-poem-line span {
+    color: transparent;
+    background: linear-gradient(45deg, #FFD700, #FF8C00, #FF4500);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    animation: atithi-fieryWordPulse 1.5s infinite alternate;
+}
+@keyframes atithi-fieryWordPulse {
+    from { transform: scale(1); text-shadow: 0 0 6px #FF4500; }
+    to { transform: scale(1.05); text-shadow: 0 0 12px #FF8C00; }
+}
+
+#poemContent.atithi-poem-stanza.atithi-no-bg .atithi-hunkar-line {
+    background-color: rgba(255, 215, 0, 0.1) !important;
+    border-top: 2.5px solid #FF4500 !important;
+    border-bottom: 2.5px solid #FF4500 !important;
+    border-left: none !important;
+    border-right: none !important;
+    color: #FFFFE0 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    padding: 8px; margin: 12px 0 !important;
+    font-size: clamp(1.2em, 2.6vw, 1.5em) !important;
+}
+
+/* Attractive Background Sections */
+.atithi-attractive-bg-section {
+    padding: 20px; margin: 20px 0; border-radius: 8px; color: #FFFFFF !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+.atithi-attractive-bg-section > h2, .atithi-attractive-bg-section > h3 {
+    color: #FFDB58 !important; text-shadow: 1px 1px 3px #000;
+    border-bottom: 1px dotted rgba(255,215,0,0.7); margin-bottom: 15px; padding-bottom: 10px; text-align: center;
+}
+.atithi-attractive-bg-section p { color: #F0F8FF !important; font-size: clamp(1.05em, 2.1vw, 1.2em); line-height: 1.9; }
+
+.atithi-bg-conclusion { background: linear-gradient(135deg, #2A002A, #500750); border: 1px solid #FFD700;}
+.atithi-bg-rajvansh-pink-purple { background: linear-gradient(135deg, rgba(199, 21, 133, 0.85), rgba(138, 43, 226, 0.9)) !important; border: 1px solid rgba(218, 112, 214, 0.7) !important; }
+.atithi-bg-suffering { background: linear-gradient(135deg, #4A1F04, #803608); border: 1px solid #FFD700;}
+
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box {
+    background: linear-gradient(145deg, rgba(100, 0, 50, 0.75), rgba(60, 0, 80, 0.9)) !important;
+    border: 1px solid rgba(218, 112, 214, 0.65) !important;
+    border-left-width: 5px !important; border-left-color: #C71585 !important;
+}
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-link-label-read-more {
+    background-color: #B71C1C !important; box-shadow: 0 0 8px #B71C1C !important;
+}
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-related-link-text { color: #FFEFD5 !important; }
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-related-link-box .atithi-related-link-text:hover {
+    color: #FFDAB9 !important; text-shadow: 0 0 5px rgba(255, 218, 185, 0.7) !important;
+}
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote {
+    background-color: rgba(40, 0, 30, 0.45) !important; border-left-color: #FF69B4 !important; color: #FFF5EE !important;
+}
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote::before,
+#poorvavartiRajvansh.atithi-bg-rajvansh-pink-purple .atithi-article-quote::after { color: #FFB6C1 !important; }
+
+/* Media Content (Images & Videos) */
+.atithi-media-content h3 {
+    font-family: 'Rozha One', serif; color: #FFD700 !important; font-size: clamp(1.5em, 2.9vw, 1.8em);
+    margin-bottom: 15px; text-transform: uppercase; text-align: center;
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
+}
+.atithi-media-content h3 .fa { margin-right: 10px; }
+.atithi-media-placeholder img {
+    max-width: 100%; height: auto; border: 2px solid #FFD700; border-radius: 5px;
+    margin-bottom:10px; display: block; margin-left: auto; margin-right: auto;
+}
+.atithi-media-placeholder p {
+    font-family: 'Lohit Devanagari', 'Sahitya', serif; font-size:clamp(0.8em, 1.8vw, 0.9em);
+    color:#ccc !important; margin-bottom: 15px; text-align: center;
+}
+.atithi-video-player {
+    position: relative; padding-bottom: 56.25%;
+    height: 0; overflow: hidden; max-width: 100%;
+    background: #000; border: 2px solid #DC143C;
+    border-radius: 5px; margin: 0 auto 15px auto;
+}
+.atithi-video-player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+/* Guidance & Reference Content */
+.atithi-guidance-content h2 {
+    font-family: 'Rozha One', serif; color: #FFD700 !important; font-size: clamp(1.7em, 3.3vw, 2.1em);
+    text-align: center; margin-bottom: 18px; border-bottom: 1px dotted #FFD700; padding-bottom: 9px;
+}
+.atithi-guidance-content h2 .fa { margin-right: 10px; }
+.atithi-guidance-content h3 {
+    font-family: 'Teko', 'Rozha One', sans-serif; color: #F0E68C !important; font-size: clamp(1.4em, 2.9vw, 1.8em);
+    margin-top: 18px; margin-bottom: 9px;
+}
+.atithi-guidance-content h3 .fa { margin-right: 8px; }
+.atithi-guidance-content p, .atithi-guidance-content ul {
+    font-family: 'Lohit Devanagari', 'Sahitya', serif; font-size: clamp(1em, 2vw, 1.1em);
+    color: #e0e0e0 !important; line-height: 1.8; margin-bottom: 9px;
+}
+.atithi-guidance-content ul { list-style-position: inside; padding-left: 0px; list-style-type: none; }
+.atithi-guidance-content ul li {
+    margin-bottom: 4px;
+    position: relative;
+    padding-left: 25px;
+}
+.atithi-guidance-content ul li::before {
+    content: "\f058";
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    color: #FFD700 !important;
+}
+.atithi-guidance-content strong { color: #FFD700 !important; font-family: 'Martel Sans', 'Baloo 2', sans-serif; }
+
+/* Code Block */
+.atithi-code-block { background: #1e1e1e; border: 1px solid #444; border-radius: 5px; padding: 15px; margin-top: 10px; position: relative; }
+.atithi-code-block pre {
+    font-family: 'Roboto Mono', monospace;
+    font-size: clamp(0.9em, 1.8vw, 1em);
+    color: #d4d4d4 !important;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 380px;
+    overflow: auto;
+}
+.atithi-copy-button {
+    position: absolute; top: 10px; right: 10px; background: #FF4500; color: white; border: none;
+    padding: 5px 10px; font-size: 0.8em; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center;
+}
+.atithi-copy-button .fa { margin-right: 5px;}
+.atithi-copy-button:hover { background: #FF0000; }
+
+/* Rights Info & External Links Section Headers */
+.atithi-rights-info h3, .atithi-external-links h3 {
+    font-family: 'Rozha One', serif; color: #FFD700 !important; font-size: clamp(1.5em, 2.9vw, 1.8em);
+    margin-bottom: 15px; text-transform: uppercase; text-align:center;
+    border-bottom: 1px dotted #FFD700; padding-bottom: 8px;
+}
+.atithi-rights-info h3 .fa, .atithi-external-links h3 .fa { margin-right: 10px; }
+
+/* Rights Info Block */
+.atithi-content-block.atithi-rights-info {
+    animation: atithi-info-block-glow 12s ease-in-out infinite alternate;
+    text-align: center;
+}
+@keyframes atithi-info-block-glow {
+    0% { background-color: rgba(15, 5, 40, 0.4); }
+    50% { background-color: rgba(30, 10, 65, 0.6); }
+    100% { background-color: rgba(15, 5, 40, 0.4); }
+}
+.atithi-rights-info p {
+    font-size: clamp(0.9em, 1.9vw, 1.05em); color: #FFF0F5 !important;
+    line-height: 1.7; margin-bottom: 10px; font-family: 'Sahitya', 'Lohit Devanagari', serif;
+}
+.atithi-rights-info .atithi-copyright-text .fa { margin-right: 6px; color: #FFD700 !important; font-size: 0.9em;}
+.atithi-rights-info strong { font-family: 'Baloo 2', cursive; color: #F0E68C !important; }
+
+/* Page Footer */
+.atithi-page-footer {
+    text-align: center; padding: 25px; margin-top: 20px; width:100%;
+    font-size: 0.95em; color: #FFD700 !important;
+    animation: atithi-footer-color-shift 15s ease-in-out infinite;
+}
+@keyframes atithi-footer-color-shift {
+    0% { background-color: rgba(15, 0, 15, 0.65); }
+    50% { background-color: rgba(30, 0, 30, 0.85); }
+    100% { background-color: rgba(15, 0, 15, 0.65); }
+}
+.atithi-page-footer p { font-family: 'Teko', 'Sahitya', sans-serif; color: #FFD700 !important; text-shadow: 1px 1px 2px #000;}
+.atithi-page-footer::before {
+    content: "\f1d8 \f0c2 \f192";
+    font-family: FontAwesome; display: block; font-size: 1.6em;
+    margin-bottom: 12px; opacity: 0.75; color: #FFD700 !important;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* Related Link Box (In-content) */
+.atithi-related-link-box {
+    background: linear-gradient(145deg, rgba(80, 7, 80, 0.5), rgba(42, 0, 42, 0.7));
+    border: 1px solid #FFD700;
+    border-left: 5px solid #FF6347;
+    padding: 15px 20px;
+    margin-top: 20px; margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+.atithi-related-link-box:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0,0,0,0.4);
+}
+.atithi-link-label {
+    font-family: 'Teko', 'Rozha One', sans-serif;
+    font-size: clamp(0.9em, 2vw, 1.1em);
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    display: inline-block;
+}
+.atithi-link-label-new { background-color: #FF4500; box-shadow: 0 0 8px #FF4500; }
+.atithi-link-label-deep-dive { background-color: #8A2BE2; box-shadow: 0 0 8px #8A2BE2; }
+.atithi-link-label-read-more { background-color: #32CD32; box-shadow: 0 0 8px #32CD32; }
+.atithi-link-label-next-part { background-color: #1E90FF; box-shadow: 0 0 8px #1E90FF; }
+.atithi-link-label-must-read,
+.atithi-link-label-must-see { background-color: #FFD700; color: #2F002F; box-shadow: 0 0 8px #FFD700; }
+
+.atithi-related-link-text {
+    font-family: 'Sahitya', 'Tiro Devanagari Hindi', serif;
+    font-size: clamp(1.05em, 2.2vw, 1.25em);
+    color: #FFDEAD !important;
+    text-decoration: none;
+    line-height: 1.6;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.atithi-related-link-text:hover {
+    color: #FFC107 !important;
+    text-decoration: underline;
+    text-shadow: 0 0 5px rgba(255, 193, 7, 0.7);
+}
+
+/* Call to Action / Scroll Theme Block */
+.atithi-cta-scroll-block {
+    background: linear-gradient(to bottom, #fdf5e6, #f5e7ce);
+    color: #5D4037 !important;
+    padding: 25px;
+    margin: 40px auto;
+    border-radius: 10px;
+    max-width: 100%;
+    border: 3px solid #8B4513;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(139, 69, 19, 0.2);
+    position: relative;
+    font-family: 'Tiro Devanagari Hindi', 'Sahitya', serif;
+    width: 100%;
+    clear: both;
+}
+.atithi-cta-scroll-header,
+.atithi-cta-scroll-content,
+.atithi-cta-scroll-footer {
+    width: 100%;
+    overflow-x: hidden;
+}
+.atithi-cta-scroll-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #8B4513;
+    text-align: center;
+}
+.atithi-scroll-deco {
+    font-size: 2.5em;
+    color: #8B4513 !important;
+    margin: 0 15px;
+    line-height: 1;
+    animation: atithi-decoPulse 2s infinite alternate;
+}
+@keyframes atithi-decoPulse {
+    from { transform: scale(0.95); opacity: 0.8; }
+    to { transform: scale(1.05); opacity: 1; }
+}
+.atithi-cta-scroll-block .atithi-cta-title {
+    font-family: 'Rozha One', 'Martel Sans', serif;
+    font-size: clamp(1.6em, 3.5vw, 2.3em);
+    color: #654321 !important;
+    text-shadow: 1px 1px 0px #fff5e1;
+    margin: 0;
+    line-height: 1.3;
+}
+.atithi-cta-scroll-content .atithi-cta-text {
+    font-size: clamp(1.05em, 2.2vw, 1.2em);
+    line-height: 1.9;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #795548 !important;
+}
+.atithi-cta-scroll-content .atithi-highlight-text {
+    font-weight: bold;
+    color: #D2691E !important;
+    background-color: rgba(255, 228, 196, 0.5);
+    padding: 0px 5px;
+    border-radius: 3px;
+}
+.atithi-cta-interaction-box {
+    background-color: rgba(240, 220, 190, 0.5);
+    border: 1px solid #D2B48C;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+.atithi-interaction-title {
+    font-family: 'Rakkas', cursive;
+    font-size: clamp(1.4em, 2.8vw, 1.8em);
+    color: #A0522D !important;
+    margin-bottom: 12px;
+}
+.atithi-interaction-title .fa-comments-o { margin-right: 10px; color: #8B4513 !important; }
+.atithi-interaction-text {
+    font-size: clamp(0.95em, 2vw, 1.1em);
+    color: #5D4037 !important;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+.atithi-email-connect { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #D2B48C; }
+.atithi-email-connect .fa-envelope-open-o {
+    font-size: 1.8em; color: #8B4513 !important; margin-bottom: 8px;
+    display: block; margin-left: auto; margin-right: auto;
+}
+.atithi-email-connect p { font-size: clamp(0.9em, 1.9vw, 1.05em); color: #795548 !important; margin-bottom: 8px; }
+.atithi-email-link {
+    font-family: 'Roboto Mono', monospace; font-size: clamp(0.95em, 2vw, 1.1em);
+    color: #006400 !important;
+    text-decoration: none; border-bottom: 1px dotted #006400;
+    padding-bottom: 2px; transition: color 0.3s ease, border-bottom-color 0.3s ease; display: inline-block;
+}
+.atithi-email-link:hover { color: #228B22 !important; border-bottom-color: #228B22 !important; }
+
+.atithi-cta-scroll-footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 2px dashed #8B4513; }
+.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action {
+    background: linear-gradient(145deg, #D2691E, #A0522D);
+    color: #fff; border: 2px solid #F4A460;
+    font-size: clamp(1em, 2.1vw, 1.25em); padding: 10px 22px; border-radius: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 10px rgba(210, 105, 30, 0.4);
+    transition: all 0.3s ease-in-out;
+}
+.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action:hover {
+    background: linear-gradient(145deg, #A0522D, #8B4513);
+    transform: scale(1.03) translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 15px rgba(244, 164, 96, 0.6);
+}
+.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action .fa {
+    margin-left: 10px; font-size: 1.1em; transition: transform 0.3s ease-out;
+}
+.atithi-cta-scroll-block .atithi-button.atithi-cta-main-action:hover .fa { transform: translateX(4px) rotate(10deg); }
+
+/* External Links Section Styles */
+.atithi-external-links {
+    width: 100%;
+    background-color: rgba(25, 0, 25, 0.3);
+    padding: 25px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(170, 0, 170, 0.5);
+    margin-top: 30px; margin-bottom: 30px;
+}
+.atithi-external-links-intro {
+    font-size: clamp(0.9em, 1.8vw, 1.05em); color: #E0E0E0 !important; margin-bottom: 20px;
+    max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.7;
+}
+.atithi-scrollable-links-container {
+    max-height: 450px; overflow-y: auto; overflow-x: hidden;
+    padding-right: 10px; margin-right: -10px;
+    border: 1px solid rgba(170, 0, 170, 0.3);
+    border-radius: 8px; background-color: rgba(0,0,0,0.1);
+}
+.atithi-scrollable-links-container::-webkit-scrollbar { width: 8px; }
+.atithi-scrollable-links-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+.atithi-scrollable-links-container::-webkit-scrollbar-thumb { background: #8A2BE2; border-radius: 10px; }
+.atithi-scrollable-links-container::-webkit-scrollbar-thumb:hover { background: #9932CC; }
+.atithi-scrollable-links-container { scrollbar-width: thin; scrollbar-color: #8A2BE2 rgba(255,255,255,0.05); }
+
+.atithi-link-card-scroll {
+    display: flex; align-items: center;
+    background: linear-gradient(135deg, rgba(75, 0, 130, 0.3), rgba(128, 0, 128, 0.4));
+    border: 1px solid rgba(138, 43, 226, 0.4);
+    border-radius: 8px; padding: 12px 15px; margin-bottom: 10px;
+    text-decoration: none; color: #FFF8DC;
+    transition: all 0.3s ease; position: relative;
+}
+.atithi-link-card-scroll:last-child { margin-bottom: 0; }
+.atithi-link-card-scroll:hover {
+    transform: translateX(5px) scale(1.01);
+    background: linear-gradient(135deg, rgba(75, 0, 130, 0.5), rgba(128, 0, 128, 0.6));
+    border-color: #FFD700;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+}
+.atithi-link-card-scroll-icon { font-size: 1.8em; color: #FFD700 !important; margin-right: 15px; min-width: 30px; text-align: center; }
+.atithi-link-card-scroll-text { flex-grow: 1; text-align: left; }
+.atithi-link-card-scroll-title {
+    font-family: 'Teko', 'Rozha One', sans-serif; font-size: clamp(1.1em, 2vw, 1.35em);
+    color: #FFDEAD !important;
+    margin-bottom: 3px; letter-spacing: 0.3px;
+}
+.atithi-link-card-scroll-desc {
+    font-family: 'Sahitya', serif; font-size: clamp(0.8em, 1.5vw, 0.9em);
+    color: #E0FFFF !important;
+    line-height: 1.5; opacity: 0.9;
+}
+.atithi-link-card-scroll-arrow {
+    font-size: 1.5em; color: #FFD700 !important; opacity: 0.6; margin-left: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.atithi-link-card-scroll:hover .atithi-link-card-scroll-arrow { opacity: 1; transform: translateX(3px); }
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    .atithi-content-wrapper { padding: 0 8px; }
+    .atithi-page-header .atithi-main-title { font-size: clamp(1.9em, 5.2vw, 2.6em); }
+    .atithi-page-header .atithi-subtitle { font-size: clamp(0.85em, 1.9vw, 1.05em); }
+    .atithi-article-content p, .atithi-article-content li, .atithi-poem-line { font-size: clamp(0.95em, 2.2vw, 1.1em); }
+    .atithi-content-block { padding: 15px 18px; margin-bottom: 8px; }
+    .atithi-button { padding: 8px 15px; font-size: clamp(0.9em, 1.7vw, 1.05em); }
+    .atithi-article-content h2 { font-size: clamp(1.7em, 4.3vw, 2.0em); }
+    .atithi-article-content h3 { font-size: clamp(1.5em, 3.8vw, 1.8em); }
+    #poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) { font-size: clamp(0.95em, 1.9vw, 1.15em) !important; }
+    #poemContent .atithi-first-poem-line { font-size: clamp(1.1em, 2.3vw, 1.4em) !important; }
+    #poemContent .atithi-hunkar-line { font-size: clamp(1.0em, 2.1vw, 1.3em) !important; }
+
+    .atithi-cta-scroll-block { padding: 20px 15px; margin: 30px 10px; width: calc(100% - 20px); }
+    .atithi-scroll-deco { font-size: 2em; margin: 0 10px; }
+    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.4em, 3vw, 2em); }
+
+    .atithi-external-links { padding: 20px 10px; }
+    .atithi-scrollable-links-container { max-height: 400px; padding-right: 5px; margin-right: -5px; }
+    .atithi-link-card-scroll-icon { font-size: 1.6em; margin-right: 10px; }
+    .atithi-link-card-scroll-title { font-size: clamp(1em, 1.8vw, 1.25em); }
+    .atithi-link-card-scroll-desc { font-size: clamp(0.75em, 1.4vw, 0.85em); }
+}
+
+@media (max-width: 480px) {
+    .atithi-main-site-container { border-left: none; border-right: none; border-radius: 0; }
+    .atithi-main-site-container::before { height: 3px; top: -1.5px; }
+    .atithi-content-wrapper { padding: 0 5px; }
+    .atithi-page-header .atithi-main-title { font-size: clamp(1.7em, 5.8vw, 2.3em); }
+    .atithi-content-block { padding: 12px 15px; margin-bottom:5px; }
+    .atithi-article-content h2 { font-size: clamp(1.6em, 4.6vw, 1.9em); }
+    .atithi-article-content h3 { font-size: clamp(1.4em, 3.9vw, 1.7em); }
+    #poemContent .atithi-poem-line:not(.atithi-first-poem-line):not(.atithi-hunkar-line) { font-size: clamp(0.9em, 1.8vw, 1.1em) !important; }
+    #poemContent .atithi-first-poem-line { font-size: clamp(1.0em, 2.1vw, 1.3em) !important; }
+    #poemContent .atithi-hunkar-line { font-size: clamp(0.95em, 2.0vw, 1.25em) !important; }
+
+    .atithi-cta-scroll-block { width: calc(100% - 10px); margin-left:5px; margin-right:5px; }
+    .atithi-cta-scroll-block .atithi-cta-title { font-size: clamp(1.3em, 4.5vw, 1.8em); }
+    .atithi-cta-scroll-block .atithi-button.atithi-cta-main-action { padding: 10px 18px; font-size: clamp(0.9em, 2.5vw, 1.1em); }
+
+    .atithi-scrollable-links-container { max-height: 350px; }
+    .atithi-link-card-scroll { flex-direction: column; align-items: flex-start; text-align: left; padding: 10px; }
+    .atithi-link-card-scroll-icon { margin-bottom: 8px; }
+    .atithi-link-card-scroll-arrow { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); }
+
+    .atithi-action-buttons { gap: 8px; }
+    .atithi-button { padding: 8px 12px; font-size: clamp(0.85em, 1.9vw, 1em); }
+}
