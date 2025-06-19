@@ -288,7 +288,7 @@ html {
 }
 .atithi-conclusion-text h3 .fa, .atithi-attractive-bg-section h3 .fa, .atithi-attractive-bg-section h2 .fa { margin-right: 10px; }
 
-/* Headings within article content - CORRECTED WITH !important */
+/* Headings within article content */
 .atithi-article-content h2, .atithi-article-content h3, .atithi-article-content h4, .atithi-article-content h5, .atithi-article-content h6 {
     font-family: 'Martel Sans', 'Rozha One', serif;
     margin-top: 20px; margin-bottom: 12px;
@@ -303,16 +303,56 @@ html {
 .atithi-article-content h5 { font-size: clamp(1.3em, 2.6vw, 1.8em); color: #FFC107 !important; }
 .atithi-article-content h6 { font-size: clamp(1.2em, 2.4vw, 1.6em); color: #FFDEAD !important; }
 
-/* Paragraphs and List items in article - CORRECTED WITH !important */
+/* Paragraphs and List items in article */
 .atithi-content-block .atithi-article-content p, .atithi-content-block .atithi-article-content li {
     font-size: clamp(1em, 2vw, 1.15em);
     color: #FFFFFF !important;
     line-height: 2.0;
     margin-bottom: 15px;
 }
-.atithi-content-block .atithi-article-content strong { font-family: 'Baloo 2', 'Lohit Devanagari', cursive; color: #FFFFE0 !important; font-weight: 700; }
 .atithi-content-block.atithi-no-bg .atithi-article-content p, .atithi-content-block.atithi-no-bg .atithi-article-content li { color: #E0FFFF !important; }
-.atithi-content-block.atithi-no-bg .atithi-article-content strong { color: #FFD700 !important; }
+
+/* =================================================================== */
+/* === ULTIMATE FIX FOR STRONG TAGS (Braided Rope Gradient Design) === */
+/* =================================================================== */
+/* यह नियम इतना विशिष्ट है कि इसे कोई अन्य CSS ओवरराइड नहीं कर पाएगा */
+.atithi-main-site-container .atithi-page-container .atithi-content-block.atithi-article-content ul li strong {
+    /* टेक्स्ट को छिपाते हैं ताकि ग्रेडिएंट दिख सके */
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+
+    /* रस्सी जैसा गूंथा हुआ ग्रेडिएंट बैकग्राउंड */
+    background: repeating-linear-gradient(
+        135deg,
+        #FFD700 0px,      /* चमकदार सोना */
+        #FFD700 4px,      /* सोने की पट्टी की मोटाई */
+        #D2691E 4px,      /* चॉकलेट/गहरा नारंगी */
+        #D2691E 8px,      /* नारंगी पट्टी की मोटाई */
+        #B8860B 8px,      /* गहरा कांस्य रंग */
+        #B8860B 12px      /* कांस्य पट्टी की मोटाई */
+    ) !important;
+
+    /* बैकग्राउंड को टेक्स्ट के आकार में क्लिप करते हैं */
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+
+    /* 3D प्रभाव के लिए गहरी परछाई */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+
+    /* फॉन्ट को मोटा और विशिष्ट बनाए रखते हैं */
+    font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important;
+    font-weight: 700 !important;
+}
+
+/* पैराग्राफ के अंदर के strong टैग के लिए भी यही नियम (इसे सादा रखा गया है) */
+.atithi-main-site-container .atithi-page-container .atithi-content-block.atithi-article-content p strong {
+    color: #FFFFE0 !important; /* इसे सादा हल्का पीला रखते हैं ताकि पढ़ने में आसानी हो */
+    font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important;
+    font-weight: 700 !important;
+    background: none !important; /* ग्रेडिएंट रीसेट करें */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+}
+
 
 /* Unordered List styling */
 .atithi-article-content ul { list-style: none; padding-left: 0; }
