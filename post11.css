@@ -17,16 +17,39 @@ html {
     padding: 0;
 }
 
+/* ========================================================= */
+/* === ANIMATED GALAXY BACKGROUND (WIDER & BLOGGER-FRIENDLY) === */
+/* ========================================================= */
 .atithi-main-site-container {
+    width: 98% !important;
+    max-width: 1400px !important;
+    margin: 15px auto !important;
+    border-radius: 12px;
     position: relative;
-    width: 100%;
-    min-height: 100vh;
-    background-color: #05052d;
-    border: 1.5px solid rgba(255, 215, 0, 0.25);
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    min-height: 100vh; 
+    background-size: 400% 400%; 
+    background-image: radial-gradient(
+        circle at 20% 25%,
+        rgba(5, 5, 45, 1) 0%,      
+        rgba(139, 0, 139, 0.8) 30%, 
+        rgba(0, 100, 0, 0.7) 50%,   
+        rgba(139, 0, 139, 0.8) 70%, 
+        rgba(5, 5, 45, 1) 100%     
+    );
+    animation: atithi-galaxy-swirl 40s ease-in-out infinite;
+    border: 1.5px solid rgba(255, 215, 0, 0.25); 
+    overflow: visible; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+@keyframes atithi-galaxy-swirl {
+    0% { background-position: 0% 50%; transform: rotate(0deg) scale(1.1); }
+    25% { background-position: 50% 100%; transform: rotate(1deg) scale(1.15); }
+    50% { background-position: 100% 50%; transform: rotate(0deg) scale(1.1); }
+    75% { background-position: 50% 0%; transform: rotate(-1deg) scale(1.15); }
+    100% { background-position: 0% 50%; transform: rotate(0deg) scale(1.1); }
 }
 
 .atithi-main-site-container::before {
@@ -44,6 +67,7 @@ html {
     background-size: 400% 100%;
     animation: atithi-top-border-shine 10s linear infinite;
     z-index: 10;
+    border-radius: 12px 12px 0 0; /* बॉर्डर को भी गोल कर दिया */
 }
 
 @keyframes atithi-top-border-shine {
@@ -61,15 +85,18 @@ html {
     align-items: center;
     position: relative;
     z-index: 1;
+    background-color: rgba(5, 5, 45, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 12px;
 }
 
 .atithi-content-wrapper {
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 /* Header Zone */
@@ -315,44 +342,26 @@ html {
 /* =================================================================== */
 /* === ULTIMATE FIX FOR STRONG TAGS (Braided Rope Gradient Design) === */
 /* =================================================================== */
-/* यह नियम इतना विशिष्ट है कि इसे कोई अन्य CSS ओवरराइड नहीं कर पाएगा */
 .atithi-main-site-container .atithi-page-container .atithi-content-block.atithi-article-content ul li strong {
-    /* टेक्स्ट को छिपाते हैं ताकि ग्रेडिएंट दिख सके */
     color: transparent !important;
     -webkit-text-fill-color: transparent !important;
-
-    /* रस्सी जैसा गूंथा हुआ ग्रेडिएंट बैकग्राउंड */
     background: repeating-linear-gradient(
-        135deg,
-        #FFD700 0px,      /* चमकदार सोना */
-        #FFD700 4px,      /* सोने की पट्टी की मोटाई */
-        #D2691E 4px,      /* चॉकलेट/गहरा नारंगी */
-        #D2691E 8px,      /* नारंगी पट्टी की मोटाई */
-        #B8860B 8px,      /* गहरा कांस्य रंग */
-        #B8860B 12px      /* कांस्य पट्टी की मोटाई */
+        135deg, #FFD700 0px, #FFD700 4px, #D2691E 4px, #D2691E 8px, #B8860B 8px, #B8860B 12px
     ) !important;
-
-    /* बैकग्राउंड को टेक्स्ट के आकार में क्लिप करते हैं */
     -webkit-background-clip: text !important;
     background-clip: text !important;
-
-    /* 3D प्रभाव के लिए गहरी परछाई */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
-
-    /* फॉन्ट को मोटा और विशिष्ट बनाए रखते हैं */
     font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important;
     font-weight: 700 !important;
 }
 
-/* पैराग्राफ के अंदर के strong टैग के लिए भी यही नियम (इसे सादा रखा गया है) */
 .atithi-main-site-container .atithi-page-container .atithi-content-block.atithi-article-content p strong {
-    color: #FFFFE0 !important; /* इसे सादा हल्का पीला रखते हैं ताकि पढ़ने में आसानी हो */
+    color: #FFFFE0 !important;
     font-family: 'Baloo 2', 'Lohit Devanagari', cursive !important;
     font-weight: 700 !important;
-    background: none !important; /* ग्रेडिएंट रीसेट करें */
+    background: none !important;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
 }
-
 
 /* Unordered List styling */
 .atithi-article-content ul { list-style: none; padding-left: 0; }
@@ -370,6 +379,17 @@ html {
     top: 0.25em;
     line-height: 1;
     font-size: 1em;
+}
+
+/* ============================================================== */
+/* === FIX: HIDE LIST BULLET POINT IF STRONG TAG IS PRESENT === */
+/* ============================================================== */
+.atithi-article-content ul li:has(> strong) {
+    padding-left: 0 !important;
+}
+
+.atithi-article-content ul li:has(> strong)::before {
+    display: none !important;
 }
 
 /* Article Quote styling */
@@ -891,7 +911,7 @@ html {
 }
 
 @media (max-width: 480px) {
-    .atithi-main-site-container { border-left: none; border-right: none; border-radius: 0; }
+    .atithi-main-site-container { border-left: none; border-right: none; border-radius: 0; width: 100% !important; margin: 0 !important; }
     .atithi-main-site-container::before { height: 3px; top: -1.5px; }
     .atithi-content-wrapper { padding: 0 5px; }
     .atithi-page-header .atithi-main-title { font-size: clamp(1.7em, 5.8vw, 2.3em); }
