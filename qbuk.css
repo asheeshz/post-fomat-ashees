@@ -72,14 +72,19 @@ header.qu-page-main-header {
     border-radius: 8px 8px 0 0;
 }
 
-header.qu-page-main-header h1 {
+/* --- बदला हुआ --- */
+/* h1 को p.qu-main-title-p से बदल दिया गया है */
+header.qu-page-main-header p.qu-main-title-p {
     font-family: 'Rozha One', 'Martel Sans', serif;
     font-size: clamp(2em, 4.5vw, 3em);
     color: #FFD700 !important;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
     margin-bottom: 8px;
 }
-header.qu-page-main-header h1 .fa {
+
+/* --- बदला हुआ --- */
+/* यहाँ भी h1 को p.qu-main-title-p से बदल दिया गया है */
+header.qu-page-main-header p.qu-main-title-p .fa {
     margin: 0 15px;
     font-size: 0.8em;
     vertical-align: middle;
